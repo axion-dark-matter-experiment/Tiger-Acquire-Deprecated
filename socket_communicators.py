@@ -9,6 +9,13 @@ import color_printer as cp
 
 
 class SocketComm:
+    
+    def __init__(self):
+        
+        self.print_green = cp.ColorPrinter("Green")
+        self.print_purple = cp.ColorPrinter("Purple")
+        self.print_yellow = cp.ColorPrinter("Yellow")
+        self.print_red = cp.ColorPrinter("Red")
 
     def socket_connect(self, host, port):
 
@@ -68,18 +75,13 @@ class SocketComm:
 
 class NetworkAnalyzerComm (SocketComm):
 
-    def __init__(self, nwa_sock):
+    def __init__(self, nwa_sock, nwa_points, nwa_span, nwa_power):
         
         self.nwa_sock = nwa_sock
 
         self.__set__GPIB()
-        self.__set_network_analyzer()
-        self.__set_RF_mapping()
-        
-        self.print_green = cp.ColorPrinter("Green")
-        self.print_purple = cp.ColorPrinter("Purple")
-        self.print_yellow = cp.ColorPrinter("Yellow")
-        self.print_red = cp.ColorPrinter("Red")
+        self.__set_network_analyzer(nwa_points)
+        self.__set_RF_mapping(nwa_span, nwa_power)
 
     def __set_GPIB(self):
 
@@ -117,15 +119,15 @@ class NetworkAnalyzerComm (SocketComm):
         
         self.print_green("Network analyzer set")
 
-    def __set_RF_mapping(self, switch, nwa_span, nwa_power):
+    def __set_RF_mapping(self, nwa_span, nwa_power):
 
         # Make sure first switch is directing signal to the network analyzer
         # instead of the signal analyzer
-        self.print_purple("Sending signal to Network Analyzer")
-        # switch actuation voltage is 28 volts
-        self.send_command(switch, "V2 28")
-        # switch needs to be off to send signal to network analyzer
-        self.send_command(switch, "OP1 0")
+#         self.print_purple("Sending signal to Network Analyzer")
+#         # switch actuation voltage is 28 volts
+#         self.send_command(switch, "V2 28")
+#         # switch needs to be off to send signal to network analyzer
+#         self.send_command(switch, "OP1 0")
         
         self.print_purple("setting up RF source")
         # set passthrough mode to RF source
@@ -245,11 +247,6 @@ class StepperMotorComm (SocketComm):
     def __init__(self, addr_dict):
         self.step_addr = self.__get_step_addr(addr_dict)
         
-        self.print_green = cp.ColorPrinter("Green")
-        self.print_purple = cp.ColorPrinter("Purple")
-        self.print_yellow = cp.ColorPrinter("Yellow")
-        self.print_red = cp.ColorPrinter("Red")
-        
     def __get_step_addr(self, addr_dict):
         ip_addrs = addr_dict['step'][0]
         port = addr_dict['step'][1]
@@ -326,67 +323,86 @@ class StepperMotorComm (SocketComm):
         time.sleep(revs)
         step.close
         
+class SwitchComm ( SocketComm ):
+    
+    def __init__(self, switch_sock ):
+        self.switch_sock = switch_sock
+        self.__set_voltages()
+        
+    def __set_voltages(self):
+        self.send_command(self.switch_sock, "V1 28")
+        self.send_command(self.switch_sock, "V2 28")
+        
+    def switch_to_signal_analyzer(self):
+        self.print_purple("Switched to Signal Analyzer")
+        self.send_command(self.switch_sock,"OP1 1")
+        
+    def switch_to_network_analyzer(self):
+        self.print_purple("Switched to Network Analyzer")
+        self.send_command(self.switch_sock,"OP1 0")
+        
+    def switch_to_transmission(self):
+        self.print_purple("Switched to Transmission Measurements")
+        self.send_command(self.switch_sock, "OP2 1")
+        
+    def switch_to_reflection(self):
+        self.print_purple("Switched to Reflection Measurements")
+        self.send_command(self.switch_sock, "OP2 0")
+        
 class SignalAnalyzerComm( SocketComm ):
     
-    def __init__(self, sock_dict):
+    def __init__(self, sa_sock ):
+        self.sa_sock = sa_sock
     
-    def set_signal_analyzer(self):
-
-        sa_sock=self.sock_dict['sa']
-        fft_length = self.fft_length
-        sa_span = self.sa_span
-        sa_averages = self.sa_averages
-        # actual_center_freq = rt_params.actual_center_freq
-        actual_center_freq = 4260
-
-        funcs.c_print("Setting spectrum analyzer","Purple")
-
+    def set_signal_analyzer(self, center_freq, fft_length = 131072, freq_span = 10, num_averages = 20001):
+        
+        self.print_purple("Setting spectrum analyzer")
+        
         #Set RF switch so that signal goes to Signal Analyzer
-        switch=self.sock_dict['switch']
-        sc.send_command(switch, "OP1 1")
-
+#         switch=self.sock_dict['switch']
+#         self.send_command(switch, "OP1 1")
+        
         #general configuration
-        sc.send_command(sa_sock, "INST:SEL BASIC") # set IQ analyzer mode
-        sc.send_command(sa_sock, "SPEC:DIF:BAND 10MHz") # set Digital IF Bandwidth
-        sc.send_command(sa_sock, "SPEC:DIF:FILT:TYPE FLAT") # set filter type to flattop
-        sc.send_command(sa_sock, "SPEC:FFT:WIND UNIF") # set FFT window to uniform
-        sc.send_command(sa_sock, "SPEC:FFT:LENG:AUTO OFF") # disable automatic FFT window and length control
-
+        self.send_command(self.sa_sock, "INST:SEL BASIC") # set IQ analyzer mode
+        self.send_command(self.sa_sock, "SPEC:DIF:BAND 10MHz") # set Digital IF Bandwidth
+        self.send_command(self.sa_sock, "SPEC:DIF:FILT:TYPE FLAT") # set filter type to flattop
+        self.send_command(self.sa_sock, "SPEC:FFT:WIND UNIF") # set FFT window to uniform
+        self.send_command(self.sa_sock, "SPEC:FFT:LENG:AUTO OFF") # disable automatic FFT window and length control
+        
         #Max size for FFT length is 131072
         #FFT length represents number of IQ pairs used to generate power spectrum
         #FFT length indirectly controls 'capture time'
         #Presumably this time is synonymous with integration time
-        sc.send_command(sa_sock, "SPEC:FFT:WIND:LENG "+str(fft_length)) # set FFT window length
-        sc.send_command(sa_sock, "SPEC:FFT:LENG "+str(fft_length)) # set FFT length
-
+        self.send_command(self.sa_sock, "SPEC:FFT:WIND:LENG "+str(fft_length)) # set FFT window length
+        self.send_command(self.sa_sock, "SPEC:FFT:LENG "+str(fft_length)) # set FFT length
+        
         #configure measurements
-        sc.send_command(sa_sock, "CONF:SPEC:NDEF") # configure measurement
-        sc.send_command(sa_sock, "FREQ:CENT "+str(actual_center_freq)+"MHz") # set center frequency
-        sc.send_command(sa_sock, "SPEC:FREQ:SPAN "+str(sa_span)+"MHz") # set frequency span
-
+        self.send_command(self.sa_sock, "CONF:SPEC:NDEF") # configure measurement
+        self.send_command(self.sa_sock, "FREQ:CENT "+str(center_freq)+"MHz") # set center frequency
+        self.send_command(self.sa_sock, "SPEC:FREQ:SPAN "+str(freq_span)+"MHz") # set frequency span
+        
         #configure averaging
-        sc.send_command(sa_sock, "SPEC:AVER:TYPE RMS") # set average type to power average
-        sc.send_command(sa_sock, "ACP:AVER:TCON EXP") # set averaging to non-repeating
+        self.send_command(self.sa_sock, "SPEC:AVER:TYPE RMS") # set average type to power average
+        self.send_command(self.sa_sock, "ACP:AVER:TCON EXP") # set averaging to non-repeating
         #Maximum number of averaged values is 20001
-        sc.send_command(sa_sock, "SPEC:AVER:COUN "+str(sa_averages)) # set number of averages
-        sc.send_command(sa_sock, "INIT:CONT OFF") # turn off continuous measurement operation
+        self.send_command(self.sa_sock, "SPEC:AVER:COUN "+str(num_averages)) # set number of averages
+        self.send_command(self.sa_sock, "INIT:CONT OFF") # turn off continuous measurement operation
         #Total integration time is given by time_per_frame(FFT length)*num_averages
-
-        funcs.c_print("Spectrum analyzer set","Green")
+        
+        self.print_green("Spectrum analyzer set")
 
     def take_data_signal_analyzer(self):
-        funcs.c_print("Starting integration...","Purple")
-        sa_sock=self.sock_dict['sa']
+        self.print_purple("Starting integration...")
 
         #Initialize measurement
         #This will start collecting and averaging samples
-        sc.send_command(sa_sock, "INIT:IMM")
+        self.send_command(self.sa_sock, "INIT:IMM")
 
         # *OPC? will write "1\n" to the output when operation is complete.
         while True:
             #Poll the signal analyzer
-            sc.send_command(sa_sock, "*OPC?")
-            status_str = sc.read_data(sa_sock, printlen=True, timeout=0.5)
+            self.send_command(self.sa_sock, "*OPC?")
+            status_str = self.read_data(self.sa_sock, printlen=True, timeout=0.5)
 
             #Wait until *OPC? returns '1\n' indicating that the requested number
             #of samples have been collected
@@ -398,13 +414,15 @@ class SignalAnalyzerComm( SocketComm ):
 
         #Since measurement is already initliazed collect data with the
         #FETC(h) command
-        sc.send_command(sa_sock, ":FETC:SPEC7?")
-        raw_sa_data = sc.read_data(sa_sock, printlen=True, timeout=0.5)
+        self.send_command(self.sa_sock, ":FETC:SPEC7?")
+        raw_sa_data = self.read_data(self.sa_sock, printlen=True, timeout=0.5)
+        
+        return raw_sa_data
 
-        out_file=open(self.data_dict['file_name'],'a')
-
-        print(raw_sa_data, end="\n", file=out_file)
-        out_str="Wrote data to "+self.data_dict['file_name']
-        funcs.c_print(out_str,"Green")
-
-        out_file.close()
+#         out_file=open(self.data_dict['file_name'],'a')
+# 
+#         print(raw_sa_data, end="\n", file=out_file)
+#         out_str="Wrote data to "+self.data_dict['file_name']
+#         funcs.c_print(out_str,"Green")
+#  
+#         out_file.close()

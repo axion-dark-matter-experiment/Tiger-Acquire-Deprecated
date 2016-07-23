@@ -1,9 +1,13 @@
-save_file_path;/home/bephillips2/workspace/Electric-Tiger
-len_of_tune;5
-revs_per_iter;1
-start_length;5.165
-nwa_span;400
-nwa_points;401
-nwa_power;12.5
-nominal_centers;3200;3600;4000;4400
-google;8.8.8.8;53
+d;save_file_path;/home/bephillips2/workspace/Electric-Tiger
+d;len_of_tune;5
+d;revs_per_iter;1
+d;start_length;5.165
+d;nwa_span;400
+d;nwa_points;401
+d;nwa_power;12.5
+freq_window = 100
+sa_span = 10
+sa_averages = 256
+fft_length = 65536
+l;nominal_centers;3200;3600;4000;4400
+s;google;8.8.8.8;53
