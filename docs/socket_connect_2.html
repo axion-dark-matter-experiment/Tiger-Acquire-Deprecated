@@ -1,0 +1,56 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module socket_connect_2</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>socket_connect_2</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/bephillips2/workspace/Electric_Tiger_Control_Code/socket_connect_2.py">/home/bephillips2/workspace/Electric_Tiger_Control_Code/socket_connect_2.py</a></font></td></tr></table>
+    <p><tt>#&nbsp;socket_connect.py<br>
+#&nbsp;Functions&nbsp;for&nbsp;connecting&nbsp;to&nbsp;remote&nbsp;machines</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="select.html">select</a><br>
+</td><td width="25%" valign=top><a href="socket.html">socket</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="socket_connect_2.html#SocketComm">SocketComm</a>
+</font></dt></dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SocketComm">class <strong>SocketComm</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="SocketComm-read_data"><strong>read_data</strong></a>(sock, printlen<font color="#909090">=False</font>, timeout<font color="#909090">=2</font>)</dt><dd><tt>#&nbsp;read&nbsp;data&nbsp;and&nbsp;store&nbsp;in&nbsp;a&nbsp;string</tt></dd></dl>
+
+<dl><dt><a name="SocketComm-send_command"><strong>send_command</strong></a>(sock, cmd, terminator<font color="#909090">='<font color="#c040c0">\n</font>'</font>)</dt><dd><tt>#&nbsp;send&nbsp;a&nbsp;string&nbsp;to&nbsp;the&nbsp;device&nbsp;connected&nbsp;on&nbsp;the&nbsp;socket</tt></dd></dl>
+
+<dl><dt><a name="SocketComm-send_command_long"><strong>send_command_long</strong></a>(sock, cmd, terminator<font color="#909090">='<font color="#c040c0">\n</font>'</font>)</dt><dd><tt>#&nbsp;send&nbsp;a&nbsp;command&nbsp;of&nbsp;arbitary&nbsp;length&nbsp;to&nbsp;socket<br>
+#&nbsp;entire&nbsp;command&nbsp;will&nbsp;be&nbsp;sent&nbsp;until&nbsp;finished&nbsp;or&nbsp;an&nbsp;error&nbsp;occurs<br>
+#&nbsp;unlike&nbsp;send_command&nbsp;the&nbsp;socket&nbsp;will&nbsp;not&nbsp;time-our&nbsp;or&nbsp;end&nbsp;prematurely</tt></dd></dl>
+
+<dl><dt><a name="SocketComm-send_command_scl"><strong>send_command_scl</strong></a>(sock, cmd)</dt><dd><tt>#&nbsp;Special&nbsp;send&nbsp;command&nbsp;that&nbsp;formats&nbsp;data&nbsp;so&nbsp;it&nbsp;can&nbsp;be&nbsp;send&nbsp;to&nbsp;the&nbsp;stepper&nbsp;motor</tt></dd></dl>
+
+<dl><dt><a name="SocketComm-socket_connect"><strong>socket_connect</strong></a>(host, port)</dt></dl>
+
+</td></tr></table></td></tr></table>
+</body></html>

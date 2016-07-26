@@ -1,11 +1,9 @@
 #!/usr/bin/env python3.4
 
 import mode_tracking as mt
-import subprocess
 
 import sys #basic std library functions
 import argparse
-import time
 
 parser = argparse.ArgumentParser(description='Control code for Electric Tiger.')
 parser.add_argument('-M','--mode_map', help='Build a mode map (i.e. map of transmitted power.)',action='store_true')

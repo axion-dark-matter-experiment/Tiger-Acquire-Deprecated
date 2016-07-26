@@ -2,13 +2,21 @@ import config_classes
 import modetrack as mt
 
 import socket_communicators as sc
+import data_processors as procs
 import time
+import os
+import color_printer as cp
 import atexit
 
 class ModeTrackBody(config_classes.ConfigTypes):
 
     def __init__(self, config_path):
         super(ModeTrackBody, self).__init__(config_path)
+        
+        self.print_green = cp.ColorPrinter("Green")
+        self.print_purple = cp.ColorPrinter("Purple")
+        self.print_blue = cp.ColorPrinter("Blue")
+        self.print_red = cp.ColorPrinter("Red")
         
         nwa_sock = self.data_dict['nwa']
         
@@ -25,13 +33,16 @@ class ModeTrackBody(config_classes.ConfigTypes):
         self.switch_comm = sc.SwitchComm(switch_sock)
         self.step_comm = sc.StepperMotorComm(step_addr)
         
+        self.fitter = procs.LorentzianFitter()
+        self.plotter = procs.Plotter()
+        
         self.m_track = mt.ModeTrack()
+        self.convertor = procs.Convertor()
 
-
-        self.freq_window = 100  # Frequency window used for identify peaks specified in MHz
-        self.sa_span = 10  # MHz
-        self.sa_averages = 256  # total number of averages to take, Max is
-        self.fft_length = 65536  # Number of IQ points to generate spectrum, Max is
+        self.freq_window = self.data_dict['freq_window']  # Frequency window used for identify peaks specified in MHz
+        self.sa_span = self.data_dict['sa_span']  # MHz
+        self.sa_averages = self.data_dict['sa_averages']  # total number of averages to take, Max is
+        self.fft_length = self.data_dict['fft_length']  # Number of IQ points to generate spectrum, Max is
 
         self.fitted_q = 0.0
         self.fitted_center_freq = 0.0
@@ -44,61 +55,68 @@ class ModeTrackBody(config_classes.ConfigTypes):
         self.iteration = 0
 
     def retract_cavity(self):
-        step = funcs.get_step_sock(self.addr_dict)
+        
         tune_length = float(self.data_dict['len_of_tune'])
-
-        funcs.reset_cavity(step, tune_length)
-
-        step.close()
+        self.step_comm.reset_cavity(tune_length)
 
     def prequel(self):
         self.switch_comm.switch_to_network_analyzer()
 
 
     def get_data_nwa(self):
-        self.raw_nwa_data.extend(self.nwa_comm.collect_data(self.nominal_centers))
+        total_data_str = ''
+        total_data_str.extend(self.nwa_comm.collect_data(self.nominal_centers))
+        
+        return total_data_str
 
 
-    def format_points(self):
+    def format_points(self, raw_nwa_data):
 
         total_iterations = self.num_of_iters
         start_length = float(self.data_dict['start_length'])
         current_iteration = float(self.iteration)
         tune_length = float(self.data_dict['len_of_tune'])
+        
+        max_frequency = self.nominal_centers[-1] + self.nwa_span / 2
+        min_frequency = self.nominal_centers[0] - self.nwa_span / 2
 
         cavity_length = start_length + (current_iteration * tune_length / (total_iterations))
-        funcs.c_print("Current cavity length: " + str(cavity_length), "Yellow")
+        self.print_yellow("Current cavity length: " + str(cavity_length))
 
-        del self.formatted_points[:]
+#         del self.formatted_points[:]
 
-        self.formatted_points = funcs.make_plot_points(cavity_length, self.nominal_centers, self.nwa_span, self.nwa_points, self.raw_nwa_data)
+        return self.formatter.make_plot_points(self.raw_data, \
+                                                                 self.cavity_length, \
+                                                                  min_frequency, \
+                                                                   max_frequency)
 
-        del self.raw_nwa_data[:]
+#         del self.raw_nwa_data[:]
 
-    def set_bg_data(self):
-    	bg_str = ''
-    	for triple in self.formatted_points:
-    		temp_str = str(triple)
-    		# Create translation table.
-    		trans_table = dict.fromkeys(map(ord, ' []'), None)
-    		temp_str = temp_str.translate(trans_table)
-    		bg_str += temp_str + "\n"
+    def set_bg_data(self, blank_data):
+        
+        bg_str = ''
+        for triple in blank_data:
+            temp_str = str(triple)
+            # Create translation table.
+            trans_table = dict.fromkeys(map(ord, ' []'), None)
+            temp_str = temp_str.translate(trans_table)
+            bg_str += temp_str + "\n"
+        
+        # need to remove list item in list since it will be a blank line
+        self.green_printer("Background data sent to sub-process.")
+        self.m_track.SetBackground(bg_str[:-1])
 
-    	# need to remove list item in list since it will be a blank line
-    	funcs.c_print("Background data sent to sub-process.", "Green")
-    	self.m_track.SetBackground(bg_str[:-1])
-
-    def find_minima_peaks(self):
-    	data_str = ''
-
-    	for triple in self.formatted_points:
-    		temp_str = str(triple)
-    		# Create translation table.
-    		trans_table = dict.fromkeys(map(ord, ' []'), None)
-    		temp_str = temp_str.translate(trans_table)
-    		data_str += temp_str + "\n"
-
-    	self.mode_of_desire = self.m_track.GetPeaksBiLat(data_str[:-1], 0)
+    def find_minima_peak(self, formatted_points):
+        data_str = ''
+        
+        for triple in formatted_points:
+            temp_str = str(triple)
+            # Create translation table.
+            trans_table = dict.fromkeys(map(ord, ' []'), None)
+            temp_str = temp_str.translate(trans_table)
+            data_str += temp_str + "\n"
+        
+        return self.m_track.GetPeaksBiLat(data_str[:-1], 0)
 
     def next_iteration(self):
 
@@ -110,222 +128,156 @@ class ModeTrackBody(config_classes.ConfigTypes):
         iters = self.iteration
         num_of_iters = self.num_of_iters
 
-        step_sock = funcs.get_step_sock(self.addr_dict)
-        funcs.walk_loop(step_sock, len_of_tune, revs, iters, num_of_iters)
+        self.step_comm.walk_loop(len_of_tune, revs, iters, num_of_iters)
+        
+    def __recenter_peak(self, power_list):
+        
+        total_iterations = self.num_of_iters
+        start_length = float(self.data_dict['start_length'])
+        current_iteration = float(self.iteration)
+        tune_length = float(self.data_dict['len_of_tune'])
+        
+        cavity_length = start_length + (current_iteration * tune_length / (total_iterations))
+        trans_window_str = self.convertor.power_list_to_str(power_list, self.mode_of_desire, self.freq_window, cavity_length)
+        
+        return self.m_track.GetMaxPeak(trans_window_str[:-1])
 
-    def set_signal_analyzer(self):
-
-    	sa_sock = self.sock_dict['sa']
-    	fft_length = self.fft_length
-    	sa_span = self.sa_span
-    	sa_averages = self.sa_averages
-    	# actual_center_freq = rt_params.actual_center_freq
-    	actual_center_freq = 4260
-
-    	funcs.c_print("Setting spectrum analyzer", "Purple")
-
-    	# Set RF switch so that signal goes to Signal Analyzer
-    	switch = self.sock_dict['switch']
-    	sc.send_command(switch, "OP1 1")
-
-    	# general configuration
-    	sc.send_command(sa_sock, "INST:SEL BASIC")  # set IQ analyzer mode
-    	sc.send_command(sa_sock, "SPEC:DIF:BAND 10MHz")  # set Digital IF Bandwidth
-    	sc.send_command(sa_sock, "SPEC:DIF:FILT:TYPE FLAT")  # set filter type to flattop
-    	sc.send_command(sa_sock, "SPEC:FFT:WIND UNIF")  # set FFT window to uniform
-    	sc.send_command(sa_sock, "SPEC:FFT:LENG:AUTO OFF")  # disable automatic FFT window and length control
-
-    	# Max size for FFT length is 131072
-    	# FFT length represents number of IQ pairs used to generate power spectrum
-    	# FFT length indirectly controls 'capture time'
-    	# Presumably this time is synonymous with integration time
-    	sc.send_command(sa_sock, "SPEC:FFT:WIND:LENG " + str(fft_length))  # set FFT window length
-    	sc.send_command(sa_sock, "SPEC:FFT:LENG " + str(fft_length))  # set FFT length
-
-    	# configure measurements
-    	sc.send_command(sa_sock, "CONF:SPEC:NDEF")  # configure measurement
-    	sc.send_command(sa_sock, "FREQ:CENT " + str(actual_center_freq) + "MHz")  # set center frequency
-    	sc.send_command(sa_sock, "SPEC:FREQ:SPAN " + str(sa_span) + "MHz")  # set frequency span
-
-    	# configure averaging
-    	sc.send_command(sa_sock, "SPEC:AVER:TYPE RMS")  # set average type to power average
-    	sc.send_command(sa_sock, "ACP:AVER:TCON EXP")  # set averaging to non-repeating
-    	# Maximum number of averaged values is 20001
-    	sc.send_command(sa_sock, "SPEC:AVER:COUN " + str(sa_averages))  # set number of averages
-    	sc.send_command(sa_sock, "INIT:CONT OFF")  # turn off continuous measurement operation
-    	# Total integration time is given by time_per_frame(FFT length)*num_averages
-
-    	funcs.c_print("Spectrum analyzer set", "Green")
-
-    def take_data_signal_analyzer(self):
-    	funcs.c_print("Starting integration...", "Purple")
-    	sa_sock = self.sock_dict['sa']
-
-    	# Initialize measurement
-    	# This will start collecting and averaging samples
-    	sc.send_command(sa_sock, "INIT:IMM")
-
-    	# *OPC? will write "1\n" to the output when operation is complete.
-    	while True:
-    		# Poll the signal analyzer
-    		sc.send_command(sa_sock, "*OPC?")
-    		status_str = sc.read_data(sa_sock, printlen=True, timeout=0.5)
-
-    		# Wait until *OPC? returns '1\n' indicating that the requested number
-    		# of samples have been collected
-    		if(status_str == "1\n"):
-    			print ("Integration complete")
-    			break
-    		else:
-    			print ("Waiting...")
-
-    	# Since measurement is already initliazed collect data with the
-    	# FETC(h) command
-    	sc.send_command(sa_sock, ":FETC:SPEC7?")
-    	raw_sa_data = sc.read_data(sa_sock, printlen=True, timeout=0.5)
-
-    	out_file = open(self.data_dict['file_name'], 'a')
-
-    	print(raw_sa_data, end="\n", file=out_file)
-    	out_str = "Wrote data to " + self.data_dict['file_name']
-    	funcs.c_print(out_str, "Green")
-
-    	out_file.close()
-
-    def set_trans_frequency_window(self):
-    	nwa_sock = self.sock_dict['nwa']
-    	nwa_span = self.nwa_span
-    	freq_window = self.freq_window
-
-    	switch = self.sock_dict['switch']
-
-    	mode_of_desire = self.mode_of_desire
-
-    	if (mode_of_desire == 0.0):
-        	funcs.c_print("Mode of desire not found.", "Red")
-    	return
-
-    	funcs.c_print("Checking peak.", "Purple")
-
-    	# switch to measuring transmission spectrum
-    	sc.send_command(switch, "OP2 1")
-
-    	# set passthrough mode to source
-    	sc.send_command(nwa_sock, "PT19")
-    	# change GPIB address to passthrough, send commands to signal sweeper
-    	sc.send_command(nwa_sock, "++addr 17")
-
-    	# set center frequency to mode of desire
-    	print ("setting center frequency to", mod, " MHz")
-    	sc.send_command(nwa_sock, "CF " + str(round(mod)) + "MZ")
-    	time.sleep(1)
-
-    	# establish narrow frequency window around peak
-    	# peak position will deviate slighty from observed position in
-    	# reflection measurements
-    	sc.send_command(nwa_sock, "DF " + str(freq_window) + "MZ")
-    	time.sleep(1)
-
-    	# return to network analyzer
-    	sc.send_command(nwa_sock, "++addr 16")
-
-    def recenter_peak(self, power_list):
-    	total_iterations = self.num_of_iters
-    	start_length = float(self.data_dict['start_length'])
-    	current_iteration = float(self.iteration)
-    	tune_length = float(self.data_dict['len_of_tune'])
-
-    	cavity_length = start_length + (current_iteration * tune_length / (total_iterations))
-    	trans_window_str = funcs.power_list_to_str(power_list, self.mode_of_desire, self.freq_window, cavity_length)
-
-    	self.mode_of_desire = self.m_track.GetMaxPeak(trans_window_str[:-1])
-
-    def check_peak(self):
-        nwa_sock = self.sock_dict['nwa']
+    def check_peak(self, mode_of_desire):
+        
         nwa_span = self.nwa_span
         freq_window = self.freq_window
 
-        switch = self.sock_dict['switch']
-
-        if (self.mode_of_desire == 0.0):
-            funcs.c_print("Mode of desire not found.", "Red")
+        if (mode_of_desire == 0.0):
+            self.print_red("Mode of desire not found.")
             return
 
-        funcs.c_print("Checking peak.", "Purple")
-        # switch to measuring transmission spectrum
-        sc.send_command(switch, "OP2 1")
+        self.print_purple("Checking peak.")
+        
+        #since we identified the position of our mode using reflection measurements
+        #we need to switch to transmission to find the 'real' position of the mode
+        self.switch_comm.switch_to_transmission()
 
-        funcs.set_freq_window(nwa_sock, self.mode_of_desire , freq_window)
-        initial_trans_window = funcs.take_data_single(nwa_sock)
-        initial_trans_window = funcs.str_to_power_list(initial_trans_window)
+#         funcs.set_freq_window(nwa_sock, self.mode_of_desire , freq_window)
+#         initial_trans_window = funcs.take_data_single(nwa_sock)
+#         initial_trans_window = funcs.str_to_power_list(initial_trans_window)
+        
+        self.nwa_comm.set_freq_window(mode_of_desire , freq_window)
+        initial_window = self.nwa_comm.take_data_single()
+        initial_window = self.convertor.str_list_to_power_list(initial_window)
+        
+        self.plotter(initial_window, self.mode_of_desire, freq_window)
 
-        funcs.plot_freq_window(initial_trans_window, self.mode_of_desire, freq_window)
+#         funcs.plot_freq_window(initial_trans_window, self.mode_of_desire, freq_window)
 
-        self.recenter_peak(initial_trans_window)
+        new_mode_of_desire = self.__recenter_peak(initial_window)
 
-        final_trans_window = funcs.take_data_single(nwa_sock)
-        final_trans_window = funcs.str_to_power_list(final_trans_window)
+        final_window = self.nwa_comm.take_data_single()
+        final_window = self.convertor.str_list_to_power_list(final_window)
+        
+        self.plotter(initial_window, self.mode_of_desire, freq_window)
 
-        funcs.plot_freq_window(final_trans_window, self.mode_of_desire, freq_window)
+#         funcs.plot_freq_window(final_trans_window, self.mode_of_desire, freq_window)
 
-        funcs.fit_lorentzian(final_trans_window, self.mode_of_desire, freq_window)
+        self.fitter(final_window, mode_of_desire, freq_window)
 
-        funcs.set_freq_window(nwa_sock, self.mode_of_desire , nwa_span)
+#         funcs.fit_lorentzian(final_trans_window, self.mode_of_desire, freq_window)
+
+        self.nwa_comm.set_freq_window(new_mode_of_desire , nwa_span)
+#         funcs.set_freq_window(nwa_sock, self.mode_of_desire , nwa_span)
 
         # return to reflection measurements
-        sc.send_command(switch, "OP2 0")
+        self.switch_comm.switch_to_reflection()
+        
+        return new_mode_of_desire
+    
+    def get_data_sa(self, mode_of_desire):
+        
+        self.sa_comm.set_signal_analyzer(mode_of_desire, fft_length = 1024, freq_span = 10, num_averages = 25)
+        return self.sa_comm.take_data_signal_analyzer()
+        
 
 class ModeTrackProgram(ModeTrackBody):
 
     def __init__(self, config_path):
         super(ModeTrackProgram, self).__init__(config_path)
         atexit.register(self.panic_cleanup)
+        
+    def find_mode_of_desire_reflection(self):
+        nwa_data = self.get_data_nwa()
+        formatted_points = self.format_points(nwa_data)
+        mode_of_desire = self.find_minima_peak(formatted_points)
+        
+        if (mode_of_desire <= 0):
+            return -1
+        else:
+            return mode_of_desire
+        
+    def find_mode_of_desire_transmission(self, mode_of_desire):
+        mode_of_desire = self.check_peak(mode_of_desire)
+        
+        if (mode_of_desire <= 0):
+            return -1
+        else:
+            return mode_of_desire
+        
+    def take_data(self, mode_of_desire):
+        sa_data = self.get_data_sa(mode_of_desire)
+        return self.format_points(sa_data)
+        
+    def set_background(self):
+        nwa_data = self.get_data_nwa()
+        formatted_points = self.format_points(nwa_data)
+        self.set_bg_data(formatted_points)
+        
+    def generate_save_file_name(self, idx):
+        # Generate file name time-stamp in the form dd.mm.yyyy
+        time_stamp = time.strftime("%d.%m.%Y")
+        # concatenate the base save-file path with the date-time string to form the name of all necessary .csv files
+        save_path = self.data_dict['save_file_path']
+        return os.path.join(save_path, time_stamp + str(idx) + 'SA.csv')
+        
+    def save_data(self, formatted_data, idx):
+        
+        path = self.generate_save_file_name(idx)
+        
+        out_file=open(path,'a')
+        
+        for item in formatted_data:
+            out_str=str(item)
+            trans_table = dict.fromkeys(map(ord, ' []'), None)
+            out_str = out_str.translate(trans_table)
+        
+            print(out_str, end="\n", file=out_file)
+        
+        out_str="Wrote data to "+path
+        
+        out_file.close()
+        
 
     def program(self):
 
-        funcs.set_GPIB(self.nwa_sock)
         self.prequel()
+        self.set_background()
+        self.next_iteration()
 
-        for x in range(0, self.num_of_iters):
-            self.get_data_nwa()
-            self.format_points()
-            # self.save_plot_points()
-
-            if(x == 0):
-            	self.set_bg_data()
-            elif(x >= 1):
-            	self.find_minima_peaks()
-            	self.check_peak()
-            	# subprocess.Popen("~/workspace/Electric-Tiger/Python_Files/MM-plot.m",shell=True)
+        #start indexing at one since we used our first iteration to capture
+        #background data
+        for x in range(1, self.num_of_iters):
+            
+            mode_of_desire = self.find_mode_of_desire_reflection()
+            break if (mode_of_desire <= 0 ) else pass
+            mode_of_desire = self.find_mode_of_desire_transmission(mode_of_desire)
+            break if (mode_of_desire <= 0 ) else pass
+            
+            data = self.get_data_sa(mode_of_desire)
+            self.save_data(data, x)
+            
+            # subprocess.Popen("~/workspace/Electric-Tiger/Python_Files/MM-plot.m",shell=True)
 
             self.next_iteration()
 
         self.retract_cavity()
         self.close_all()
-
-    def panic_reset_cavity(self):
-
-        rev = -1.0 * self.iteration
-        nsteps = int(rev * 200)
-
-        step = sc.socket_connect("10.95.100.177", 7776)
-
-        # set steps per revolution to 200 steps/revolution
-        sc.send_command_scl(step, "MR0")
-
-        # Acceleration of 5 rev/s/s
-        sc.send_command_scl(step, "AC5")
-        # Deceleration of 5 rev/s/s
-        sc.send_command_scl(step, "DE5")
-        # Velocity of 5 rev/s
-        sc.send_command_scl(step, "VE5")
-
-        funcs.c_print("Program halted! Resetting cavity to initial length.", "Red")
-        print ("Moving motor " + str(abs(rev)) + " revolutions.")
-
-        sc.send_command_scl(step, "FL" + str(nsteps))
-
-        step.close()
 
     def panic_cleanup(self):
 

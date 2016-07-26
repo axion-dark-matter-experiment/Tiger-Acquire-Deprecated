@@ -5,9 +5,9 @@ d;start_length;5.165
 d;nwa_span;400
 d;nwa_points;401
 d;nwa_power;12.5
-freq_window = 100
-sa_span = 10
-sa_averages = 256
-fft_length = 65536
+d;freq_window;100
+d;sa_span;10
+d;sa_averages;256
+d;fft_length;65536
 l;nominal_centers;3200;3600;4000;4400
 s;google;8.8.8.8;53

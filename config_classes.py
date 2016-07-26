@@ -66,7 +66,7 @@ class ConfigTypes:
 
 		# attemp to generate a socket object
 		try:
-			sock = self.sock_comm.socket_connect(ip_addrs, int(port))
+			sock = self.sock_comm._socket_connect(ip_addrs, int(port))
 			# let user know a socket object has been generated successfully
 			st = "Successfully connected to " + inst_name
 			self.print_green(st)
