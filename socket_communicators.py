@@ -76,15 +76,18 @@ class SocketComm:
 class NetworkAnalyzerComm (SocketComm):
 
     def __init__(self, nwa_sock, nwa_points, nwa_span, nwa_power):
+        super(NetworkAnalyzerComm, self).__init__()
         
         self.nwa_sock = nwa_sock
 
-        self.__set__GPIB()
+        self.__set_GPIB()
         self.__set_network_analyzer(nwa_points)
         self.__set_RF_mapping(nwa_span, nwa_power)
+        self.print_purple("Setting GPIB convertor")
 
     def __set_GPIB(self):
 
+#         self.print_purple("Setting GPIB converter")
         self.print_purple("Setting GPIB converter")
         # set to network analyzer GPIB address
         self._send_command(self.nwa_sock, "++addr 16")
@@ -245,11 +248,13 @@ class NetworkAnalyzerComm (SocketComm):
 class StepperMotorComm (SocketComm):
 
     def __init__(self, addr_dict):
+        super(StepperMotorComm, self).__init__()
         self.step_addr = self.__get_step_addr(addr_dict)
         
     def __get_step_addr(self, addr_dict):
-        ip_addrs = addr_dict['step'][0]
-        port = addr_dict['step'][1]
+
+        ip_addrs = addr_dict[0]
+        port = addr_dict[1]
         
         return [ip_addrs, port]
 
@@ -351,6 +356,7 @@ class StepperMotorComm (SocketComm):
 class SwitchComm ( SocketComm ):
     
     def __init__(self, switch_sock ):
+        super(SwitchComm, self).__init__()
         self.switch_sock = switch_sock
         self.__set_voltages()
         
@@ -377,6 +383,7 @@ class SwitchComm ( SocketComm ):
 class SignalAnalyzerComm( SocketComm ):
     
     def __init__(self, sa_sock ):
+        super(SignalAnalyzerComm, self).__init__()
         self.sa_sock = sa_sock
     
     def set_signal_analyzer(self, center_freq, fft_length = 131072, freq_span = 10, num_averages = 20001):

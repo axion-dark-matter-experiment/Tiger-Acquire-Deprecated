@@ -64,7 +64,7 @@ class ConfigTypes:
 		# instrument name, IP address and port number
 		self.print_purple(st)
 
-		# attemp to generate a socket object
+		# attempt to generate a socket object
 		try:
 			sock = self.sock_comm._socket_connect(ip_addrs, int(port))
 			# let user know a socket object has been generated successfully
@@ -103,7 +103,7 @@ class ConfigTypes:
 		for x in range(0, len(config_list)):
 			
 			type_id = config_list[x][0]
-			func_dict[type_id](config_list[x])
+			func_dict[type_id](config_list[x][1:])
 
 
 	def __generate_file_paths(self):

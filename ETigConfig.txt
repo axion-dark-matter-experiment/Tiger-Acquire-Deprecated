@@ -10,4 +10,7 @@ d;sa_span;10
 d;sa_averages;256
 d;fft_length;65536
 l;nominal_centers;3200;3600;4000;4400
-s;google;8.8.8.8;53
+s;switch;10.95.100.174;9221
+s;nwa;10.95.100.176;1234
+s;step;10.95.100.177;7776
+s;sa;10.95.100.175;5025

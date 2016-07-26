@@ -17,15 +17,16 @@ class ModeTrackBody(config_classes.ConfigTypes):
         self.print_purple = cp.ColorPrinter("Purple")
         self.print_blue = cp.ColorPrinter("Blue")
         self.print_red = cp.ColorPrinter("Red")
+        self.print_yellow = cp.ColorPrinter("Yellow")
         
-        nwa_sock = self.data_dict['nwa']
+        nwa_sock = self.sock_dict['nwa']
         
         nwa_points = self.data_dict['nwa_points']
         nwa_span = self.data_dict['nwa_span']
         nwa_power = self.data_dict['nwa_power']
         
-        sa_sock = self.data_dict['sa']
-        switch_sock = self.data_dict['switch']
+        sa_sock = self.sock_dict['sa']
+        switch_sock = self.sock_dict['switch']
         step_addr = self.addr_dict['step']
         
         self.nwa_comm = sc.NetworkAnalyzerComm(nwa_sock, nwa_points, nwa_span, nwa_power)
@@ -43,6 +44,9 @@ class ModeTrackBody(config_classes.ConfigTypes):
         self.sa_span = self.data_dict['sa_span']  # MHz
         self.sa_averages = self.data_dict['sa_averages']  # total number of averages to take, Max is
         self.fft_length = self.data_dict['fft_length']  # Number of IQ points to generate spectrum, Max is
+        self.nominal_centers = self.data_dict['nominal_centers']
+        self.num_of_iters = self.data_dict['num_of_iters']
+        self.nwa_span = self.data_dict['nwa_span']
 
         self.fitted_q = 0.0
         self.fitted_center_freq = 0.0
@@ -64,31 +68,31 @@ class ModeTrackBody(config_classes.ConfigTypes):
 
 
     def get_data_nwa(self):
-        total_data_str = ''
-        total_data_str.extend(self.nwa_comm.collect_data(self.nominal_centers))
+        total_data_list = []
+        total_data_list.extend(self.nwa_comm.collect_data(self.nominal_centers))
         
-        return total_data_str
+        return total_data_list
 
 
-    def format_points(self, raw_nwa_data):
+    def format_points(self, raw_data):
 
         total_iterations = self.num_of_iters
         start_length = float(self.data_dict['start_length'])
         current_iteration = float(self.iteration)
         tune_length = float(self.data_dict['len_of_tune'])
+        nwa_span = float(self.data_dict['nwa_span'])
+        last_center = float(self.nominal_centers[-1])
+        first_center = float(self.nominal_centers[0])
         
-        max_frequency = self.nominal_centers[-1] + self.nwa_span / 2
-        min_frequency = self.nominal_centers[0] - self.nwa_span / 2
+        max_frequency = last_center + nwa_span / 2
+        min_frequency = first_center - nwa_span / 2
 
         cavity_length = start_length + (current_iteration * tune_length / (total_iterations))
         self.print_yellow("Current cavity length: " + str(cavity_length))
 
 #         del self.formatted_points[:]
 
-        return self.formatter.make_plot_points(self.raw_data, \
-                                                                 self.cavity_length, \
-                                                                  min_frequency, \
-                                                                   max_frequency)
+        return self.convertor.make_plot_points(raw_data, cavity_length, min_frequency, max_frequency)
 
 #         del self.raw_nwa_data[:]
 
@@ -103,7 +107,7 @@ class ModeTrackBody(config_classes.ConfigTypes):
             bg_str += temp_str + "\n"
         
         # need to remove list item in list since it will be a blank line
-        self.green_printer("Background data sent to sub-process.")
+        print("Background data sent to sub-process.")
         self.m_track.SetBackground(bg_str[:-1])
 
     def find_minima_peak(self, formatted_points):
@@ -153,8 +157,8 @@ class ModeTrackBody(config_classes.ConfigTypes):
 
         self.print_purple("Checking peak.")
         
-        #since we identified the position of our mode using reflection measurements
-        #we need to switch to transmission to find the 'real' position of the mode
+        # since we identified the position of our mode using reflection measurements
+        # we need to switch to transmission to find the 'real' position of the mode
         self.switch_comm.switch_to_transmission()
 
 #         funcs.set_freq_window(nwa_sock, self.mode_of_desire , freq_window)
@@ -192,7 +196,7 @@ class ModeTrackBody(config_classes.ConfigTypes):
     
     def get_data_sa(self, mode_of_desire):
         
-        self.sa_comm.set_signal_analyzer(mode_of_desire, fft_length = 1024, freq_span = 10, num_averages = 25)
+        self.sa_comm.set_signal_analyzer(mode_of_desire, fft_length=1024, freq_span=10, num_averages=25)
         return self.sa_comm.take_data_signal_analyzer()
         
 
@@ -240,16 +244,16 @@ class ModeTrackProgram(ModeTrackBody):
         
         path = self.generate_save_file_name(idx)
         
-        out_file=open(path,'a')
+        out_file = open(path, 'a')
         
         for item in formatted_data:
-            out_str=str(item)
+            out_str = str(item)
             trans_table = dict.fromkeys(map(ord, ' []'), None)
             out_str = out_str.translate(trans_table)
         
             print(out_str, end="\n", file=out_file)
         
-        out_str="Wrote data to "+path
+        out_str = "Wrote data to " + path
         
         out_file.close()
         
@@ -260,14 +264,18 @@ class ModeTrackProgram(ModeTrackBody):
         self.set_background()
         self.next_iteration()
 
-        #start indexing at one since we used our first iteration to capture
-        #background data
+        # start indexing at one since we used our first iteration to capture
+        # background data
         for x in range(1, self.num_of_iters):
             
             mode_of_desire = self.find_mode_of_desire_reflection()
-            break if (mode_of_desire <= 0 ) else pass
+            if (mode_of_desire <= 0):
+                self.next_iteration()
+                continue
             mode_of_desire = self.find_mode_of_desire_transmission(mode_of_desire)
-            break if (mode_of_desire <= 0 ) else pass
+            if (mode_of_desire <= 0):
+                self.next_iteration()
+                continue
             
             data = self.get_data_sa(mode_of_desire)
             self.save_data(data, x)
@@ -281,5 +289,6 @@ class ModeTrackProgram(ModeTrackBody):
 
     def panic_cleanup(self):
 
-        self.panic_reset_cavity()
+        current_iteration = self.iteration
+        self.step_comm.panic_reset_cavity(current_iteration)
         self.close_all()

@@ -2,7 +2,6 @@
 
 import mode_tracking as mt
 
-import sys #basic std library functions
 import argparse
 
 parser = argparse.ArgumentParser(description='Control code for Electric Tiger.')
@@ -13,7 +12,7 @@ args = parser.parse_args()
 
 
 #argv = sys.argv
-argv="/home/bephillips2/workspace/Electric-Tiger/Control_Code/ETigConfig.txt"#temporary stand-in for command line input
+argv="/home/bephillips2/workspace/Electric_Tiger_Control_Code/ETigConfig.txt"#temporary stand-in for command line input
 
 def main():
 
@@ -21,4 +20,4 @@ def main():
 	meta_tig.program()
 
 if __name__ == "__main__":
-    main()
+	main()
