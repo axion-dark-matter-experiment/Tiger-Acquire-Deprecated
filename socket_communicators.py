@@ -244,6 +244,30 @@ class NetworkAnalyzerComm (SocketComm):
         self._send_command(self.nwa_sock, "++read 10")
         
         return self._read_data(self.nwa_sock, printlen=True)
+    
+    def __set_RF_source(self, turn_on):
+        
+        self.__send_command(self.nwa_sock, "PT19") # set passthrough mode to source
+        self.__send_command(self.nwa_sock, "++addr 17") # change GPIB address to passthrough
+        
+        if (turn_on == True):
+            self.__send_command(self.nwa_sock, "RF1") # turn on RF
+        elif (turn_on == False):
+            self.__send_command(self.nwa_sock, "RF0") # turn off RF
+        else:
+            self.print_red("Bad command RF source not set.")
+            
+        self.send_command(self.nwa_sock, "++addr 16") # change back GPIB address to network analyzer
+    
+    def turn_off_RF_source(self):
+        
+        self.print_yellow("Turning off RF source.")
+        self.__set_RF_source(self, turn_on = False)
+        
+    def turn_on_RF_source(self):
+        
+        self.print_yellow("Turning on RF source.")
+        self.__set_RF_source(self, turn_on = True)
 
 class StepperMotorComm (SocketComm):
 

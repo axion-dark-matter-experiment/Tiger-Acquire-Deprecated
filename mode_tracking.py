@@ -196,8 +196,14 @@ class ModeTrackBody(config_classes.ConfigTypes):
     
     def get_data_sa(self, mode_of_desire):
         
+        self.nwa_comm.turn_off_RF_source()
+        
         self.sa_comm.set_signal_analyzer(mode_of_desire, fft_length=1024, freq_span=10, num_averages=25)
-        return self.sa_comm.take_data_signal_analyzer()
+        raw_sa_data = self.sa_comm.take_data_signal_analyzer()
+        
+        self.nwa_comm.turn_on_RF_source()
+        
+        return raw_sa_data
         
 
 class ModeTrackProgram(ModeTrackBody):
