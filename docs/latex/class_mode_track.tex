@@ -1,0 +1,468 @@
+\hypertarget{class_mode_track}{\section{Mode\-Track Class Reference}
+\label{class_mode_track}\index{Mode\-Track@{Mode\-Track}}
+}
+
+
+Base Class for mode tracking algorithims; designed to be wrapped with Swig and called from Python module.  
+
+
+
+
+{\ttfamily \#include $<$modetrack.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_mode_track_a53130b8d183a69b14d2ef47666d09385}{From\-File} (std\-::string config\-\_\-name)
+\begin{DoxyCompactList}\small\item\em Run mode tracking algorithim on previously saved data. \end{DoxyCompactList}\item 
+void \hyperlink{class_mode_track_aa04491a2f3b4bb04fe6503757d416b73}{Set\-Background} (std\-::string background\-\_\-str)
+\begin{DoxyCompactList}\small\item\em Set background data which will be subtracted from each measurement. \end{DoxyCompactList}\item 
+double \hyperlink{class_mode_track_ac4ab8caa7ab71906390651cdd4c20c0c}{Get\-Peaks\-Gauss} (std\-::string data\-\_\-str, int mode\-\_\-number)
+\begin{DoxyCompactList}\small\item\em Identify minima peaks in a list of power data using Gaussian filtering. \end{DoxyCompactList}\item 
+double \hyperlink{class_mode_track_a2158f2117f99a3aee6891bcc2126aa83}{Get\-Peaks\-Bi\-Lat} (std\-::string data\-\_\-str, int mode\-\_\-number)
+\begin{DoxyCompactList}\small\item\em Identify minima peaks in a list of power data using Bilateral filtering. \end{DoxyCompactList}\item 
+double \hyperlink{class_mode_track_a8ffe12b39a5d90b6ba7a25c0c66bea8d}{Get\-Max\-Peak} (std\-::string data\-\_\-str)
+\begin{DoxyCompactList}\small\item\em Find a local maximum in a list of data. \end{DoxyCompactList}\item 
+\hypertarget{class_mode_track_a99eeeb6757873474994a61dbd7e31e43}{void {\bfseries Set\-Lower\-Bound} (double frequency)}\label{class_mode_track_a99eeeb6757873474994a61dbd7e31e43}
+
+\item 
+\hypertarget{class_mode_track_a7b7a1977d0cdacf2533581c82707e018}{void {\bfseries Set\-Upper\-Bound} (double frequency)}\label{class_mode_track_a7b7a1977d0cdacf2533581c82707e018}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Types}
+\begin{DoxyCompactItemize}
+\item 
+enum {\bfseries Method} \{ {\bfseries Gauss}, 
+{\bfseries Bi\-Lat}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_mode_track_a4e0a0d9430910d77c067c0ee40110200}{Load\-From\-Config} (const char $\ast$config\-\_\-name)
+\begin{DoxyCompactList}\small\item\em opens file specified and loads values into enteries\-\_\-strings \end{DoxyCompactList}\item 
+\hypertarget{class_mode_track_a992935ab5c2bd97e824a88039238e07f}{void \hyperlink{class_mode_track_a992935ab5c2bd97e824a88039238e07f}{Cast\-To\-Type} ()}\label{class_mode_track_a992935ab5c2bd97e824a88039238e07f}
+
+\begin{DoxyCompactList}\small\item\em casts each element in enteries\-\_\-strings from a string to a double and loads into entries. \end{DoxyCompactList}\item 
+std\-::vector$<$ double $>$ \hyperlink{class_mode_track_a8461b01cf1c811aa7cf781fb9bb07f68}{Derivative} (std\-::vector$<$ double $>$ \&data\-\_\-list)
+\begin{DoxyCompactList}\small\item\em Compute the the forth order approximation of the derivative. \end{DoxyCompactList}\item 
+void \hyperlink{class_mode_track_a5dccdca7cd909c332b5ed1e09118cd98}{Populate\-Best\-Fit\-Curves} ()
+\begin{DoxyCompactList}\small\item\em Load cubic spline coeffecients for modes 0 through 3. \end{DoxyCompactList}\item 
+double \hyperlink{class_mode_track_afe43b234695b74e5c493acb08aec39b7}{Std\-Dev} (std\-::vector$<$ double $>$ \&data\-\_\-list)
+\begin{DoxyCompactList}\small\item\em Compute the standard deviation of a list. \end{DoxyCompactList}\item 
+std\-::vector$<$ double $>$ \hyperlink{class_mode_track_ac9749deca774e487cbcc694a56b226cd}{Normalize} (std\-::vector$<$ double $>$ \&data\-\_\-list)
+\begin{DoxyCompactList}\small\item\em Normalize a list of data w.\-r.\-t. to the L2 norm. \end{DoxyCompactList}\item 
+std\-::vector$<$ double $>$ \hyperlink{class_mode_track_a8d08e12e9d882c875e6f7f4b8539f542}{Convolve} (std\-::vector$<$ double $>$ \&data\-\_\-list, std\-::vector$<$ double $>$ \&kernel)
+\begin{DoxyCompactList}\small\item\em Compute the 1\-D convolution of data\-\_\-list with kernel. \end{DoxyCompactList}\item 
+std\-::vector$<$ double $>$ \hyperlink{class_mode_track_aa315defc02162bed269fa981a01382b8}{Gauss\-Blur} (std\-::vector$<$ double $>$ \&data\-\_\-list)
+\begin{DoxyCompactList}\small\item\em Compute the convulution of data\-\_\-list with a Gaussian kernel. \end{DoxyCompactList}\item 
+std\-::vector$<$ double $>$ \hyperlink{class_mode_track_a69dab14db20b8ffdcae63914fb2e0c83}{Find\-Peaks} (std\-::vector$<$ double $>$ \&data\-\_\-list, Mode\-Track\-::\-Method method)
+\begin{DoxyCompactList}\small\item\em Find minima peaks in a list. \end{DoxyCompactList}\item 
+std\-::map$<$ uint, double $>$ \hyperlink{class_mode_track_a83776f06fac4ccff81ae76405dc5bee8}{Compare\-And\-Fill} (std\-::vector$<$ double $>$ \&peak\-\_\-list, std\-::vector$<$ std\-::tuple$<$ double, double, double $>$ $>$ \&comparison\-\_\-list)
+\begin{DoxyCompactList}\small\item\em Compare the position of each identified peak with estimated peak position. \end{DoxyCompactList}\item 
+double \hyperlink{class_mode_track_a7960f1ee58a1a420814843ca0f8c0ae4}{Generate\-Spline} (int mode\-\_\-number, double length)
+\begin{DoxyCompactList}\small\item\em Generate\-Spline. \end{DoxyCompactList}\item 
+std\-::vector$<$ double $>$ \hyperlink{class_mode_track_ad69c546f3d3ac916b0f00c7aa2917903}{Gauss\-Kernel} (int r)
+\begin{DoxyCompactList}\small\item\em Generate a Gaussian kernel of radius r and sigma = r/2 Kernel is generated by sampling Gaussian function with sigma = r/2 a total of r times. \end{DoxyCompactList}\item 
+void \hyperlink{class_mode_track_a9e59f0ed0b57daebd0d051d594faf1f9}{Parse\-String} (std\-::string data\-\_\-str)
+\begin{DoxyCompactList}\small\item\em Parse\-String. \end{DoxyCompactList}\item 
+\hypertarget{class_mode_track_abb8bbf4d81e0333da7d176c1e475ceaa}{std\-::vector$<$ double $>$ {\bfseries Bilateral\-Filter} (std\-::vector$<$ double $>$ \&data\-\_\-list, double sigma\-\_\-s, double sigma\-\_\-r)}\label{class_mode_track_abb8bbf4d81e0333da7d176c1e475ceaa}
+
+\item 
+\hypertarget{class_mode_track_a0102fdc2d13318b65d2127e4733725c6}{uint {\bfseries Find\-Maxima} (std\-::vector$<$ double $>$ \&data\-\_\-list)}\label{class_mode_track_a0102fdc2d13318b65d2127e4733725c6}
+
+\item 
+\hypertarget{class_mode_track_aab5c7a6c9acd8478b93a4e943e67dcb3}{double {\bfseries Get\-Peaks} (std\-::string data\-\_\-str, int mode\-\_\-number, Method filter\-\_\-method)}\label{class_mode_track_aab5c7a6c9acd8478b93a4e943e67dcb3}
+
+\item 
+\hypertarget{class_mode_track_aac2fd6070522ecbfa7b2b2295416f72d}{void {\bfseries Debug\-Save\-Info} (std\-::vector$<$ double $>$ filtered\-\_\-list, Method method)}\label{class_mode_track_aac2fd6070522ecbfa7b2b2295416f72d}
+
+\item 
+\hypertarget{class_mode_track_ad95e1bb9346109bcda61f25e9cc2cdc6}{bool {\bfseries Check\-Bounds} (double frequency)}\label{class_mode_track_ad95e1bb9346109bcda61f25e9cc2cdc6}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_mode_track_aa9b7a628197e5929e76a6bd9b7481650}{double {\bfseries lower\-\_\-bound} = 0.\-0f}\label{class_mode_track_aa9b7a628197e5929e76a6bd9b7481650}
+
+\item 
+\hypertarget{class_mode_track_aa26bb53ca89328131bd15be63db392b4}{double {\bfseries upper\-\_\-bound} = 0.\-0f}\label{class_mode_track_aa26bb53ca89328131bd15be63db392b4}
+
+\item 
+\hypertarget{class_mode_track_ac042e73bed483d080e48246d55318fa6}{double {\bfseries max\-\_\-search\-\_\-radius} = 436.\-344}\label{class_mode_track_ac042e73bed483d080e48246d55318fa6}
+
+\item 
+\hypertarget{class_mode_track_a6acf61e6f22fdda9a696013b13b30304}{std\-::vector$<$ std\-::tuple\\*
+$<$ std\-::string, std\-::string, \\*
+std\-::string $>$ $>$ \hyperlink{class_mode_track_a6acf61e6f22fdda9a696013b13b30304}{entries\-\_\-strings}}\label{class_mode_track_a6acf61e6f22fdda9a696013b13b30304}
+
+\begin{DoxyCompactList}\small\item\em Container for raw entries loaded from config. file. Used by the function \hyperlink{class_mode_track_a53130b8d183a69b14d2ef47666d09385}{From\-File()} \end{DoxyCompactList}\item 
+\hypertarget{class_mode_track_a1e854bd28c396015e5d723c05b638450}{std\-::vector$<$ std\-::tuple\\*
+$<$ double, double, double $>$ $>$ \hyperlink{class_mode_track_a1e854bd28c396015e5d723c05b638450}{entries}}\label{class_mode_track_a1e854bd28c396015e5d723c05b638450}
+
+\begin{DoxyCompactList}\small\item\em Container for data enteries converted from std\-::strings to doubles Used by the function \hyperlink{class_mode_track_a53130b8d183a69b14d2ef47666d09385}{From\-File()} \end{DoxyCompactList}\item 
+\hypertarget{class_mode_track_a02671d29adcf46f88c611194b7351f0b}{std\-::vector$<$ double $>$ \hyperlink{class_mode_track_a02671d29adcf46f88c611194b7351f0b}{background}}\label{class_mode_track_a02671d29adcf46f88c611194b7351f0b}
+
+\begin{DoxyCompactList}\small\item\em Background data, to be subtracted off of main data set. \end{DoxyCompactList}\item 
+std\-::vector$<$ std\-::tuple\\*
+$<$ double, double, double $>$ $>$ \hyperlink{class_mode_track_af99ee8eb4ea41c82bb67243e597744d1}{estimated\-\_\-paths}
+\begin{DoxyCompactList}\small\item\em quadratic best-\/fit coeffecients for each of the four modes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Base Class for mode tracking algorithims; designed to be wrapped with Swig and called from Python module. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_mode_track_a83776f06fac4ccff81ae76405dc5bee8}{\index{Mode\-Track@{Mode\-Track}!Compare\-And\-Fill@{Compare\-And\-Fill}}
+\index{Compare\-And\-Fill@{Compare\-And\-Fill}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Compare\-And\-Fill}]{\setlength{\rightskip}{0pt plus 5cm}std\-::map$<$ uint, double $>$ Mode\-Track\-::\-Compare\-And\-Fill (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$ \&}]{peak\-\_\-list, }
+\item[{std\-::vector$<$ std\-::tuple$<$ double, double, double $>$ $>$ \&}]{comparison\-\_\-list}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_a83776f06fac4ccff81ae76405dc5bee8}
+
+
+Compare the position of each identified peak with estimated peak position. 
+
+Estimated peak positions are generated from old Reflection Map data. The distance -\/in frequency space-\/ between each identified peak and each estimated peak is computed. Using these numbers the index of each identified peak is determined (by looking at the smallest frequency seperation). If duplicate peak indices are discovered the one with the smallest frequency seperation is used.
+
+If it is found that any peaks have been missed, that is there is a gap between identified peak indices, the position of the missing peaks will be estimated using the \hyperlink{class_mode_track_a7960f1ee58a1a420814843ca0f8c0ae4}{Generate\-Spline()} function. For example if peaks 0 and 3 were found, the position of peaks 1 and 2 would be estimated.
+
+
+\begin{DoxyParams}{Parameters}
+{\em peak\-\_\-list} & List of peaks identified by \hyperlink{class_mode_track_a69dab14db20b8ffdcae63914fb2e0c83}{Find\-Peaks()} functions \\
+\hline
+{\em comparison\-\_\-list} & List of data triples generated by \hyperlink{class_mode_track_a7960f1ee58a1a420814843ca0f8c0ae4}{Generate\-Spline()} function \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Dictionary of identified peaks, with the format of 
+\end{DoxyReturn}
+\hypertarget{class_mode_track_a8d08e12e9d882c875e6f7f4b8539f542}{\index{Mode\-Track@{Mode\-Track}!Convolve@{Convolve}}
+\index{Convolve@{Convolve}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Convolve}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$ double $>$ Mode\-Track\-::\-Convolve (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$ \&}]{data\-\_\-list, }
+\item[{std\-::vector$<$ double $>$ \&}]{kernel}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_a8d08e12e9d882c875e6f7f4b8539f542}
+
+
+Compute the 1\-D convolution of data\-\_\-list with kernel. 
+
+Note that edge effects are handeled by zero padding data\-\_\-list
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\-\_\-list} & List of data to be convolved with kernel \\
+\hline
+{\em kernel} & Convolution kernel, must be smaller than data\-\_\-list \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Convolution of data\-\_\-list and kernel 
+\end{DoxyReturn}
+\hypertarget{class_mode_track_a8461b01cf1c811aa7cf781fb9bb07f68}{\index{Mode\-Track@{Mode\-Track}!Derivative@{Derivative}}
+\index{Derivative@{Derivative}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Derivative}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$ double $>$ Mode\-Track\-::\-Derivative (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$ \&}]{data\-\_\-list}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_a8461b01cf1c811aa7cf781fb9bb07f68}
+
+
+Compute the the forth order approximation of the derivative. 
+
+Uses method $ f'(n) \approx \frac{-f(n+2)+8*f(n+1)-8*f(n-1)+f(n-2)}{12} $ to approximate the derivative.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\-\_\-list} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\hypertarget{class_mode_track_a69dab14db20b8ffdcae63914fb2e0c83}{\index{Mode\-Track@{Mode\-Track}!Find\-Peaks@{Find\-Peaks}}
+\index{Find\-Peaks@{Find\-Peaks}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Find\-Peaks}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$ double $>$ Mode\-Track\-::\-Find\-Peaks (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$ \&}]{data\-\_\-list, }
+\item[{Mode\-Track\-::\-Method}]{method}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_a69dab14db20b8ffdcae63914fb2e0c83}
+
+
+Find minima peaks in a list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\-\_\-list} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+List of peaks in the order in which they were found. Note that peak position will be given by indices with regard to the original list. 
+\end{DoxyReturn}
+\hypertarget{class_mode_track_a53130b8d183a69b14d2ef47666d09385}{\index{Mode\-Track@{Mode\-Track}!From\-File@{From\-File}}
+\index{From\-File@{From\-File}!ModeTrack@{Mode\-Track}}
+\subsubsection[{From\-File}]{\setlength{\rightskip}{0pt plus 5cm}void Mode\-Track\-::\-From\-File (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{config\-\_\-name}
+\end{DoxyParamCaption}
+)}}\label{class_mode_track_a53130b8d183a69b14d2ef47666d09385}
+
+
+Run mode tracking algorithim on previously saved data. 
+
+This function is primarily used to test the effectiveness of the mode tracking scheme. It is not designed to be called while the experiment is running.
+
+
+\begin{DoxyParams}{Parameters}
+{\em config\-\_\-name} & path to the file that should be searched \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_mode_track_aa315defc02162bed269fa981a01382b8}{\index{Mode\-Track@{Mode\-Track}!Gauss\-Blur@{Gauss\-Blur}}
+\index{Gauss\-Blur@{Gauss\-Blur}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Gauss\-Blur}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$ double $>$ Mode\-Track\-::\-Gauss\-Blur (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$ \&}]{data\-\_\-list}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_aa315defc02162bed269fa981a01382b8}
+
+
+Compute the convulution of data\-\_\-list with a Gaussian kernel. 
+
+The Gaussian kernel will have radius of 15 and sigma = 15/2.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\-\_\-list} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\hypertarget{class_mode_track_ad69c546f3d3ac916b0f00c7aa2917903}{\index{Mode\-Track@{Mode\-Track}!Gauss\-Kernel@{Gauss\-Kernel}}
+\index{Gauss\-Kernel@{Gauss\-Kernel}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Gauss\-Kernel}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$ double $>$ Mode\-Track\-::\-Gauss\-Kernel (
+\begin{DoxyParamCaption}
+\item[{int}]{r}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_ad69c546f3d3ac916b0f00c7aa2917903}
+
+
+Generate a Gaussian kernel of radius r and sigma = r/2 Kernel is generated by sampling Gaussian function with sigma = r/2 a total of r times. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & The radius of the generated kernel \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Gassian Kernel 
+\end{DoxyReturn}
+\hypertarget{class_mode_track_a7960f1ee58a1a420814843ca0f8c0ae4}{\index{Mode\-Track@{Mode\-Track}!Generate\-Spline@{Generate\-Spline}}
+\index{Generate\-Spline@{Generate\-Spline}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Generate\-Spline}]{\setlength{\rightskip}{0pt plus 5cm}double Mode\-Track\-::\-Generate\-Spline (
+\begin{DoxyParamCaption}
+\item[{int}]{mode\-\_\-number, }
+\item[{double}]{length}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_a7960f1ee58a1a420814843ca0f8c0ae4}
+
+
+Generate\-Spline. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mode\-\_\-number} & \\
+\hline
+{\em length} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\hypertarget{class_mode_track_a8ffe12b39a5d90b6ba7a25c0c66bea8d}{\index{Mode\-Track@{Mode\-Track}!Get\-Max\-Peak@{Get\-Max\-Peak}}
+\index{Get\-Max\-Peak@{Get\-Max\-Peak}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Get\-Max\-Peak}]{\setlength{\rightskip}{0pt plus 5cm}double Mode\-Track\-::\-Get\-Max\-Peak (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{data\-\_\-str}
+\end{DoxyParamCaption}
+)}}\label{class_mode_track_a8ffe12b39a5d90b6ba7a25c0c66bea8d}
+
+
+Find a local maximum in a list of data. 
+
+This method applies the same Gaussian Blur/\-Derivative filter combination that 'Get\-Peaks' uses, but does not make reference to the estimated peak positions. If multiple peaks are identified take the one with the highest overall value. This function is designed to be called when identifying peaks when looking at a transmission measurement.
+
+\begin{DoxyReturn}{Returns}
+Frequency of maxima, if one is found. Otherwise return value will be 0. 
+\end{DoxyReturn}
+\hypertarget{class_mode_track_a2158f2117f99a3aee6891bcc2126aa83}{\index{Mode\-Track@{Mode\-Track}!Get\-Peaks\-Bi\-Lat@{Get\-Peaks\-Bi\-Lat}}
+\index{Get\-Peaks\-Bi\-Lat@{Get\-Peaks\-Bi\-Lat}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Get\-Peaks\-Bi\-Lat}]{\setlength{\rightskip}{0pt plus 5cm}double Mode\-Track\-::\-Get\-Peaks\-Bi\-Lat (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{data\-\_\-str, }
+\item[{int}]{mode\-\_\-number}
+\end{DoxyParamCaption}
+)}}\label{class_mode_track_a2158f2117f99a3aee6891bcc2126aa83}
+
+
+Identify minima peaks in a list of power data using Bilateral filtering. 
+
+This function is very similar to \hyperlink{class_mode_track_ac4ab8caa7ab71906390651cdd4c20c0c}{Get\-Peaks\-Gauss()} except for the method that is used to filter data. This function makes use of a Bilateral filter for data pre-\/processing.
+
+See \href{https://users.cs.duke.edu/~tomasi/papers/tomasi/tomasiIccv98.pdf}{\tt https\-://users.\-cs.\-duke.\-edu/$\sim$tomasi/papers/tomasi/tomasi\-Iccv98.\-pdf} for more details.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\-\_\-str} & string containing power data that should be searched through. Needs to be in the a list of values seperated by commas, eg \char`\"{}p1,p2,...,pn\char`\"{}\\
+\hline
+{\em mode\-\_\-number} & Identify which mode should be tracked. Choices are 0,1,2 and 3.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The frequency of the requested mode in M\-Hz. If the requested mode was not found a value of 0 will be returned. 
+\end{DoxyReturn}
+\hypertarget{class_mode_track_ac4ab8caa7ab71906390651cdd4c20c0c}{\index{Mode\-Track@{Mode\-Track}!Get\-Peaks\-Gauss@{Get\-Peaks\-Gauss}}
+\index{Get\-Peaks\-Gauss@{Get\-Peaks\-Gauss}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Get\-Peaks\-Gauss}]{\setlength{\rightskip}{0pt plus 5cm}double Mode\-Track\-::\-Get\-Peaks\-Gauss (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{data\-\_\-str, }
+\item[{int}]{mode\-\_\-number}
+\end{DoxyParamCaption}
+)}}\label{class_mode_track_ac4ab8caa7ab71906390651cdd4c20c0c}
+
+
+Identify minima peaks in a list of power data using Gaussian filtering. 
+
+This function is designed to be called by the main control code during data taking. The main control program will collect reflection measurements and call this function to identify the position of the mode of desire.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\-\_\-str} & string containing power data that should be searched through. Needs to be in the a list of values seperated by commas, eg \char`\"{}p1,p2,...,pn\char`\"{}\\
+\hline
+{\em mode\-\_\-number} & Identify which mode should be tracked. Choices are 0,1,2 and 3.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The frequency of the requested mode in M\-Hz. If the requested mode was not found a value of 0 will be returned. 
+\end{DoxyReturn}
+\hypertarget{class_mode_track_a4e0a0d9430910d77c067c0ee40110200}{\index{Mode\-Track@{Mode\-Track}!Load\-From\-Config@{Load\-From\-Config}}
+\index{Load\-From\-Config@{Load\-From\-Config}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Load\-From\-Config}]{\setlength{\rightskip}{0pt plus 5cm}void Mode\-Track\-::\-Load\-From\-Config (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{config\-\_\-name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_a4e0a0d9430910d77c067c0ee40110200}
+
+
+opens file specified and loads values into enteries\-\_\-strings 
+
+
+\begin{DoxyParams}{Parameters}
+{\em config\-\_\-name} & path to file that the mode tracking algorithim should be run against, usually an old mode map or coupling map. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_mode_track_ac9749deca774e487cbcc694a56b226cd}{\index{Mode\-Track@{Mode\-Track}!Normalize@{Normalize}}
+\index{Normalize@{Normalize}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Normalize}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$ double $>$ Mode\-Track\-::\-Normalize (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$ \&}]{data\-\_\-list}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_ac9749deca774e487cbcc694a56b226cd}
+
+
+Normalize a list of data w.\-r.\-t. to the L2 norm. 
+
+That is for the list of the values $ \{a_1,a_2...,a_i\}$ ensure that $ \sqrt{\sum_{i=1}^n | a_i |^2} = 1 $ 
+\begin{DoxyParams}{Parameters}
+{\em data\-\_\-list} & The input list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Normalized list. Note that this allows the original list to go unaltered. 
+\end{DoxyReturn}
+\hypertarget{class_mode_track_a9e59f0ed0b57daebd0d051d594faf1f9}{\index{Mode\-Track@{Mode\-Track}!Parse\-String@{Parse\-String}}
+\index{Parse\-String@{Parse\-String}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Parse\-String}]{\setlength{\rightskip}{0pt plus 5cm}void Mode\-Track\-::\-Parse\-String (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{data\-\_\-str}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_a9e59f0ed0b57daebd0d051d594faf1f9}
+
+
+Parse\-String. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\-\_\-str} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_mode_track_a5dccdca7cd909c332b5ed1e09118cd98}{\index{Mode\-Track@{Mode\-Track}!Populate\-Best\-Fit\-Curves@{Populate\-Best\-Fit\-Curves}}
+\index{Populate\-Best\-Fit\-Curves@{Populate\-Best\-Fit\-Curves}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Populate\-Best\-Fit\-Curves}]{\setlength{\rightskip}{0pt plus 5cm}void Mode\-Track\-::\-Populate\-Best\-Fit\-Curves (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_a5dccdca7cd909c332b5ed1e09118cd98}
+
+
+Load cubic spline coeffecients for modes 0 through 3. 
+
+These values were attained by examining an old mode map. \hypertarget{class_mode_track_aa04491a2f3b4bb04fe6503757d416b73}{\index{Mode\-Track@{Mode\-Track}!Set\-Background@{Set\-Background}}
+\index{Set\-Background@{Set\-Background}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Set\-Background}]{\setlength{\rightskip}{0pt plus 5cm}void Mode\-Track\-::\-Set\-Background (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{background\-\_\-str}
+\end{DoxyParamCaption}
+)}}\label{class_mode_track_aa04491a2f3b4bb04fe6503757d416b73}
+
+
+Set background data which will be subtracted from each measurement. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em background\-\_\-str} & string of power values seperated by commas, eg \char`\"{}p1,p2,...,pn\char`\"{} \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_mode_track_afe43b234695b74e5c493acb08aec39b7}{\index{Mode\-Track@{Mode\-Track}!Std\-Dev@{Std\-Dev}}
+\index{Std\-Dev@{Std\-Dev}!ModeTrack@{Mode\-Track}}
+\subsubsection[{Std\-Dev}]{\setlength{\rightskip}{0pt plus 5cm}double Mode\-Track\-::\-Std\-Dev (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$ \&}]{data\-\_\-list}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_afe43b234695b74e5c493acb08aec39b7}
+
+
+Compute the standard deviation of a list. 
+
+Includes unbiasing via Bessel's correction, ie $ \frac{n}{n-1} $
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\-\_\-list} & Input data list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Standard deviation of list. 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_mode_track_af99ee8eb4ea41c82bb67243e597744d1}{\index{Mode\-Track@{Mode\-Track}!estimated\-\_\-paths@{estimated\-\_\-paths}}
+\index{estimated\-\_\-paths@{estimated\-\_\-paths}!ModeTrack@{Mode\-Track}}
+\subsubsection[{estimated\-\_\-paths}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$std\-::tuple$<$double,double,double$>$ $>$ Mode\-Track\-::estimated\-\_\-paths\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mode_track_af99ee8eb4ea41c82bb67243e597744d1}
+
+
+quadratic best-\/fit coeffecients for each of the four modes. 
+
+format is $ f(x) = a x^2+b x+c$ and tuple is populated with (a,b,c) first entry in vector corresponds to the first mode (ie mode 0) second entry corresponds to mode 1 etc. 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+/home/bephillips2/workspace/\-Electric\-\_\-\-Tiger\-\_\-\-Control\-\_\-\-Code/modetrack.\-h\item 
+/home/bephillips2/workspace/\-Electric\-\_\-\-Tiger\-\_\-\-Control\-\_\-\-Code/modetrack.\-cpp\end{DoxyCompactItemize}

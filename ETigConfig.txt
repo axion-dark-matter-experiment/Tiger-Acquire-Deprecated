@@ -1,7 +1,7 @@
 d;save_file_path;/home/bephillips2/workspace/Electric-Tiger
-d;len_of_tune;5
+d;len_of_tune;5.282
 d;revs_per_iter;1
-d;start_length;5.165
+d;start_length;
 d;nwa_span;400
 d;nwa_points;401
 d;nwa_power;12.5

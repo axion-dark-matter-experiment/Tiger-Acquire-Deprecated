@@ -1,0 +1,44 @@
+\hypertarget{classdata__processors_1_1_convertor}{\section{data\-\_\-processors.\-Convertor Class Reference}
+\label{classdata__processors_1_1_convertor}\index{data\-\_\-processors.\-Convertor@{data\-\_\-processors.\-Convertor}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classdata__processors_1_1_convertor_a94e11e94ade77ad72d4e4d023743be0a}{def {\bfseries str\-\_\-list\-\_\-to\-\_\-power\-\_\-list}}\label{classdata__processors_1_1_convertor_a94e11e94ade77ad72d4e4d023743be0a}
+
+\item 
+\hypertarget{classdata__processors_1_1_convertor_a5e2186b5bf7c96c63dc2e2bdc732ea80}{def {\bfseries power\-\_\-list\-\_\-to\-\_\-str}}\label{classdata__processors_1_1_convertor_a5e2186b5bf7c96c63dc2e2bdc732ea80}
+
+\item 
+def \hyperlink{classdata__processors_1_1_convertor_a88faafccd5d1c63f535859ce1ce40b80}{make\-\_\-plot\-\_\-points}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classdata__processors_1_1_convertor_a88faafccd5d1c63f535859ce1ce40b80}{\index{data\-\_\-processors\-::\-Convertor@{data\-\_\-processors\-::\-Convertor}!make\-\_\-plot\-\_\-points@{make\-\_\-plot\-\_\-points}}
+\index{make\-\_\-plot\-\_\-points@{make\-\_\-plot\-\_\-points}!data_processors::Convertor@{data\-\_\-processors\-::\-Convertor}}
+\subsubsection[{make\-\_\-plot\-\_\-points}]{\setlength{\rightskip}{0pt plus 5cm}def data\-\_\-processors.\-Convertor.\-make\-\_\-plot\-\_\-points (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{raw\-\_\-data, }
+\item[{}]{cavity\-\_\-length, }
+\item[{}]{min\-\_\-frequency, }
+\item[{}]{max\-\_\-frequency}
+\end{DoxyParamCaption}
+)}}\label{classdata__processors_1_1_convertor_a88faafccd5d1c63f535859ce1ce40b80}
+\begin{DoxyVerb}Convert collected data into a format suitable for saving or processing.
+Output data will be a list of triples (Frequency(mHz),Cavity Length(in),Power(dBm))
+    
+Args:
+    raw_data:Either a list of strings or a single string in comma seperated format
+    cavity_length:The current length of the cavity in inches
+    nominal_centers:RunTimeParameters class
+    
+Returns:
+    plot_points, a list of data triples with the format described above
+\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/bephillips2/workspace/\-Electric\-\_\-\-Tiger\-\_\-\-Control\-\_\-\-Code/data\-\_\-processors.\-py\end{DoxyCompactItemize}

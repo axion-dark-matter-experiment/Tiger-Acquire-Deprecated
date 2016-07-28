@@ -1,0 +1,91 @@
+\hypertarget{classconfig__classes_1_1_config_types}{\section{config\-\_\-classes.\-Config\-Types Class Reference}
+\label{classconfig__classes_1_1_config_types}\index{config\-\_\-classes.\-Config\-Types@{config\-\_\-classes.\-Config\-Types}}
+}
+Inheritance diagram for config\-\_\-classes.\-Config\-Types\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classconfig__classes_1_1_config_types}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classconfig__classes_1_1_config_types_ae72c95b861cdf7720bac010da60bd082}{\-\_\-\-\_\-init\-\_\-\-\_\-}
+\item 
+def \hyperlink{classconfig__classes_1_1_config_types_a73e7c999dc01bc081ae866d485be3836}{close\-\_\-all}
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classconfig__classes_1_1_config_types_a34ce9f770593d52d488c15078aaaf139}{{\bfseries print\-\_\-green}}\label{classconfig__classes_1_1_config_types_a34ce9f770593d52d488c15078aaaf139}
+
+\item 
+\hypertarget{classconfig__classes_1_1_config_types_a9751b795ba6bfef933f91cf3b6dd4505}{{\bfseries print\-\_\-purple}}\label{classconfig__classes_1_1_config_types_a9751b795ba6bfef933f91cf3b6dd4505}
+
+\item 
+\hypertarget{classconfig__classes_1_1_config_types_a064692a58bf56ea42d3ac3f5f4fa73b3}{{\bfseries print\-\_\-blue}}\label{classconfig__classes_1_1_config_types_a064692a58bf56ea42d3ac3f5f4fa73b3}
+
+\item 
+\hypertarget{classconfig__classes_1_1_config_types_acf58fae99cf73fb829bea02f4c37dccf}{{\bfseries print\-\_\-red}}\label{classconfig__classes_1_1_config_types_acf58fae99cf73fb829bea02f4c37dccf}
+
+\item 
+\hypertarget{classconfig__classes_1_1_config_types_a6d67331a2645674e277620507d715521}{{\bfseries sock\-\_\-dict}}\label{classconfig__classes_1_1_config_types_a6d67331a2645674e277620507d715521}
+
+\item 
+\hypertarget{classconfig__classes_1_1_config_types_ad8abbf130e01aef1a3df21e9610d796f}{{\bfseries data\-\_\-dict}}\label{classconfig__classes_1_1_config_types_ad8abbf130e01aef1a3df21e9610d796f}
+
+\item 
+\hypertarget{classconfig__classes_1_1_config_types_a66280f7aa817c2bfa3c80973041ae53c}{{\bfseries addr\-\_\-dict}}\label{classconfig__classes_1_1_config_types_a66280f7aa817c2bfa3c80973041ae53c}
+
+\item 
+\hypertarget{classconfig__classes_1_1_config_types_a941d66a12dd918e27fc2d0c2ae784194}{{\bfseries sock\-\_\-comm}}\label{classconfig__classes_1_1_config_types_a941d66a12dd918e27fc2d0c2ae784194}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Contains data that is read from user specified config file.
+Class is responsible for reading and parsing config file, as well as generating
+socket objects for all instruments.
+Makes use of two dictionaries, data_dict for plain data types and sock_dict for socket objects.
+
+Member variables in data_dict are mutable during run time, members of sock_dict are not.
+
+Attributes:
+    sock_data: Dictionary that holds socket objects, format is instrument_name:[socket_object]
+    data_dict: Dictionary that hold plain data loaded from the config file, format is data_title:[data_value]
+\end{DoxyVerb}
+ 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classconfig__classes_1_1_config_types_ae72c95b861cdf7720bac010da60bd082}{\index{config\-\_\-classes\-::\-Config\-Types@{config\-\_\-classes\-::\-Config\-Types}!\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}}
+\index{\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}!config_classes::ConfigTypes@{config\-\_\-classes\-::\-Config\-Types}}
+\subsubsection[{\-\_\-\-\_\-init\-\_\-\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}def config\-\_\-classes.\-Config\-Types.\-\_\-\-\_\-init\-\_\-\-\_\- (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{config\-\_\-path}
+\end{DoxyParamCaption}
+)}}\label{classconfig__classes_1_1_config_types_ae72c95b861cdf7720bac010da60bd082}
+\begin{DoxyVerb}Initailzie dictionary objects, and populate from config file information.
+
+Args:
+    config_path: string specifying path to config file, set by command line argument.
+\end{DoxyVerb}
+ 
+
+\subsection{Member Function Documentation}
+\hypertarget{classconfig__classes_1_1_config_types_a73e7c999dc01bc081ae866d485be3836}{\index{config\-\_\-classes\-::\-Config\-Types@{config\-\_\-classes\-::\-Config\-Types}!close\-\_\-all@{close\-\_\-all}}
+\index{close\-\_\-all@{close\-\_\-all}!config_classes::ConfigTypes@{config\-\_\-classes\-::\-Config\-Types}}
+\subsubsection[{close\-\_\-all}]{\setlength{\rightskip}{0pt plus 5cm}def config\-\_\-classes.\-Config\-Types.\-close\-\_\-all (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classconfig__classes_1_1_config_types_a73e7c999dc01bc081ae866d485be3836}
+\begin{DoxyVerb}Function to close all sockets in the socket dictionary, to be called before program exit or during error handling
+    should not throw errors since sockets should only be added to dictionary when connection was successful, avoiding the case of a NULL value
+\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/bephillips2/workspace/\-Electric\-\_\-\-Tiger\-\_\-\-Control\-\_\-\-Code/config\-\_\-classes.\-py\end{DoxyCompactItemize}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.4
 
-import socket_connect_2 as sc
+import socket_communicators as sc
 import argparse
 
 parser = argparse.ArgumentParser(description='Manually tune the length of the cavity.')
@@ -10,42 +10,53 @@ parser.add_argument('-H','--haste', help='Move the cavity quickly (5x faster tha
 parser.add_argument('travel', type=float, help='Distance to tune the cavity (in inches).')
 args = parser.parse_args()
 
-def move_step(tune_length, haste_on = False):
-    rev = tune_length * 16
-    step = sc.socket_connect("10.95.100.177", 7776)
+class StepperMover (sc.SocketComm):
+    
+    def __init__(self, host = "10.95.100.177", port = 7776):
+        super(StepperMover, self).__init__()
+        self.step_sock = self._socket_connect(host, port)
+        
+    def __call__(self, tune_length, haste):
+        self.__move_step(tune_length, haste)
 
-    nsteps = int(rev*200)
-    # set steps per revolution to 200 steps/revolution
-    sc.send_command_scl(step, "MR0")
-
-    if(haste_on):
-        # Acceleration of 5 rev/s/s
-        sc.send_command_scl(step, "AC5")
-        # Deceleration of 5 rev/s/s
-        sc.send_command_scl(step, "DE5")
-        # Velocity of 5 rev/s
-        sc.send_command_scl(step, "VE5")
-
-    else:
-        # Acceleration of 1 rev/s/s
-        sc.send_command_scl(step, "AC1")
-        # Deceleration of 1 rev/s/s
-        sc.send_command_scl(step, "DE1")
-        # Velocity of 80 rev/s
-        sc.send_command_scl(step, "VE1")
-
-    print ("Moving motor "+ str(abs(rev))+" revolutions.")
-
-    sc.send_command_scl(step, "FL"+str(nsteps))
-
-    step.close()
+    def __move_step(self, tune_length, haste_on = False): 
+            
+        rev = tune_length * 16
+    
+        nsteps = int(rev*200)
+        # set steps per revolution to 200 steps/revolution
+        self._send_command_scl(self.step_sock, "MR0")
+    
+        if(haste_on):
+            # Acceleration of 5 rev/s/s
+            self._send_command_scl(self.step_sock, "AC5")
+            # Deceleration of 5 rev/s/s
+            self._send_command_scl(self.step_sock, "DE5")
+            # Velocity of 5 rev/s
+            self._send_command_scl(self.step_sock, "VE5")
+    
+        else:
+            # Acceleration of 1 rev/s/s
+            self._send_command_scl(self.step_sock, "AC1")
+            # Deceleration of 1 rev/s/s
+            self._send_command_scl(self.step_sock, "DE1")
+            # Velocity of 80 rev/s
+            self._send_command_scl(self.step_sock, "VE1")
+    
+        print ("Moving motor "+ str(abs(rev))+" revolutions.")
+    
+        self._send_command_scl(self.step_sock, "FL"+str(nsteps))
+    
+        self.step_sock.close()
 
 def main():
+    
+    step_mover = StepperMover()
 
     if(args.extend):
-        move_step(args.travel,args.haste)
+        step_mover(args.travel,args.haste)
     elif(args.retract):
-        move_step(-1*args.travel,args.haste)
+        step_mover(-1*args.travel,args.haste)
 
 if __name__ == "__main__":
     main()
