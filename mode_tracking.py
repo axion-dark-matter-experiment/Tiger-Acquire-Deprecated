@@ -40,13 +40,13 @@ class ModeTrackBody(config_classes.ConfigTypes):
         self.m_track = mt.ModeTrack()
         self.convertor = procs.Convertor()
 
-        self.freq_window = self.data_dict['freq_window']  # Frequency window used for identify peaks specified in MHz
-        self.sa_span = self.data_dict['sa_span']  # MHz
-        self.sa_averages = self.data_dict['sa_averages']  # total number of averages to take, Max is
-        self.fft_length = self.data_dict['fft_length']  # Number of IQ points to generate spectrum, Max is
+        self.freq_window = int(self.data_dict['freq_window'])  # Frequency window used for identify peaks specified in MHz
+        self.sa_span = int(self.data_dict['sa_span'])  # MHz
+        self.sa_averages = int(self.data_dict['sa_averages'])  # total number of averages to take, Max is
+        self.fft_length = int(self.data_dict['fft_length'])  # Number of IQ points to generate spectrum, Max is
         self.nominal_centers = self.data_dict['nominal_centers']
-        self.num_of_iters = self.data_dict['num_of_iters']
-        self.nwa_span = self.data_dict['nwa_span']
+        self.num_of_iters = int(self.data_dict['num_of_iters'])
+        self.nwa_span = int(self.data_dict['nwa_span'])
 
         self.fitted_q = 0.0
         self.fitted_center_freq = 0.0
@@ -65,6 +65,7 @@ class ModeTrackBody(config_classes.ConfigTypes):
 
     def prequel(self):
         self.switch_comm.switch_to_network_analyzer()
+        self.switch_comm.switch_to_reflection()
 
 
     def get_data_nwa(self):
@@ -167,7 +168,7 @@ class ModeTrackBody(config_classes.ConfigTypes):
         
         self.nwa_comm.set_freq_window(mode_of_desire , freq_window)
         initial_window = self.nwa_comm.take_data_single()
-        initial_window = self.convertor.str_list_to_power_list(initial_window)
+        initial_window = self.convertor.format_points(initial_window)
         
         self.plotter(initial_window, self.mode_of_desire, freq_window)
 
@@ -176,7 +177,7 @@ class ModeTrackBody(config_classes.ConfigTypes):
         new_mode_of_desire = self.__recenter_peak(initial_window)
 
         final_window = self.nwa_comm.take_data_single()
-        final_window = self.convertor.str_list_to_power_list(final_window)
+        final_window = self.convertor.format_points(final_window)
         
         self.plotter(initial_window, self.mode_of_desire, freq_window)
 

@@ -1,5 +1,10 @@
-# _socket_connect.py
-# Functions for connecting to remote machines
+"""
+Group of classes that handle communications between the local machine (the one running the program)
+and remote instruments via network sockets.
+
+This file also serves as a replacement for the old 'socket_connect' module and its' slightly more
+modern incarnation, 'socket_connect_2'
+"""
 
 import socket
 import sys
@@ -7,10 +12,15 @@ import select
 import time  # sleep
 import color_printer as cp
 
-
 class SocketComm:
-    
+    """
+    Object that handles basic network socket operations.
+    This class is responsible for generating sockets, sending strings and receiving strings.
+    """    
     def __init__(self):
+        """
+        Initialize color printers.
+        """
         
         self.print_green = cp.ColorPrinter("Green")
         self.print_purple = cp.ColorPrinter("Purple")
@@ -18,49 +28,107 @@ class SocketComm:
         self.print_red = cp.ColorPrinter("Red")
 
     def _socket_connect(self, host, port):
+        """
+        Attempt to generate a socket to IP address 'host' on port 'port'
+        
+        Args:
+            host: The IP address we want to connect to, specified as a string
+            ex "8.8.8.8"
+            
+            port: The port we wish to connect to, specifed as a number
+            ex. 80
+            
+        Returns:
+            Socket object to the specified IP and port on success, None on failure
+        """
 
-        # get host info using supplied host and port
+        #Attempt to get host info
         try:
             sockinfo = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)
         except OSError:
+            #Return None if we fail
             print ("Socket Connect: could not get host info.")
             return None
 
-        # connect to first socket we can
+        # Connect to first socket we can
         for sock in sockinfo:
             try:
                 s = socket.socket(sock[0], sock[1], sock[2])
                 s.settimeout(5)  # set socket time-out to 5 seconds, default is ~120 seconds
                 s.connect((host, port))
                 print ("Socket Connect: connected to", s.getpeername()[0])
+                #Return socket object on success
                 return s
             except (IOError, ValueError) as exc:
                 print ("Socket Connect: Could not connect to socket.")
-                # raise the same errors that tripped _socket_connect so functioned that
+                # Raise the same errors that tripped _socket_connect so functioned that
                 # caller is aware of the error
                 raise exc
                 return None
 
-    # send a string to the device connected on the socket
     def _send_command(self, sock, cmd, terminator='\n'):
+        """
+        Send a terminated string to a socket.
+        Most instruments recognize '\n' as EOF so we use that for the default.
+        
+        Note that this function should not be used to send long commands since
+        it will time-out after a while.
+        
+        Args:
+            sock: The socket object to send the string to
+            cmd: The string to be sent
+            terminator: EOF character to append to the end of the string
+        """
         try:
             command = cmd + terminator
             sock.send(command.encode())
         except:
             print ("Error sending command", cmd, sys.exc_info()[0])
 
-    # send a command of arbitary length to socket
-    # entire command will be sent until finished or an error occurs
-    # unlike _send_command the socket will not time-our or end prematurely
     def _send_command_long(self, sock, cmd, terminator='\n'):
+        """
+        Send a terminated string of arbitrary length to a socket.
+        Unlike _send_command this function will never time and, and will
+        continuing sending data until finished or an error occurs.
+        
+        Args:
+            sock: The socket object to send the string to
+            cmd: The string to be sent
+            terminator: EOF character to append to the end of the string
+        """
         try:
             command = cmd + terminator
             sock.sendall(command.encode())
         except:
             print ("Error sending command", cmd, sys.exc_info()[0])
+            
+    # Special send command that formats data so it can be send to the stepper motor
+    def _send_command_scl(self, sock, cmd):
+        """
+        Special version of _send_command that accommodates the amazingly weird
+        terminator conventions that Applied Motion Products steppers motors use.
+        
+        Args:
+            sock: Stepper motor socket object
+            cmd: String to be sent
+        """
+        cmd = "\0\a" + cmd
+        self._send_command(sock, cmd, terminator='\r')
+
 
     # read data and store in a string
     def _read_data(self, sock, printlen=False, timeout=2):
+        """
+        Read a string from a socket object.
+        
+        Args:
+            sock: Socket to read from
+            printlen: if true show the number of bytes read
+            timeout: max time to wait for the socket to respond
+            
+        Returns:
+            data: The data read from the socket as a string
+        """
         data = ''
         while(select.select([sock], [], [], timeout) != ([], [], [])):
             buff = sock.recv(2048)
@@ -68,14 +136,24 @@ class SocketComm:
         if printlen: print ("received", len(data), "bytes")
         return data
 
-    # Special send command that formats data so it can be send to the stepper motor
-    def _send_command_scl(self, sock, cmd):
-        cmd = "\0\a" + cmd
-        self._send_command(sock, cmd, terminator='\r')
-
 class NetworkAnalyzerComm (SocketComm):
+    """
+    Object to communicate with the HP8757 C Network Analyzer.
+    """
 
     def __init__(self, nwa_sock, nwa_points, nwa_span, nwa_power):
+        """
+        Handle all set-up tasks necessary so the Analyzer can receive commands and output data.
+        
+        It should be noted the Args for this contructor should be pulled from the config file,
+        and not specified by hand.
+        
+        Args:
+            nwa_sock: Socket where the Network Analyzer can be found
+            nwa_points: Number of data points the NA will output when collecting a -single- set of data
+            nwa_span: How wide the frequency window is for a -single- set of data, in MHz
+            nwa_power: Power to set the RF source to, in dBm
+        """
         super(NetworkAnalyzerComm, self).__init__()
         
         self.nwa_sock = nwa_sock
@@ -86,21 +164,33 @@ class NetworkAnalyzerComm (SocketComm):
         self.print_purple("Setting GPIB convertor")
 
     def __set_GPIB(self):
+        """
+        Initialize the Prologix GPIB-ETHERNET Controller.
+        """
 
-#         self.print_purple("Setting GPIB converter")
         self.print_purple("Setting GPIB converter")
-        # set to network analyzer GPIB address
+        
+        # Set to network analyzer GPIB address
         self._send_command(self.nwa_sock, "++addr 16")
-        # disable auto-read
+        # Disable Auto-Read
         self._send_command(self.nwa_sock, "++auto 0")
-        # enable EOI assertion at end of commands
+        # Enable EOI assertion at end of commands
         self._send_command(self.nwa_sock, "++eoi 1")
-        # append CR+LF to instrument commands
+        # Append CR+LF to instrument commands
         self._send_command(self.nwa_sock, "++eos 0")
         
         self.print_green("GPIB converter set.")
 
     def __set_network_analyzer(self, nwa_points, do_avg=False):
+        """
+        Set all - Network Analyzer - parameters that will not change for the duration of the
+        experiment. 
+        
+        Args:
+            nwa_points: Number of data points the NA will output when collecting a -single- set of data
+            do_avg: Should averaging be performed or not? Since by default we only collect data from a
+             single signal sweep this is set to off by default.
+        """
 
         self.print_purple("Setting network analyzer")
         # set active channel to 1
@@ -123,14 +213,15 @@ class NetworkAnalyzerComm (SocketComm):
         self.print_green("Network analyzer set")
 
     def __set_RF_mapping(self, nwa_span, nwa_power):
-
-        # Make sure first switch is directing signal to the network analyzer
-        # instead of the signal analyzer
-#         self.print_purple("Sending signal to Network Analyzer")
-#         # switch actuation voltage is 28 volts
-#         self._send_command(switch, "V2 28")
-#         # switch needs to be off to send signal to network analyzer
-#         self._send_command(switch, "OP1 0")
+        
+        """
+        Set all - Signal Sweeper - parameters that will not change for the duration of the
+        experiment.
+        
+        Args:
+            nwa_span: How wide the frequency window is for a -single- set of data, in MHz
+            nwa_power: Power to set the RF source to, in dBm
+        """
         
         self.print_purple("setting up RF source")
         # set passthrough mode to RF source
@@ -153,6 +244,17 @@ class NetworkAnalyzerComm (SocketComm):
         self._send_command(self.nwa_sock, "++addr 16")
 
     def collect_data(self, freq_centers):
+        """
+        Collect wide-scan data by stitching together data from several individual frequency windows.
+        This is the main method used to collect power specta from the Network Analyzer.
+        
+        Args:
+            freq_centers: List of frequencies where the individual frequency windows should be centered.
+            Note that the frequency span used is set by the constructor parameter 'freq_span'
+            
+        Returns:
+            Comma seperated power spectrum, returned as a single string
+        """
         
         tmp_list = []
         
@@ -176,9 +278,12 @@ class NetworkAnalyzerComm (SocketComm):
         
             # turn off swept mode
             self._send_command(self.nwa_sock, "SW0")
-            # set analyzer to perform exactly five sweeps
+            # set analyzer to perform exactly one sweep
             self._send_command(self.nwa_sock, "TS1")
-            # give network analyzer time to complete sweeps
+            # give network analyzer time to complete sweep
+            # this delay time needs to be much longer that what would appear obvious,
+            # if the analyzer does not have time to complete a sweep we will gather the most recent
+            # data set (usually the last data set or garbage)
             time.sleep(3)
         
             print ("Transferring data " + str(idx + 1))
@@ -186,7 +291,7 @@ class NetworkAnalyzerComm (SocketComm):
             # Input A absolute power measurement
             self._send_command(self.nwa_sock, "C1IA")
             self._send_command(self.nwa_sock, "C1OD")
-            # data output takes ~0.8 seconds in ASCII mode
+            # allow time for data to be sent ( data output takes ~0.8 seconds in ASCII mode )
             time.sleep(1)
             self._send_command(self.nwa_sock, "++read 10")
         
@@ -195,6 +300,7 @@ class NetworkAnalyzerComm (SocketComm):
         return tmp_list
 
     def set_freq_window(self, frequency , span):
+        
         # set passthrough mode to source
         self._send_command(self.nwa_sock, "PT19")
         # change GPIB address to passthrough, send commands to signal sweeper
@@ -262,12 +368,12 @@ class NetworkAnalyzerComm (SocketComm):
     def turn_off_RF_source(self):
         
         self.print_yellow("Turning off RF source.")
-        self.__set_RF_source(self, turn_on = False)
+        self.__set_RF_source(self, False)
         
     def turn_on_RF_source(self):
         
         self.print_yellow("Turning on RF source.")
-        self.__set_RF_source(self, turn_on = True)
+        self.__set_RF_source(self, True)
 
 class StepperMotorComm (SocketComm):
 
