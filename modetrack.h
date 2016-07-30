@@ -97,7 +97,7 @@ class ModeTrack {
     //
     void SetUpperBound(double frequency);
 
-  protected:
+  private:
     //
     enum Method { Gauss, BiLat };
     //

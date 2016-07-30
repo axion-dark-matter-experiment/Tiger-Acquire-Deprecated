@@ -172,9 +172,6 @@ void ModeTrack::SetUpperBound(double frequency) {
     lower_bound = frequency;
 }
 
-inline void SetSearchRadius() {
-    //
-}
 
 double ModeTrack::GetMaxPeak(std::string data_str) {
     //parse input string into vector of string triples
@@ -534,25 +531,28 @@ uint ModeTrack::FindMaxima(std::vector<double>& data_list) {
                 uint found_index = i;
                 double found_power = data_list.at(i);
 
+                std::cout<<"Power was: "<<found_power<<std::endl;
+
                 //check to see if peak index is already an element in the map
                 //if duplicate is found check which frequency seperation is the smallest
                 //between the current and stored value.
                 if( peak_index != 0 ) {
-//                    std::cout<<"Duplicate Index Detected"<<std::endl;
+                    std::cout<<"Duplicate Index Detected"<<std::endl;
 
                     //if stored value is greater than current value, replaced stored value with current
                     if( found_power > peak_power ) {
-//                        std::cout<<"Found Peak was Greater."<<std::endl;
+                        std::cout<<"Found Peak was Greater."<<std::endl;
 //                        std::cout<<"Power was: "<<found_power<<std::endl;
                         peak_index = found_index;
                         peak_power = found_power;
                         //if stored value is less than current leave stored value unchanged
                     } else {
-//                        std::cout<<"Found Peak was Less."<<std::endl;
+                        std::cout<<"Found Peak was Less."<<std::endl;
 //                        std::cout<<"Power was: "<<found_power<<std::endl;
                     }
                 } else { //if no duplicate is found create a new entry
                     peak_index = found_index;
+                    peak_power = found_power;
                 }
 
             }

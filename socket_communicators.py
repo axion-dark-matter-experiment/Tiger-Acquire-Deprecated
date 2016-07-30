@@ -10,6 +10,7 @@ import socket
 import sys
 import select
 import time  # sleep
+import datetime as dt
 import color_printer as cp
 
 class SocketComm:
@@ -588,20 +589,26 @@ class SignalAnalyzerComm( SocketComm ):
         #Initialize measurement
         #This will start collecting and averaging samples
         self._send_command(self.sa_sock, "INIT:IMM")
+        
+        elapsed_time = 0.0
 
         # *OPC? will write "1\n" to the output when operation is complete.
         while True:
             #Poll the signal analyzer
             self._send_command(self.sa_sock, "*OPC?")
             status_str = self._read_data(self.sa_sock, printlen=False, timeout=0.5)
-
+            
             #Wait until *OPC? returns '1\n' indicating that the requested number
             #of samples have been collected
             if(status_str == "1\n"):
-                print ("Integration complete")
+                print ("\nIntegration complete")
                 break
             else:
-                print ("Waiting...")
+                elapsed_time += dt.datetime.now().microsecond
+#                 print ("\rWaiting, time elapsed: "+str(round(elapsed_time/1e6))+ " seconds")
+                status = "\rWaiting, time elapsed: "+str(round(elapsed_time/1e6))+ " seconds"
+                sys.stdout.write(status)
+                sys.stdout.flush()
 
         #Since measurement is already initliazed collect data with the
         #FETC(h) command
