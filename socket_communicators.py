@@ -353,27 +353,27 @@ class NetworkAnalyzerComm (SocketComm):
     
     def __set_RF_source(self, turn_on):
         
-        self.__send_command(self.nwa_sock, "PT19") # set passthrough mode to source
-        self.__send_command(self.nwa_sock, "++addr 17") # change GPIB address to passthrough
+        self._send_command(self.nwa_sock, "PT19") # set passthrough mode to source
+        self._send_command(self.nwa_sock, "++addr 17") # change GPIB address to passthrough
         
         if (turn_on == True):
-            self.__send_command(self.nwa_sock, "RF1") # turn on RF
+            self._send_command(self.nwa_sock, "RF1") # turn on RF
         elif (turn_on == False):
-            self.__send_command(self.nwa_sock, "RF0") # turn off RF
+            self._send_command(self.nwa_sock, "RF0") # turn off RF
         else:
             self.print_red("Bad command RF source not set.")
             
-        self.send_command(self.nwa_sock, "++addr 16") # change back GPIB address to network analyzer
+        self._send_command(self.nwa_sock, "++addr 16") # change back GPIB address to network analyzer
     
     def turn_off_RF_source(self):
         
         self.print_yellow("Turning off RF source.")
-        self.__set_RF_source(self, False)
+        self.__set_RF_source(False)
         
     def turn_on_RF_source(self):
         
         self.print_yellow("Turning on RF source.")
-        self.__set_RF_source(self, True)
+        self.__set_RF_source(True)
 
 class StepperMotorComm (SocketComm):
 
@@ -406,24 +406,44 @@ class StepperMotorComm (SocketComm):
             self.print_red(st)
             return -1
 
-    def __set_stepper_motor(self, step_sock):
+    def __set_stepper_motor(self, step_sock, traverse_speed):
 
         self.print_purple("Setting stepper motor")
         # set 200 steps/rev
         self._send_command_scl(step_sock, "MR0")
         # set acceleration
-        self._send_command_scl(step_sock, "AC1")
+        self._send_command_scl(step_sock, "AC"+str(traverse_speed))
         # set deceleration
-        self._send_command_scl(step_sock, "DE1")
+        self._send_command_scl(step_sock, "DE"+str(traverse_speed))
         # set velocity
-        self._send_command_scl(step_sock, "VE0.5")
+        self._send_command_scl(step_sock, "VE"+str(traverse_speed))
         
         self.print_green("Stepper motor set.")
+        
+    def set_to_initial_length(self, initial_length, current_length):
+        
+        self.print_purple("Moving to initial cavity length of "+str(initial_length))
+        
+        step_sock = self.__get_step_sock()
+        self.__set_stepper_motor(step_sock, 5)
+        
+        delta_l = initial_length - current_length
+        delta_steps = int(round(16*200*delta_l))
+        
+        self.print_yellow("Need to move "+str(delta_l))
+        
+        self._send_command_scl(step_sock, "FL" + str(delta_steps))
+        delay_time = 2*abs(5/16*delta_l)
+        time.sleep(delay_time)
+        
+        step_sock.close()
+        
+        
 
     def reset_cavity(self, len_of_tune):
 
         step_sock = self.__get_step_sock()
-        self.__set_stepper_motor(step_sock)
+        self.__set_stepper_motor(step_sock, 5)
 
         rev = int(len_of_tune * -16)
 
@@ -431,37 +451,36 @@ class StepperMotorComm (SocketComm):
 
         nsteps = int(rev * 200)
 
-        # set steps per revolution to 200 steps/revolution
-        self._send_command_scl(step_sock, "MR0")
-        # set acceleration
-        self._send_command_scl(step_sock, "AC1")
-        # set deceleration
-        self._send_command_scl(step_sock, "DE1")
-        # set velocity
-        self._send_command_scl(step_sock, "VE1.5")
+#         # set steps per revolution to 200 steps/revolution
+#         self._send_command_scl(step_sock, "MR0")
+#         # set acceleration
+#         self._send_command_scl(step_sock, "AC1")
+#         # set deceleration
+#         self._send_command_scl(step_sock, "DE1")
+#         # set velocity
+#         self._send_command_scl(step_sock, "VE1.5")
         print ("Moving motor ", rev, " Revolutions.")  # Movement will take", abs(duration), "seconds."
         self._send_command_scl(step_sock, "FL" + str(nsteps))
-        self._send_command_scl(step_sock, "VE.5")
 
         step_sock.close()
         
-    def panic_reset_cavity(self, iteration):
+    def panic_reset_cavity(self, iteration, revs_per_iter):
 
-        rev = -1.0 * iteration
+        rev = -1.0 * iteration * revs_per_iter
         nsteps = int(rev * 200)
 
-#         step_sock = self._socket_connect("10.95.100.177", 7776)
         step_sock = self.__get_step_sock()
+        self.__set_stepper_motor(step_sock, 5)
 
-        # set steps per revolution to 200 steps/revolution
-        self._send_command_scl(step_sock, "MR0")
-
-        # Acceleration of 5 rev/s/s
-        self._send_command_scl(step_sock, "AC5")
-        # Deceleration of 5 rev/s/s
-        self._send_command_scl(step_sock, "DE5")
-        # Velocity of 5 rev/s
-        self._send_command_scl(step_sock, "VE5")
+#         # set steps per revolution to 200 steps/revolution
+#         self._send_command_scl(step_sock, "MR0")
+# 
+#         # Acceleration of 5 rev/s/s
+#         self._send_command_scl(step_sock, "AC5")
+#         # Deceleration of 5 rev/s/s
+#         self._send_command_scl(step_sock, "DE5")
+#         # Velocity of 5 rev/s
+#         self._send_command_scl(step_sock, "VE5")
 
         self.print_red("Program halted! Resetting cavity to initial length.")
         print ("Moving motor " + str(abs(rev)) + " revolutions.")
@@ -473,12 +492,12 @@ class StepperMotorComm (SocketComm):
     def walk_loop(self, len_of_tune, revs, iters, num_of_iters):
 
         step_sock = self.__get_step_sock()
-        self.__set_stepper_motor(step_sock)
+        self.__set_stepper_motor(step_sock, 1)
 
         print ("Iteration:", iters, " of ", num_of_iters, ".  Moving stepper", revs, "revolution(s).")
         itsteps = int(revs * 200)
         self._send_command_scl(step_sock, "FL" + str(itsteps))
-        self._send_command_scl(step_sock, "VE.5")
+
         # wait for stepper motor to move
         time.sleep(revs)
         step_sock.close()
@@ -509,6 +528,16 @@ class SwitchComm ( SocketComm ):
     def switch_to_reflection(self):
         self.print_purple("Switched to Reflection Measurements")
         self._send_command(self.switch_sock, "OP2 0")
+        
+class ArduComm( SocketComm ):
+    
+    def __init__(self, ardu_sock ):
+        super(ArduComm, self).__init__()
+        self.ardu_sock = ardu_sock
+        
+    def get_cavity_length(self):
+        self._send_command(self.ardu_sock, "LengthOfCavity")
+        return float(self._read_data(self.ardu_sock, printlen=False).strip(' \t\n\r'))
         
 class SignalAnalyzerComm( SocketComm ):
     
@@ -564,7 +593,7 @@ class SignalAnalyzerComm( SocketComm ):
         while True:
             #Poll the signal analyzer
             self._send_command(self.sa_sock, "*OPC?")
-            status_str = self._read_data(self.sa_sock, printlen=True, timeout=0.5)
+            status_str = self._read_data(self.sa_sock, printlen=False, timeout=0.5)
 
             #Wait until *OPC? returns '1\n' indicating that the requested number
             #of samples have been collected

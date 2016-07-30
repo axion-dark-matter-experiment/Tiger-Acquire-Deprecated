@@ -27,11 +27,13 @@ class ModeTrackBody(config_classes.ConfigTypes):
         
         sa_sock = self.sock_dict['sa']
         switch_sock = self.sock_dict['switch']
+        ardu_sock = self.sock_dict['ardu']
         step_addr = self.addr_dict['step']
         
         self.nwa_comm = sc.NetworkAnalyzerComm(nwa_sock, nwa_points, nwa_span, nwa_power)
         self.sa_comm = sc.SignalAnalyzerComm(sa_sock)
         self.switch_comm = sc.SwitchComm(switch_sock)
+        self.ardu_comm = sc.ArduComm(ardu_sock)
         self.step_comm = sc.StepperMotorComm(step_addr)
         
         self.fitter = procs.LorentzianFitter()
@@ -46,6 +48,7 @@ class ModeTrackBody(config_classes.ConfigTypes):
         self.fft_length = int(self.data_dict['fft_length'])  # Number of IQ points to generate spectrum, Max is
         self.nominal_centers = self.data_dict['nominal_centers']
         self.num_of_iters = int(self.data_dict['num_of_iters'])
+        self.start_length = float(self.data_dict['start_length'])
         self.nwa_span = int(self.data_dict['nwa_span'])
 
         self.fitted_q = 0.0
@@ -54,18 +57,21 @@ class ModeTrackBody(config_classes.ConfigTypes):
 
         # container for formatted data triples
         self.formatted_points = []
-        # position of the mode of desire in frequency space
-        self.mode_of_desire = 0.0
         self.iteration = 0
 
     def retract_cavity(self):
         
         tune_length = float(self.data_dict['len_of_tune'])
         self.step_comm.reset_cavity(tune_length)
+        
+    def __move_to_initial_cavity_length(self):
+        current_length = float(self.ardu_comm.get_cavity_length())
+        self.step_comm.set_to_initial_length(self.start_length, current_length)
 
     def prequel(self):
         self.switch_comm.switch_to_network_analyzer()
         self.switch_comm.switch_to_reflection()
+        self.__move_to_initial_cavity_length()
 
 
     def get_data_nwa(self):
@@ -77,10 +83,6 @@ class ModeTrackBody(config_classes.ConfigTypes):
 
     def format_points(self, raw_data):
 
-        total_iterations = self.num_of_iters
-        start_length = float(self.data_dict['start_length'])
-        current_iteration = float(self.iteration)
-        tune_length = float(self.data_dict['len_of_tune'])
         nwa_span = float(self.data_dict['nwa_span'])
         last_center = float(self.nominal_centers[-1])
         first_center = float(self.nominal_centers[0])
@@ -88,14 +90,12 @@ class ModeTrackBody(config_classes.ConfigTypes):
         max_frequency = last_center + nwa_span / 2
         min_frequency = first_center - nwa_span / 2
 
-        cavity_length = start_length + (current_iteration * tune_length / (total_iterations))
+#         cavity_length = self.__derive_cavity_length()
+        cavity_length = self.ardu_comm.get_cavity_length()
         self.print_yellow("Current cavity length: " + str(cavity_length))
-
-#         del self.formatted_points[:]
 
         return self.convertor.make_plot_points(raw_data, cavity_length, min_frequency, max_frequency)
 
-#         del self.raw_nwa_data[:]
 
     def set_bg_data(self, blank_data):
         
@@ -135,7 +135,7 @@ class ModeTrackBody(config_classes.ConfigTypes):
 
         self.step_comm.walk_loop(len_of_tune, revs, iters, num_of_iters)
         
-    def __recenter_peak(self, power_list):
+    def __derive_cavity_length(self):
         
         total_iterations = self.num_of_iters
         start_length = float(self.data_dict['start_length'])
@@ -143,7 +143,13 @@ class ModeTrackBody(config_classes.ConfigTypes):
         tune_length = float(self.data_dict['len_of_tune'])
         
         cavity_length = start_length + (current_iteration * tune_length / (total_iterations))
-        trans_window_str = self.convertor.power_list_to_str(power_list, self.mode_of_desire, self.freq_window, cavity_length)
+        return cavity_length
+        
+    def __recenter_peak(self, power_list, mode_of_desire):
+             
+#         cavity_length = self.__derive_cavity_length()
+        cavity_length = self.ardu_comm.get_cavity_length()
+        trans_window_str = self.convertor.power_list_to_str(power_list, mode_of_desire, self.freq_window, cavity_length)
         
         return self.m_track.GetMaxPeak(trans_window_str[:-1])
 
@@ -168,22 +174,23 @@ class ModeTrackBody(config_classes.ConfigTypes):
         
         self.nwa_comm.set_freq_window(mode_of_desire , freq_window)
         initial_window = self.nwa_comm.take_data_single()
-        initial_window = self.convertor.format_points(initial_window)
+        initial_window = self.convertor.str_list_to_power_list(initial_window)
         
-        self.plotter(initial_window, self.mode_of_desire, freq_window)
+        self.plotter(initial_window, mode_of_desire, freq_window)
 
 #         funcs.plot_freq_window(initial_trans_window, self.mode_of_desire, freq_window)
 
-        new_mode_of_desire = self.__recenter_peak(initial_window)
+        new_mode_of_desire = self.__recenter_peak(initial_window, mode_of_desire)
 
+        self.nwa_comm.set_freq_window(new_mode_of_desire , freq_window)
         final_window = self.nwa_comm.take_data_single()
-        final_window = self.convertor.format_points(final_window)
+        final_window = self.convertor.str_list_to_power_list(final_window)
         
-        self.plotter(initial_window, self.mode_of_desire, freq_window)
+        self.plotter(final_window, new_mode_of_desire, freq_window)
 
 #         funcs.plot_freq_window(final_trans_window, self.mode_of_desire, freq_window)
 
-        self.fitter(final_window, mode_of_desire, freq_window)
+        self.fitter(final_window, new_mode_of_desire, freq_window)
 
 #         funcs.fit_lorentzian(final_trans_window, self.mode_of_desire, freq_window)
 
@@ -199,7 +206,7 @@ class ModeTrackBody(config_classes.ConfigTypes):
         
         self.nwa_comm.turn_off_RF_source()
         
-        self.sa_comm.set_signal_analyzer(mode_of_desire, fft_length=1024, freq_span=10, num_averages=25)
+        self.sa_comm.set_signal_analyzer(mode_of_desire, self.fft_length, self.freq_window, self.sa_averages)
         raw_sa_data = self.sa_comm.take_data_signal_analyzer()
         
         self.nwa_comm.turn_on_RF_source()
@@ -285,6 +292,7 @@ class ModeTrackProgram(ModeTrackBody):
                 continue
             
             data = self.get_data_sa(mode_of_desire)
+            data = self.convertor.str_list_to_power_list(data)
             self.save_data(data, x)
             
             # subprocess.Popen("~/workspace/Electric-Tiger/Python_Files/MM-plot.m",shell=True)
@@ -297,5 +305,6 @@ class ModeTrackProgram(ModeTrackBody):
     def panic_cleanup(self):
 
         current_iteration = self.iteration
-        self.step_comm.panic_reset_cavity(current_iteration)
+        revs_per_iters = int(self.data_dict['revs_per_iter'])
+        self.step_comm.panic_reset_cavity(current_iteration, revs_per_iters)
         self.close_all()

@@ -1,10 +1,10 @@
-d;save_file_path;/home/bephillips2/workspace/Electric-Tiger
-d;len_of_tune;5
+d;save_file_path;/home/bephillips2/workspace/Electric_Tiger_Control_Code/data/
+d;len_of_tune;3
 d;revs_per_iter;5
-d;start_length;5.295
+d;start_length;5.0
 d;nwa_span;400
 d;nwa_points;401
-d;nwa_power;12.5
+d;nwa_power;-15.0
 d;freq_window;100
 d;sa_span;10
 d;sa_averages;256
@@ -14,3 +14,4 @@ s;switch;10.95.100.174;9221
 s;nwa;10.95.100.176;1234
 s;step;10.95.100.177;7776
 s;sa;10.95.100.175;5025
+s;ardu;10.66.192.41;23
