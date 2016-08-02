@@ -5,6 +5,7 @@ import socket_communicators as sc
 import data_processors as procs
 import time
 import os
+import subprocess
 import color_printer as cp
 import atexit
 
@@ -121,7 +122,7 @@ class ModeTrackBody(config_classes.ConfigTypes):
             temp_str = temp_str.translate(trans_table)
             data_str += temp_str + "\n"
         
-        return self.m_track.GetPeaksBiLat(data_str[:-1], 0)
+        return self.m_track.GetPeaksBiLat(data_str[:-1], 1)
 
     def next_iteration(self):
 
@@ -167,18 +168,12 @@ class ModeTrackBody(config_classes.ConfigTypes):
         # since we identified the position of our mode using reflection measurements
         # we need to switch to transmission to find the 'real' position of the mode
         self.switch_comm.switch_to_transmission()
-
-#         funcs.set_freq_window(nwa_sock, self.mode_of_desire , freq_window)
-#         initial_trans_window = funcs.take_data_single(nwa_sock)
-#         initial_trans_window = funcs.str_to_power_list(initial_trans_window)
         
         self.nwa_comm.set_freq_window(mode_of_desire , freq_window)
         initial_window = self.nwa_comm.take_data_single()
         initial_window = self.convertor.str_list_to_power_list(initial_window)
         
         self.plotter(initial_window, mode_of_desire, freq_window)
-
-#         funcs.plot_freq_window(initial_trans_window, self.mode_of_desire, freq_window)
 
         new_mode_of_desire = self.__recenter_peak(initial_window, mode_of_desire)
 
@@ -188,14 +183,9 @@ class ModeTrackBody(config_classes.ConfigTypes):
         
         self.plotter(final_window, new_mode_of_desire, freq_window)
 
-#         funcs.plot_freq_window(final_trans_window, self.mode_of_desire, freq_window)
-
         self.fitter(final_window, new_mode_of_desire, freq_window)
 
-#         funcs.fit_lorentzian(final_trans_window, self.mode_of_desire, freq_window)
-
         self.nwa_comm.set_freq_window(new_mode_of_desire , nwa_span)
-#         funcs.set_freq_window(nwa_sock, self.mode_of_desire , nwa_span)
 
         # return to reflection measurements
         self.switch_comm.switch_to_reflection()
@@ -222,6 +212,8 @@ class ModeTrackProgram(ModeTrackBody):
         
     def find_mode_of_desire_reflection(self):
         nwa_data = self.get_data_nwa()
+        self.save_power_spec(nwa_data)
+        
         formatted_points = self.format_points(nwa_data)
         mode_of_desire = self.find_minima_peak(formatted_points)
         
@@ -253,11 +245,29 @@ class ModeTrackProgram(ModeTrackBody):
         # concatenate the base save-file path with the date-time string to form the name of all necessary .csv files
         save_path = self.data_dict['save_file_path']
         return os.path.join(save_path, time_stamp + str(idx) + 'SA.csv')
+    
+    def save_power_spec(self, power_spec):
+        
+        power_list = self.convertor.str_list_to_power_list(power_spec)
+        
+        path = os.path.join(os.getcwd() + '/data/current_power_spectrum.csv')
+        out_file = open(path, 'w+')
+        
+        out_str = ''
+        for power in power_list:
+            out_str += str(power)+"\n"
+            
+        print(out_str, end="", file=out_file)
+
+        out_file.close() 
+        
+        command = "./data/transfer_power_spec.sh "+path
+        subprocess.Popen(command,shell=True)
+        
         
     def save_data(self, formatted_data, idx):
         
         path = self.generate_save_file_name(idx)
-        
         out_file = open(path, 'a')
         
         for item in formatted_data:
@@ -269,8 +279,7 @@ class ModeTrackProgram(ModeTrackBody):
         
         out_str = "Wrote data to " + path
         
-        out_file.close()
-        
+        out_file.close()           
 
     def program(self):
 
@@ -299,7 +308,7 @@ class ModeTrackProgram(ModeTrackBody):
 
             self.next_iteration()
 
-        self.retract_cavity()
+#         self.retract_cavity()
         self.close_all()
 
     def panic_cleanup(self):

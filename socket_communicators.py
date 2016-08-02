@@ -452,14 +452,6 @@ class StepperMotorComm (SocketComm):
 
         nsteps = int(rev * 200)
 
-#         # set steps per revolution to 200 steps/revolution
-#         self._send_command_scl(step_sock, "MR0")
-#         # set acceleration
-#         self._send_command_scl(step_sock, "AC1")
-#         # set deceleration
-#         self._send_command_scl(step_sock, "DE1")
-#         # set velocity
-#         self._send_command_scl(step_sock, "VE1.5")
         print ("Moving motor ", rev, " Revolutions.")  # Movement will take", abs(duration), "seconds."
         self._send_command_scl(step_sock, "FL" + str(nsteps))
 
@@ -472,16 +464,6 @@ class StepperMotorComm (SocketComm):
 
         step_sock = self.__get_step_sock()
         self.__set_stepper_motor(step_sock, 5)
-
-#         # set steps per revolution to 200 steps/revolution
-#         self._send_command_scl(step_sock, "MR0")
-# 
-#         # Acceleration of 5 rev/s/s
-#         self._send_command_scl(step_sock, "AC5")
-#         # Deceleration of 5 rev/s/s
-#         self._send_command_scl(step_sock, "DE5")
-#         # Velocity of 5 rev/s
-#         self._send_command_scl(step_sock, "VE5")
 
         self.print_red("Program halted! Resetting cavity to initial length.")
         print ("Moving motor " + str(abs(rev)) + " revolutions.")

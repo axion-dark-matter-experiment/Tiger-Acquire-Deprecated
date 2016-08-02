@@ -185,7 +185,7 @@ class LorentzianFitter:
         middle = ((2 * nwa_points / 5 < np.arange(nwa_points)) & 
                 (np.arange(nwa_points) < 3 * nwa_points / 5))
         # initial values for fit: [HWHM, peak center, height]
-        p = [25.0, center_freq, nwa_yw[nwa_points / 2]]
+        p = [25, center_freq, nwa_yw[nwa_points / 2]]
         pbest = leastsq(self.__residuals, p, args=(nwa_yw[middle], nwa_xw[middle], center_freq, freq_window))[0]
     
         fitted_hwhm = pbest[0]
