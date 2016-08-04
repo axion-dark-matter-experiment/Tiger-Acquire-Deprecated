@@ -73,7 +73,9 @@ class ModeTracker(core.ProgramCore):
         
         power_list = self.convertor.str_list_to_power_list(freq_window_spec)
         
-        path = os.path.join(os.getcwd() + '/data/current_freq_window.csv')
+#         path = os.path.join(os.getcwd() + '/data/current_freq_window.csv')
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        path = dir_path + "/data/current_freq_window.csv"
         out_file = open(path, 'w+')
         
         out_str = ''
@@ -84,8 +86,9 @@ class ModeTracker(core.ProgramCore):
 
         out_file.close() 
         
-        path += " current_freq_window.jpeg"
-        command = "./data/transfer_power_spec.sh " + path
+        path += " " + dir_path + "/data/current_freq_window.jpeg"
+        command = dir_path + "/data/transfer_power_spec.sh " + path
+        
         subprocess.Popen(command, shell=True)
 
     def check_peak(self, mode_of_desire):
@@ -105,10 +108,9 @@ class ModeTracker(core.ProgramCore):
         
         self.nwa_comm.set_freq_window(mode_of_desire , freq_window)
         initial_window = self.nwa_comm.take_data_single()
-        self.save_freq_window(initial_window)
+#         self.save_freq_window(initial_window)
         
         initial_window = self.convertor.str_list_to_power_list(initial_window)
-        
 #         self.plotter(initial_window, mode_of_desire, freq_window)
 
         new_mode_of_desire = self.__recenter_peak(initial_window, mode_of_desire)
@@ -118,8 +120,6 @@ class ModeTracker(core.ProgramCore):
         self.save_freq_window(final_window)
         
         final_window = self.convertor.str_list_to_power_list(final_window)
-        
-#         self.plotter(final_window, new_mode_of_desire, freq_window)
 
         self.fitter(final_window, new_mode_of_desire, freq_window)
 
@@ -187,7 +187,10 @@ class ModeTrackProgram(ModeTracker):
         
         power_list = self.convertor.str_list_to_power_list(power_spec)
         
-        path = os.path.join(os.getcwd() + '/data/current_power_spectrum.csv')
+#         path = os.path.join(os.getcwd() + '/data/current_power_spectrum.csv')
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        path = dir_path + "/data/current_freq_window.csv"
+        
         out_file = open(path, 'w+')
         
         out_str = ''
@@ -198,8 +201,9 @@ class ModeTrackProgram(ModeTracker):
 
         out_file.close() 
         
-        path += " current_power_spectrum.jpeg"
-        command = "./data/transfer_power_spec.sh " + path
+        path += " " + dir_path + "/data/current_power_spectrum.jpeg"
+        command = dir_path + "/data/transfer_power_spec.sh " + path
+
         subprocess.Popen(command, shell=True)
         
     def save_data(self, formatted_data, idx):
