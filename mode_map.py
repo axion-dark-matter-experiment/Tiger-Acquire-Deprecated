@@ -2,7 +2,6 @@ import config_classes
 
 import socket_communicators as sc
 import data_processors as procs
-import time
 import os
 import color_printer as cp
 import atexit
@@ -10,8 +9,8 @@ import subprocess
 
 class ModeMapBody(config_classes.ConfigTypes):
 
-    def __init__(self, config_path):
-        super(ModeMapBody, self).__init__(config_path)
+    def __init__(self, config_path, map_type):
+        super(ModeMapBody, self).__init__(config_path, map_type)
         
         self.print_green = cp.ColorPrinter("Green")
         self.print_purple = cp.ColorPrinter("Purple")
@@ -42,8 +41,12 @@ class ModeMapBody(config_classes.ConfigTypes):
         self.num_of_iters = int(self.data_dict['num_of_iters'])
         self.start_length = float(self.data_dict['start_length'])
         self.nwa_span = int(self.data_dict['nwa_span'])
-        self.file_name = self.data_dict['file_name']
-        
+
+        if (map_type == "R"):
+            self.file_name = self.data_dict['file_nameR']
+        else:
+            self.file_name = self.data_dict['file_name']
+            
         self.iteration = 0
 
     def retract_cavity(self):
@@ -55,9 +58,14 @@ class ModeMapBody(config_classes.ConfigTypes):
         current_length = float(self.ardu_comm.get_cavity_length())
         self.step_comm.set_to_initial_length(self.start_length, current_length)
 
-    def prequel(self):
+    def prequel_transmission(self):
         self.switch_comm.switch_to_network_analyzer()
         self.switch_comm.switch_to_transmission()
+        self.__move_to_initial_cavity_length()
+         
+    def prequel_reflection(self):
+        self.switch_comm.switch_to_network_analyzer()
+        self.switch_comm.switch_to_reflection()
         self.__move_to_initial_cavity_length()
 
 
@@ -96,16 +104,18 @@ class ModeMapBody(config_classes.ConfigTypes):
         
 class ModeMapProgram(ModeMapBody):
 
-    def __init__(self, config_path):
-        super(ModeMapProgram, self).__init__(config_path)
+    def __init__(self, config_path, map_type):
+        super(ModeMapProgram, self).__init__(config_path, map_type)
+        self.map_type = map_type
+        
         atexit.register(self.panic_cleanup)
     
     def transfer_mode_map(self):
         
         path = self.file_name
         
-        command = "./data/transfer_mode_map.sh "+path
-        subprocess.Popen(command,shell=True)
+        command = "./data/transfer_mode_map.sh " + path
+        subprocess.Popen(command, shell=True)
         
     def transfer_power_spec(self, power_spec):
         
@@ -116,14 +126,14 @@ class ModeMapProgram(ModeMapBody):
         
         out_str = ''
         for power in power_list:
-            out_str += str(power)+"\n"
+            out_str += str(power) + "\n"
             
         print(out_str, end="", file=out_file)
 
         out_file.close() 
         
-        command = "./data/transfer_power_spec.sh "+path
-        subprocess.Popen(command,shell=True)
+        command = "./data/transfer_power_spec.sh " + path
+        subprocess.Popen(command, shell=True)
         
         
     def save_data(self, formatted_data):
@@ -153,7 +163,10 @@ class ModeMapProgram(ModeMapBody):
 
     def program(self):
 
-        self.prequel()
+        if ( self.map_type == 'R'):
+            self.prequel_reflection()
+        else:
+            self.prequel_transmission()
 
         for x in range(0, self.num_of_iters):
             

@@ -11,4 +11,7 @@ set palette rgb 7,5,15
 
 set term jpeg size 1280,720
 set output 'current_mode_map.jpeg'
-splot filename using 1:2:3 notitle with points palette
+
+set pm3d map
+
+splot filename using 2:1:3 notitle with points palette

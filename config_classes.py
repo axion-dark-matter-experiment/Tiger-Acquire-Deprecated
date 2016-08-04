@@ -112,9 +112,8 @@ class ConfigTypes:
 		# concatenate the base save-file path with the date-time string to form the name of all necessary .csv files
 		save_path = self.data_dict['save_file_path']
 		# Store miscellaneous file save paths and names in data_dict dictionary
-		self.data_dict['file_namew'] = os.path.join(save_path, time_stamp + 'F.csv')
 		self.data_dict['file_name'] = os.path.join(save_path, time_stamp + 'MM.csv')
-		self.data_dict['file_namec'] = os.path.join(save_path, time_stamp + 'CP.csv')
+		self.data_dict['file_nameR'] = os.path.join(save_path, time_stamp + 'R.csv')
 
 
 	def __get_total_iterations(self):
@@ -138,37 +137,3 @@ class ConfigTypes:
 			st = "Closing socket for " + key
 			self.print_blue(st)
 			self.sock_dict[key].close()
-
-
-class BaseTypes(ConfigTypes):
-	"""
-	Contains data that is mutable during run time, but does not need to be saved after program exits.
-	Class is designed to be accessed and have member variable values changed by external functions.
-	"""
-
-	def __init__(self, config_path):
-		super(BaseTypes, self).__init__(config_path)
-
-		self.actual_center_freq_unrounded = 0.0
-		self.actual_center_freq = 0
-		# single string used to store a -single- comma seperated list of data grabbed from the network analzyer
-		# user for Lorentzian fitting and plotting and -nothing else-
-		self.nwa_fit_data = ''
-		# raw_nwa_data is a list-of-strings. It can have anywhere between zero and eight elements.
-		self.raw_nwa_data = []
-		# special list needed to hold 'background' data, that is data collected where no modes are present
-		# needs to be passed to the modetracking sub-process as a string
-		self.background_data = ''
-		self.iterations = 0
-		self.number_of_iterations = 0
-		self.nsteps = 0
-		self.num_of_iters = 0  # counter for current iteration, needs to be set by
-
-		self.num_of_iters = self.get_total_iterations()
-
-	def clear_lists(self):
-		"""	Clear all raw data that was taken from the network analyzer
-			needs to be called during loops so that data is not duplicated.
-		"""
-		for li in self.raw_nwa_data:
-			del li[:]
