@@ -68,6 +68,25 @@ class ModeTracker(core.ProgramCore):
         trans_window_str = self.convertor.power_list_to_str(power_list, mode_of_desire, self.freq_window, cavity_length)
         
         return self.m_track.GetMaxPeak(trans_window_str[:-1])
+    
+    def save_freq_window(self, freq_window_spec):
+        
+        power_list = self.convertor.str_list_to_power_list(freq_window_spec)
+        
+        path = os.path.join(os.getcwd() + '/data/current_freq_window.csv')
+        out_file = open(path, 'w+')
+        
+        out_str = ''
+        for power in power_list:
+            out_str += str(power) + "\n"
+            
+        print(out_str, end="", file=out_file)
+
+        out_file.close() 
+        
+        path += " current_freq_window.jpeg"
+        command = "./data/transfer_power_spec.sh " + path
+        subprocess.Popen(command, shell=True)
 
     def check_peak(self, mode_of_desire):
         
@@ -86,17 +105,21 @@ class ModeTracker(core.ProgramCore):
         
         self.nwa_comm.set_freq_window(mode_of_desire , freq_window)
         initial_window = self.nwa_comm.take_data_single()
+        self.save_freq_window(initial_window)
+        
         initial_window = self.convertor.str_list_to_power_list(initial_window)
         
-        self.plotter(initial_window, mode_of_desire, freq_window)
+#         self.plotter(initial_window, mode_of_desire, freq_window)
 
         new_mode_of_desire = self.__recenter_peak(initial_window, mode_of_desire)
 
         self.nwa_comm.set_freq_window(new_mode_of_desire , freq_window)
         final_window = self.nwa_comm.take_data_single()
+        self.save_freq_window(final_window)
+        
         final_window = self.convertor.str_list_to_power_list(final_window)
         
-        self.plotter(final_window, new_mode_of_desire, freq_window)
+#         self.plotter(final_window, new_mode_of_desire, freq_window)
 
         self.fitter(final_window, new_mode_of_desire, freq_window)
 
@@ -169,15 +192,15 @@ class ModeTrackProgram(ModeTracker):
         
         out_str = ''
         for power in power_list:
-            out_str += str(power)+"\n"
+            out_str += str(power) + "\n"
             
         print(out_str, end="", file=out_file)
 
         out_file.close() 
         
-        command = "./data/transfer_power_spec.sh "+path
-        subprocess.Popen(command,shell=True)
-        
+        path += " current_power_spectrum.jpeg"
+        command = "./data/transfer_power_spec.sh " + path
+        subprocess.Popen(command, shell=True)
         
     def save_data(self, formatted_data, idx):
         

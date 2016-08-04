@@ -29,7 +29,7 @@ class MapBuilderCore (core.ProgramCore):
         
         power_list = self.convertor.str_list_to_power_list(power_spec)
         
-        path = os.path.join(os.getcwd() + '/data/current_power_spectrum.csv')
+        path = os.path.join(os.getcwd() + '/data/current_power_spectrum.csv' + ' current_power_spectrum.jpeg')
         out_file = open(path, 'w+')
         
         out_str = ''

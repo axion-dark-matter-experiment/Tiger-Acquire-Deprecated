@@ -1,6 +1,6 @@
 d;save_file_path;/home/bephillips2/workspace/Electric_Tiger_Control_Code/data/
 d;len_of_tune;6.0
-d;revs_per_iter;10
+d;revs_per_iter;5
 d;start_length;5.0
 d;nwa_span;400
 d;nwa_points;401

@@ -441,7 +441,7 @@ void ModeTrack::DebugSaveInfo(std::vector<double> filtered_list,ModeTrack::Metho
     std::string out_str = "";
 
     for(const auto& elem : filtered_list) {
-        out_str+=boost::lexical_cast<std::string>(elem)+",";
+        out_str+=boost::lexical_cast<std::string>(elem)+"\n";
     }
 
     std::string path = (method == Gauss)?"/home/bephillips2/gauss_data.csv":"/home/bephillips2/bilat_data.csv";
@@ -526,7 +526,7 @@ uint ModeTrack::FindMaxima(std::vector<double>& data_list) {
             std::cout<<"Found peak at: "<<i<<std::endl;
 
             //compensate for edge effects
-            if(i+1<(length - 2)&& i+1 > 2) {
+            if(i+1<(length - 5)&& i+1 > 5) {
 
                 uint found_index = i;
                 double found_power = data_list.at(i);
@@ -576,10 +576,15 @@ double ModeTrack::GenerateSpline(int mode_number, double length) {
 }
 
 void ModeTrack::PopulateBestFitCurves() {
-    auto mode_one_coeffs = std::make_tuple(41.2931,-987.522,9121.16);
-    auto mode_two_coeffs = std::make_tuple(36.2108,-952.119,9511.6);
-    auto mode_three_coeffs = std::make_tuple(34.5861,-958.776,10112);
-    auto mode_four_coeffs = std::make_tuple(35.2141,-1021.15,11026);
+//    auto mode_one_coeffs = std::make_tuple(41.2931,-987.522,9121.16);
+//    auto mode_two_coeffs = std::make_tuple(36.2108,-952.119,9511.6);
+//    auto mode_three_coeffs = std::make_tuple(34.5861,-958.776,10112);
+//    auto mode_four_coeffs = std::make_tuple(35.2141,-1021.15,11026);
+
+    auto mode_one_coeffs = std::make_tuple(47.9998,-1041.54,8950.56);
+    auto mode_two_coeffs = std::make_tuple(44.2758,-1055.35,9610.61);
+    auto mode_three_coeffs = std::make_tuple(45.8298,-1139.8,10626.7);
+    auto mode_four_coeffs = std::make_tuple(37.697,-1038.49,10780.2);
 
     estimated_paths.push_back(mode_one_coeffs);
     estimated_paths.push_back(mode_two_coeffs);
