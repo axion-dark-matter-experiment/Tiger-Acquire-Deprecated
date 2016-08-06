@@ -115,7 +115,7 @@ class Plotter:
 class LorentzianFitter:
     
     def __init__(self):
-        self.print_yellow = cp.ColorPrinter("Yellow")
+        self.print_blue= cp.ColorPrinter("Blue")
         self.print_purple = cp.ColorPrinter("Purple")
         
         
@@ -209,28 +209,36 @@ class LorentzianFitter:
     
         self.print_blue(out_str)
     
-        output_triple = [fitted_q, fitted_center_freq, fitted_height]
+        output_triple = [fitted_q, fitted_center_freq, fitted_hwhm]
     
         return output_triple
     
-class SaveFlatFiles:
+class FlatFileSaver:
     
-    def __init__(self, root_dir, suffix):
+    def __init__(self, root_dir, suffix, sa_data_type = None):
         
         self.root_dir = root_dir
         self.suffix = suffix
-        path = self.__get_folder_name()
-        self.__make_empty_data_folder( path )
+        self.directory = self.__get_folder_name()
         
+        self.__make_empty_data_folder( self.directory )
+        
+        self.sa_data_type = sa_data_type
         self.counter = 0
     
-    def __call__(self, formatted_data, header_string = None):
-        self.__save_data( formatted_data, header_string )
+    def __call__(self, data, header_string = None):
+        
+        if (self.sa_data_type == "Raw"):
+            self.__save_raw_data( data, header_string )
+        else:
+            self.__save_data( data, header_string )
+            
         self.counter += 1
     
     def __make_empty_data_folder(self, directory):
         
         if not os.path.exists(directory):
+            print("Made new folder at: " + directory)
             os.makedirs(directory)
     
     def __get_folder_name(self):
@@ -239,21 +247,34 @@ class SaveFlatFiles:
         dir_path = os.path.dirname(os.path.realpath(__file__))
         
         root_path = "/"+self.root_dir+"/"
-        
-#         path = dir_path + "/data/" + time_stamp +"/"
         path = dir_path + root_path + time_stamp +"/"
-        
+
         return path
 
     def __generate_save_file_name(self, idx):
         
-        save_path = self.root_dir
-        return os.path.join(save_path, str(idx) + str(self.data_suffix) + '.csv')
+        return os.path.join( str(idx) + str(self.suffix) + '.csv')
+    
+    def __save_raw_data(self, raw_data, header_string):
+        path = self.__generate_save_file_name(self.counter)
+        file_path = self.directory + path
+        
+        out_file = open(file_path, 'a')
+        
+        print(header_string, end="\n", file=out_file)
+        print(raw_data, end="\n", file=out_file)
+        
+        out_str = "Wrote data to " + path
+        print ( out_str )
+        
+        out_file.close()
     
     def __save_data(self, formatted_data, header_string ):
         
-        path = self.__generate_save_file_name(self.idx)
-        out_file = open(path, 'a')
+        path = self.__generate_save_file_name(self.counter)
+        file_path = self.directory + path
+        
+        out_file = open(file_path, 'a')
         
         print(header_string, end="\n", file=out_file)
         

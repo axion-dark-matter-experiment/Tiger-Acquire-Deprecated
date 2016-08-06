@@ -28,7 +28,7 @@ Socket Connect: connected to 10.95.100.177
 [92mSuccessfully connected to Stepper Motor[0m
 [95mSetting stepper motor[0m
 [92mStepper motor set.[0m
-[93mNeed to move -0.052999999999999936[0m
+[93mNeed to move -0.011999999999999567[0m
 [95mSetting RF source 1[0m
 setting center frequency to 3200  MHz
 Transferring data 1
@@ -45,15 +45,17 @@ received 3208 bytes
 setting center frequency to 4400  MHz
 Transferring data 4
 received 3208 bytes
-[93mCurrent cavity length: 5.053[0m
+[94mCurrent cavity length: 5.032[0m
+[94mCurrent time: 05:05:17[0m
 Background data sent to sub-process.
 Socket Connect: connected to 10.95.100.177
 [92mSuccessfully connected to Stepper Motor[0m
 [95mSetting stepper motor[0m
 [92mStepper motor set.[0m
-Iteration: 1  of  384 .  Moving stepper 0.25 revolution(s).
+Iteration: 1  of  10 .  Moving stepper 10.0 revolution(s).
 [95mSetting RF source 1[0m
 setting center frequency to 3200  MHz
+index.html                                      0%    0     0.0KB/s   --:-- ETAindex.html                                    100%   21KB  20.7KB/s   00:00    
 Transferring data 1
 received 3208 bytes
 [95mSetting RF source 2[0m
@@ -68,18 +70,21 @@ received 3208 bytes
 setting center frequency to 4400  MHz
 Transferring data 4
 received 3208 bytes
-[93mCurrent cavity length: 5.053[0m
+current_power_spectrum.jpeg                     0%    0     0.0KB/s   --:-- ETAcurrent_power_spectrum.jpeg                   100%   67KB  67.0KB/s   00:00    
+[94mCurrent cavity length: 5.493[0m
+[94mCurrent time: 05:05:59[0m
 Number of peaks identified: 1
-Smallest frequency seperation: 1523.23 at Peak: 0
+Smallest frequency seperation: 1341.68 at Peak: 0
 [1;31mIdentified peak was too far from any estimated value.[0m
 Match for peak: 0, [32mUsing real value of: 0MHz[0m
 Socket Connect: connected to 10.95.100.177
 [92mSuccessfully connected to Stepper Motor[0m
 [95mSetting stepper motor[0m
 [92mStepper motor set.[0m
-Iteration: 2  of  384 .  Moving stepper 0.25 revolution(s).
+Iteration: 2  of  10 .  Moving stepper 10.0 revolution(s).
 [95mSetting RF source 1[0m
 setting center frequency to 3200  MHz
+index.html                                      0%    0     0.0KB/s   --:-- ETAindex.html                                    100%   22KB  22.1KB/s   00:00    
 Transferring data 1
 received 3208 bytes
 [95mSetting RF source 2[0m
@@ -94,18 +99,20 @@ received 3208 bytes
 setting center frequency to 4400  MHz
 Transferring data 4
 received 3208 bytes
-[93mCurrent cavity length: 5.053[0m
+current_power_spectrum.jpeg                     0%    0     0.0KB/s   --:-- ETAcurrent_power_spectrum.jpeg                   100%   68KB  67.5KB/s   00:00    
+[94mCurrent cavity length: 6.113[0m
+[94mCurrent time: 05:06:41[0m
 Number of peaks identified: 1
-Smallest frequency seperation: 1520.23 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
+Smallest frequency seperation: 29.3194 at Peak: 0
+Match for peak: 0, [32mUsing real value of: 4348MHz[0m
 Socket Connect: connected to 10.95.100.177
 [92mSuccessfully connected to Stepper Motor[0m
 [95mSetting stepper motor[0m
 [92mStepper motor set.[0m
-Iteration: 3  of  384 .  Moving stepper 0.25 revolution(s).
+Iteration: 3  of  10 .  Moving stepper 10.0 revolution(s).
 [95mSetting RF source 1[0m
 setting center frequency to 3200  MHz
+index.html                                      0%    0     0.0KB/s   --:-- ETAindex.html                                    100%   23KB  23.5KB/s   00:00    
 Transferring data 1
 received 3208 bytes
 [95mSetting RF source 2[0m
@@ -120,46 +127,57 @@ received 3208 bytes
 setting center frequency to 4400  MHz
 Transferring data 4
 received 3208 bytes
-[93mCurrent cavity length: 5.053[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1522.23 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 4  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.073[0m
+current_power_spectrum.jpeg                     0%    0     0.0KB/s   --:-- ETAcurrent_power_spectrum.jpeg                   100%   69KB  68.7KB/s   00:00    
+[94mCurrent cavity length: 6.775[0m
+[94mCurrent time: 05:07:24[0m
 Number of peaks identified: 2
-Smallest frequency seperation: 1508.12 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1505.12 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
+Smallest frequency seperation: 18.6527 at Peak: 0
+Smallest frequency seperation: 39.9006 at Peak: 1
+Match for peak: 0, [32mUsing real value of: 4116MHz[0m
+Match for peak: 1, [32mUsing real value of: 4453MHz[0m
+[95mChecking peak.[0m
+[95mSwitched to Transmission Measurements[0m
+Setting center frequency to 4453.0  MHz
+Transferring data...
+received 3208 bytes
+Found peak at: 117
+Power was: 9.153
+Found peak at: 273
+Power was: 9.024
+Duplicate Index Detected
+Found Peak was Less.
+Found peak at: 399
+Setting center frequency to 4432.0  MHz
+Transferring data...
+received 3208 bytes
+Fitting data
+/home/bephillips2/workspace/Electric_Tiger_Control_Code/data_processors.py:189: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  p = [25, center_freq, nwa_yw[nwa_points / 2]]
+[95mParameters:[0m
+[94mFitted Q: 69.3616920505
+Fitted center frequency (MHz): 4429.16548389
+Fitted height (dBm): 9.19416057945[0m
+Setting center frequency to 4432.0  MHz
+current_freq_window.jpeg                        0%    0     0.0KB/s   --:-- ETAcurrent_freq_window.jpeg                      100%   49KB  48.6KB/s   00:00    
+[95mSwitched to Reflection Measurements[0m
+[93mTurning off RF source.[0m
+[95mSetting spectrum analyzer[0m
+[92mSpectrum analyzer set[0m
+[95mStarting integration...[0m
+Waiting, time elapsed: 1 secondsWaiting, time elapsed: 1 secondsWaiting, time elapsed: 2 secondsWaiting, time elapsed: 2 secondsWaiting, time elapsed: 3 secondsWaiting, time elapsed: 3 secondsWaiting, time elapsed: 4 secondsWaiting, time elapsed: 4 secondsWaiting, time elapsed: 5 secondsWaiting, time elapsed: 5 secondsWaiting, time elapsed: 6 secondsWaiting, time elapsed: 7 secondsWaiting, time elapsed: 7 secondsWaiting, time elapsed: 8 secondsWaiting, time elapsed: 8 secondsWaiting, time elapsed: 9 secondsWaiting, time elapsed: 10 secondsWaiting, time elapsed: 10 secondsWaiting, time elapsed: 11 secondsWaiting, time elapsed: 11 secondsWaiting, time elapsed: 12 secondsWaiting, time elapsed: 12 secondsWaiting, time elapsed: 13 secondsWaiting, time elapsed: 13 secondsWaiting, time elapsed: 14 secondsWaiting, time elapsed: 14 secondsWaiting, time elapsed: 15 secondsWaiting, time elapsed: 15 secondsWaiting, time elapsed: 16 secondsWaiting, time elapsed: 16 secondsWaiting, time elapsed: 17 secondsWaiting, time elapsed: 18 secondsWaiting, time elapsed: 18 secondsWaiting, time elapsed: 19 secondsWaiting, time elapsed: 20 secondsWaiting, time elapsed: 20 secondsWaiting, time elapsed: 21 secondsWaiting, time elapsed: 21 seconds
+Integration complete
+received 742747 bytes
+[93mTurning on RF source.[0m
+Wrote data to 0R_SA.csv
+Wrote data to 0SA.csv
 Socket Connect: connected to 10.95.100.177
 [92mSuccessfully connected to Stepper Motor[0m
 [95mSetting stepper motor[0m
 [92mStepper motor set.[0m
-Iteration: 5  of  384 .  Moving stepper 0.25 revolution(s).
+Iteration: 4  of  10 .  Moving stepper 10.0 revolution(s).
 [95mSetting RF source 1[0m
 setting center frequency to 3200  MHz
+index.html                                      0%    0     0.0KB/s   --:-- ETAindex.html                                    100%   27KB  26.6KB/s   00:00    
 Transferring data 1
 received 3208 bytes
 [95mSetting RF source 2[0m
@@ -174,1619 +192,47 @@ received 3208 bytes
 setting center frequency to 4400  MHz
 Transferring data 4
 received 3208 bytes
-[93mCurrent cavity length: 5.073[0m
+current_power_spectrum.jpeg                     0%    0     0.0KB/s   --:-- ETAcurrent_power_spectrum.jpeg                   100%   50KB  49.6KB/s   00:00    
+[94mCurrent cavity length: 7.3[0m
+[94mCurrent time: 05:08:55[0m
 Number of peaks identified: 1
-Smallest frequency seperation: 1502.12 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
+Smallest frequency seperation: 78.0124 at Peak: 1
+Match for peak: 1, [32mUsing real value of: 4188MHz[0m
+[95mChecking peak.[0m
+[95mSwitched to Transmission Measurements[0m
+Setting center frequency to 4188.0  MHz
+Transferring data...
+received 3208 bytes
+Found peak at: 89
+Power was: 8.415
+Found peak at: 192
+Power was: 8.42
+Duplicate Index Detected
+Found Peak was Greater.
+Found peak at: 399
+Setting center frequency to 4186.0  MHz
+Transferring data...
+received 3208 bytes
+Fitting data
+[95mParameters:[0m
+[94mFitted Q: 32.1889261591
+Fitted center frequency (MHz): 4182.69435189
+Fitted height (dBm): 8.43280113302[0m
+Setting center frequency to 4186.0  MHz
+current_freq_window.jpeg                        0%    0     0.0KB/s   --:-- ETAcurrent_freq_window.jpeg                      100%   46KB  46.2KB/s   00:00    
+[95mSwitched to Reflection Measurements[0m
+[93mTurning off RF source.[0m
+[95mSetting spectrum analyzer[0m
+[92mSpectrum analyzer set[0m
+[95mStarting integration...[0m
+Waiting, time elapsed: 1 secondsWaiting, time elapsed: 1 secondsWaiting, time elapsed: 2 secondsWaiting, time elapsed: 3 secondsWaiting, time elapsed: 3 secondsWaiting, time elapsed: 4 secondsWaiting, time elapsed: 5 secondsWaiting, time elapsed: 5 secondsWaiting, time elapsed: 6 secondsWaiting, time elapsed: 6 secondsWaiting, time elapsed: 7 secondsWaiting, time elapsed: 8 secondsWaiting, time elapsed: 9 secondsWaiting, time elapsed: 9 secondsWaiting, time elapsed: 10 secondsWaiting, time elapsed: 10 secondsWaiting, time elapsed: 11 secondsWaiting, time elapsed: 11 secondsWaiting, time elapsed: 12 secondsWaiting, time elapsed: 13 secondsWaiting, time elapsed: 14 secondsWaiting, time elapsed: 14 secondsWaiting, time elapsed: 15 secondsWaiting, time elapsed: 15 secondsWaiting, time elapsed: 16 secondsWaiting, time elapsed: 17 secondsWaiting, time elapsed: 18 secondsWaiting, time elapsed: 18 secondsWaiting, time elapsed: 19 secondsWaiting, time elapsed: 19 secondsWaiting, time elapsed: 20 secondsWaiting, time elapsed: 21 secondsWaiting, time elapsed: 21 secondsWaiting, time elapsed: 22 secondsWaiting, time elapsed: 23 secondsWaiting, time elapsed: 23 secondsWaiting, time elapsed: 24 secondsWaiting, time elapsed: 25 seconds
+Integration complete
+received 742747 bytes
+[93mTurning on RF source.[0m
+Wrote data to 1R_SA.csv
+Wrote data to 1SA.csv
 Socket Connect: connected to 10.95.100.177
 [92mSuccessfully connected to Stepper Motor[0m
 [95mSetting stepper motor[0m
 [92mStepper motor set.[0m
-Iteration: 6  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.114[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1621.46 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 7  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.197[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1580.09 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1577.09 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 8  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.218[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1570.72 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 9  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.135[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1618.92 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 10  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.177[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1528.97 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 11  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.156[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1541.42 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 12  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.156[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1542.42 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 13  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.197[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1622.09 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 14  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.218[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1615.72 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 15  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.218[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1620.72 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 16  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.218[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1622.72 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 17  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.218[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1629.72 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 18  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.218[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1634.72 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 19  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.239[0m
-Number of peaks identified: 3
-Smallest frequency seperation: 1625.39 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1495.39 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1491.39 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 20  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.26[0m
-Number of peaks identified: 3
-Smallest frequency seperation: 1619.1 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1488.1 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1486.1 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 21  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.281[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1614.85 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 22  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.281[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1621.85 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 23  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.302[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1613.65 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1464.65 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 24  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.302[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1616.65 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1464.65 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 25  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.323[0m
-Number of peaks identified: 4
-Smallest frequency seperation: 1616.48 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1614.48 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1452.48 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1449.48 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 26  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.344[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1611.36 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1441.36 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 27  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.365[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1603.29 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1431.29 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 28  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.365[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1606.29 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1433.29 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 29  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.386[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1599.25 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1424.25 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 30  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.429[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1578.79 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1401.79 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 31  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.408[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1588.74 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1413.74 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 32  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.429[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1577.79 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1400.79 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 33  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.429[0m
-Number of peaks identified: 3
-Smallest frequency seperation: 1575.79 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1572.79 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1402.79 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 34  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.472[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1380.5 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 35  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.493[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1544.68 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1368.68 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 36  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.515[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 1356.39 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 37  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.515[0m
-Number of peaks identified: 3
-Smallest frequency seperation: 1355.39 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 757.392 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 747.392 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Match for peak: 0, [32mUsing real value of: 0MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 38  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.536[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1345.66 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 85.6586 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4570MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 39  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.558[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1334.46 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 74.46 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4570MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 40  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.558[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1333.46 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 75.46 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4569MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 41  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.579[0m
-Number of peaks identified: 3
-Smallest frequency seperation: 1319.81 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 1316.81 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 69.8137 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4564MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 42  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.601[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 1308.71 at Peak: 0
-[1;31mIdentified peak was too far from any estimated value.[0m
-Smallest frequency seperation: 56.7058 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4566MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 43  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.623[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 45.6444 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4566MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 44  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.623[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 46.6444 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4565MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 45  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.645[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 35.6295 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4565MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 46  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.666[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 25.1586 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4565MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 47  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.688[0m
-Number of peaks identified: 0
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 48  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.688[0m
-Number of peaks identified: 0
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 49  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.732[0m
-Number of peaks identified: 0
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 50  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.732[0m
-Number of peaks identified: 0
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 51  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.776[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 24.9973 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4561MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 52  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.821[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 44.8171 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4559MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 53  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.865[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 61.9642 at Peak: 0
-Smallest frequency seperation: 101.964 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4555MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 54  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.821[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 36.8171 at Peak: 0
-Smallest frequency seperation: 80.8171 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4551MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 55  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.821[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 35.8171 at Peak: 0
-Smallest frequency seperation: 77.8171 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4550MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 56  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.843[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 44.4139 at Peak: 0
-Smallest frequency seperation: 89.4139 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4548MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 57  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.865[0m
-Number of peaks identified: 1
-Smallest frequency seperation: 51.9642 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4545MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 58  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.865[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 13.9642 at Peak: 0
-Smallest frequency seperation: 50.9642 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4507MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 59  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.91[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 32.3996 at Peak: 0
-Smallest frequency seperation: 69.3996 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4504MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 60  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.932[0m
-Number of peaks identified: 2
-Smallest frequency seperation: 41.8084 at Peak: 0
-Smallest frequency seperation: 79.8084 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4503MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 61  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.91[0m
-Number of peaks identified: 4
-Smallest frequency seperation: 52.6004 at Peak: 0
-Smallest frequency seperation: 11.6004 at Peak: 0
-Smallest frequency seperation: 28.3996 at Peak: 0
-Smallest frequency seperation: 68.3996 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4460MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 62  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.932[0m
-Number of peaks identified: 3
-Smallest frequency seperation: 44.1916 at Peak: 0
-Smallest frequency seperation: 5.19163 at Peak: 0
-Smallest frequency seperation: 34.8084 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4456MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 63  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.932[0m
-Number of peaks identified: 3
-Smallest frequency seperation: 45.1916 at Peak: 0
-Smallest frequency seperation: 5.19163 at Peak: 0
-Smallest frequency seperation: 32.8084 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4456MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 64  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.955[0m
-Number of peaks identified: 4
-Smallest frequency seperation: 76.3594 at Peak: 0
-Smallest frequency seperation: 34.3594 at Peak: 0
-Smallest frequency seperation: 4.64059 at Peak: 0
-Smallest frequency seperation: 44.6406 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4455MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 65  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
-received 3208 bytes
-[95mSetting RF source 3[0m
-setting center frequency to 4000  MHz
-Transferring data 3
-received 3208 bytes
-[95mSetting RF source 4[0m
-setting center frequency to 4400  MHz
-Transferring data 4
-received 3208 bytes
-[93mCurrent cavity length: 5.977[0m
-Number of peaks identified: 3
-Smallest frequency seperation: 25.0457 at Peak: 0
-Smallest frequency seperation: 12.9543 at Peak: 0
-Smallest frequency seperation: 49.9543 at Peak: 0
-Match for peak: 0, [32mUsing real value of: 4453MHz[0m
-Socket Connect: connected to 10.95.100.177
-[92mSuccessfully connected to Stepper Motor[0m
-[95mSetting stepper motor[0m
-[92mStepper motor set.[0m
-Iteration: 66  of  384 .  Moving stepper 0.25 revolution(s).
-[95mSetting RF source 1[0m
-setting center frequency to 3200  MHz
-Transferring data 1
-received 3208 bytes
-[95mSetting RF source 2[0m
-setting center frequency to 3600  MHz
-Transferring data 2
+Iteration: 5  of  10 .  Moving stepper 10.0 revolution(s).

@@ -14,8 +14,6 @@ class ModeTracker(core.ProgramCore):
         super(ModeTracker, self).__init__(config_path)
         
         self.fitter = procs.LorentzianFitter()
-        self.plotter = procs.Plotter()
-        
         self.m_track = mt.ModeTrack()
 
         self.freq_window = int(self.data_dict['freq_window'])  # Frequency window used for identify peaks specified in MHz
@@ -23,9 +21,34 @@ class ModeTracker(core.ProgramCore):
         self.sa_averages = int(self.data_dict['sa_averages'])  # total number of averages to take, Max is
         self.fft_length = int(self.data_dict['fft_length'])  # Number of IQ points to generate spectrum, Max is
         
+        self.noise_temperature = int(self.data_dict['noise_temperature'])  # Degrees Kelvin
+        self.effective_volume = int(self.data_dict['effective_volume'])  # Note from Legacy code read 'Invalid !!'
+        self.bfield = float(self.data_dict['bfield'])  # Tesla
+        
+        self.center_frequency = 0.0
+        self.hwhm = 0.0
+        self.quality_factor = 0.0
+        
+        # actual_center_freq, sa_span, fft_length, fitted hwhm, effective_volume, bfield, noise_temperature, sa_averages
+        
     def prequel(self):
         self.prequel_reflection()
         
+    def _build_data_header(self):
+        header = ''
+        header += "sa_span;" + str(self.sa_span) + "\n"
+        header += "fft_length;" + str(self.fft_length) + "\n"
+        header += "effective_volume;" + str(self.effective_volume) + "\n"
+        header += "bfield;" + str(self.bfield) + "\n"
+        header += "noise_temperature;" + str(self.noise_temperature) + "\n"
+        header += "sa_averages;" + str(self.sa_averages) + "\n"
+        header += "Q;" + str(self.quality_factor) + "\n"
+        header += "actual_center_freq;" + str(self.center_frequency) + "\n"
+        header += "fitted_hwhm;" + str(self.hwhm) + "\n"
+        header += "cavity_length;" + str(self.ardu_comm.get_cavity_length()) + "\n"
+        
+        return header
+    
     def set_bg_data(self, blank_data):
         
         bg_str = ''
@@ -109,10 +132,8 @@ class ModeTracker(core.ProgramCore):
         
         self.nwa_comm.set_freq_window(mode_of_desire , freq_window)
         initial_window = self.nwa_comm.take_data_single()
-#         self.save_freq_window(initial_window)
         
         initial_window = self.convertor.str_list_to_power_list(initial_window)
-#         self.plotter(initial_window, mode_of_desire, freq_window)
 
         new_mode_of_desire = self.__recenter_peak(initial_window, mode_of_desire)
 
@@ -122,7 +143,11 @@ class ModeTracker(core.ProgramCore):
         
         final_window = self.convertor.str_list_to_power_list(final_window)
 
-        self.fitter(final_window, new_mode_of_desire, freq_window)
+        data_triple = self.fitter(final_window, new_mode_of_desire, freq_window)
+        
+        self.quality_factor = data_triple[0]
+        self.center_frequency = data_triple[1]
+        self.hwhm = data_triple[2]
 
         self.nwa_comm.set_freq_window(new_mode_of_desire , nwa_span)
 
@@ -148,6 +173,9 @@ class ModeTrackProgram(ModeTracker):
         super(ModeTrackProgram, self).__init__(config_path)
         self.directory = self.get_folder_name()
         self.make_empty_data_folder(self.directory)
+        
+        self.saver = procs.FlatFileSaver('data', 'SA', 'Formatted')
+        self.raw_saver = procs.FlatFileSaver('data', 'R_SA', 'Raw')
         
         atexit.register(self.panic_cleanup)
         
@@ -212,11 +240,11 @@ class ModeTrackProgram(ModeTracker):
         subprocess.Popen(command, shell=True)
         
     def transfer_terminal_output(self):
-        dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
+        dir_path = os.path.dirname(os.path.realpath(__file__)) + "/"
 
-        cmd = "cat "+dir_path+"etig_log.txt"+" | "+dir_path+"ansi2html.sh"
+        cmd = "cat " + dir_path + "etig_log.txt" + " | " + dir_path + "ansi2html.sh"
 
-        terminal_html = subprocess.getoutput( cmd )
+        terminal_html = subprocess.getoutput(cmd)
         
         path = dir_path + "index.html"
         out_file = open(path, 'w+')
@@ -224,8 +252,8 @@ class ModeTrackProgram(ModeTracker):
         print(terminal_html, end="", file=out_file)
         out_file.close()
         
-        transfer_cmd = "scp "+dir_path+"index.html "
-        transfer_cmd += "kyou@kitsune.dyndns-ip.com:/mnt/data/www/html/Electric_Tiger/Terminal_Output/"
+        transfer_cmd = "scp " + dir_path + "index.html "
+        transfer_cmd += "kitsune.dyndns-ip.com:~/"
          
         subprocess.Popen(transfer_cmd, shell=True)
         
@@ -233,7 +261,7 @@ class ModeTrackProgram(ModeTracker):
     def get_folder_name(self):
         time_stamp = time.strftime("%H:%M:%S_%d.%m.%Y")
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        path = dir_path + "/data/" + time_stamp +"/"
+        path = dir_path + "/data/" + time_stamp + "/"
         
         return path
         
@@ -242,23 +270,17 @@ class ModeTrackProgram(ModeTracker):
         if not os.path.exists(directory):
             os.makedirs(directory)
             
-    #actual_center_freq, sa_span, fft_length, fitted hwhm, effective_volume, bfield, noise_temperature, sa_averages
+    # actual_center_freq, sa_span, fft_length, fitted hwhm, effective_volume, bfield, noise_temperature, sa_averages
         
-    def save_data(self, formatted_data, idx):
+    def save_data(self, formatted_data):
         
-        path = self.generate_save_file_name(idx)
-        out_file = open(path, 'a')
+        header = self._build_data_header()
+        self.saver(formatted_data, header)
         
-        for item in formatted_data:
-            out_str = str(item)
-            trans_table = dict.fromkeys(map(ord, ' []'), None)
-            out_str = out_str.translate(trans_table)
+    def save_raw_data(self, raw_data):
         
-            print(out_str, end="\n", file=out_file)
-        
-        out_str = "Wrote data to " + path
-        
-        out_file.close()           
+        header = self._build_data_header()
+        self.raw_saver(raw_data, header)
 
     def program(self):
 
@@ -281,8 +303,10 @@ class ModeTrackProgram(ModeTracker):
                 continue
             
             data = self.get_data_sa(mode_of_desire)
+            self.save_raw_data(data)
+            
             data = self.convertor.str_list_to_power_list(data)
-            self.save_data(data, x)
+            self.save_data(data)
 
             self.next_iteration()
 
