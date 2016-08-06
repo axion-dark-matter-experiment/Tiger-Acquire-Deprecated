@@ -10,7 +10,7 @@ set datafile separator ','
 set palette rgb 7,5,15
 
 set term jpeg size 1280,720
-set output 'current_mode_map.jpeg'
+set output outputname
 
 set pm3d map
 

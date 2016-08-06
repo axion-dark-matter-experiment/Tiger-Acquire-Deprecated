@@ -21,15 +21,20 @@ class MapBuilderCore (core.ProgramCore):
     def __transfer_map(self):
         
         path = self.file_name
+        dir_path = os.path.dirname(os.path.realpath(__file__))
         
-        command = "./data/transfer_map.sh " + path
+        command = dir_path + "/data/transfer_map.sh " + path
+        
+        print( command )
         subprocess.Popen(command, shell=True)
         
     def __transfer_power_spec(self, power_spec):
         
         power_list = self.convertor.str_list_to_power_list(power_spec)
         
-        path = os.path.join(os.getcwd() + '/data/current_power_spectrum.csv' + ' current_power_spectrum.jpeg')
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        path = dir_path + "/data/current_power_spectrum.csv"
+        
         out_file = open(path, 'w+')
         
         out_str = ''
@@ -40,9 +45,10 @@ class MapBuilderCore (core.ProgramCore):
 
         out_file.close() 
         
-        command = "./data/transfer_power_spec.sh " + path
+        path += " " + dir_path + "/data/current_power_spectrum.jpeg"
+        command = dir_path + "/data/transfer_power_spec.sh " + path
+
         subprocess.Popen(command, shell=True)
-        
         
     def __save_data(self, formatted_data):
         

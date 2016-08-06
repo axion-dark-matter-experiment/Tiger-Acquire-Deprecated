@@ -6,6 +6,7 @@ import os
 import data_processors as procs
 import modetrack as mt
 import time
+import sys
 
 class ModeTracker(core.ProgramCore):
     
@@ -145,6 +146,9 @@ class ModeTrackProgram(ModeTracker):
 
     def __init__(self, config_path):
         super(ModeTrackProgram, self).__init__(config_path)
+        self.directory = self.get_folder_name()
+        self.make_empty_data_folder(self.directory)
+        
         atexit.register(self.panic_cleanup)
         
     def find_mode_of_desire_reflection(self):
@@ -178,18 +182,19 @@ class ModeTrackProgram(ModeTracker):
         
     def generate_save_file_name(self, idx):
         # Generate file name time-stamp in the form dd.mm.yyyy
-        time_stamp = time.strftime("%d.%m.%Y")
+#         time_stamp = time.strftime("%d.%m.%Y")
         # concatenate the base save-file path with the date-time string to form the name of all necessary .csv files
-        save_path = self.data_dict['save_file_path']
-        return os.path.join(save_path, time_stamp + str(idx) + 'SA.csv')
+#         save_path = self.data_dict['save_file_path']
+        
+        save_path = self.directory
+        return os.path.join(save_path, str(idx) + 'SA.csv')
     
     def save_power_spec(self, power_spec):
         
         power_list = self.convertor.str_list_to_power_list(power_spec)
         
-#         path = os.path.join(os.getcwd() + '/data/current_power_spectrum.csv')
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        path = dir_path + "/data/current_freq_window.csv"
+        path = dir_path + "/data/current_power_spectrum.csv"
         
         out_file = open(path, 'w+')
         
@@ -205,6 +210,39 @@ class ModeTrackProgram(ModeTracker):
         command = dir_path + "/data/transfer_power_spec.sh " + path
 
         subprocess.Popen(command, shell=True)
+        
+    def transfer_terminal_output(self):
+        dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
+
+        cmd = "cat "+dir_path+"etig_log.txt"+" | "+dir_path+"ansi2html.sh"
+
+        terminal_html = subprocess.getoutput( cmd )
+        
+        path = dir_path + "index.html"
+        out_file = open(path, 'w+')
+        
+        print(terminal_html, end="", file=out_file)
+        out_file.close()
+        
+        transfer_cmd = "scp "+dir_path+"index.html "
+        transfer_cmd += "kyou@kitsune.dyndns-ip.com:/mnt/data/www/html/Electric_Tiger/Terminal_Output/"
+         
+        subprocess.Popen(transfer_cmd, shell=True)
+        
+        
+    def get_folder_name(self):
+        time_stamp = time.strftime("%H:%M:%S_%d.%m.%Y")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        path = dir_path + "/data/" + time_stamp +"/"
+        
+        return path
+        
+    def make_empty_data_folder(self, directory):
+        
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+            
+    #actual_center_freq, sa_span, fft_length, fitted hwhm, effective_volume, bfield, noise_temperature, sa_averages
         
     def save_data(self, formatted_data, idx):
         
@@ -231,6 +269,7 @@ class ModeTrackProgram(ModeTracker):
         # start indexing at one since we used our first iteration to capture
         # background data
         for x in range(1, self.num_of_iters):
+            self.transfer_terminal_output()
             
             mode_of_desire = self.find_mode_of_desire_reflection()
             if (mode_of_desire <= 0):
@@ -253,6 +292,6 @@ class ModeTrackProgram(ModeTracker):
     def panic_cleanup(self):
 
         current_iteration = self.iteration
-        revs_per_iters = int(self.data_dict['revs_per_iter'])
+        revs_per_iters = float(self.data_dict['revs_per_iter'])
         self.step_comm.panic_reset_cavity(current_iteration, revs_per_iters)
         self.close_all()

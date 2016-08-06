@@ -7,12 +7,11 @@ import os.path  # os.path.join
 import color_printer as cp
 
 class ConfigTypes:
-	"""Contains data that is read from user specified config file.
+	"""
+	Contains data that is read from user specified config file.
 	Class is responsible for reading and parsing config file, as well as generating
 	socket objects for all instruments.
 	Makes use of two dictionaries, data_dict for plain data types and sock_dict for socket objects.
-
-	Member variables in data_dict are mutable during run time, members of sock_dict are not.
 
 	Attributes:
 		sock_data: Dictionary that holds socket objects, format is instrument_name:[socket_object]

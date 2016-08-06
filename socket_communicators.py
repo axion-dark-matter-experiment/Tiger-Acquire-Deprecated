@@ -459,7 +459,7 @@ class StepperMotorComm (SocketComm):
         
     def panic_reset_cavity(self, iteration, revs_per_iter):
 
-        rev = -1.0 * iteration * revs_per_iter
+        rev = -1.0 * float(iteration) * revs_per_iter
         nsteps = int(rev * 200)
 
         step_sock = self.__get_step_sock()

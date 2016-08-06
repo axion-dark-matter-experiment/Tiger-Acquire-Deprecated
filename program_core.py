@@ -4,6 +4,8 @@ import socket_communicators as sc
 import data_processors as procs
 import color_printer as cp
 
+import time
+
 class ProgramCore(config_classes.ConfigTypes):
 
     def __init__(self, config_path):
@@ -78,14 +80,17 @@ class ProgramCore(config_classes.ConfigTypes):
         min_frequency = first_center - nwa_span / 2
 
         cavity_length = self.ardu_comm.get_cavity_length()
-        self.print_yellow("Current cavity length: " + str(cavity_length))
+        self.print_blue("Current cavity length: " + str(cavity_length))
+        
+        time_stamp = time.strftime("%H:%M:%S")
+        self.print_blue("Current time: " + str(time_stamp))
 
         return self.convertor.make_plot_points(raw_data, cavity_length, min_frequency, max_frequency)
 
     def next_iteration(self):
 
         len_of_tune = self.data_dict['len_of_tune']
-        revs = int(self.data_dict['revs_per_iter'])
+        revs = float(self.data_dict['revs_per_iter'])
 
         self.iteration += 1
 

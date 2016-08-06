@@ -1,3 +1,5 @@
 docs/
 legacy/
 __pycache__/
+*.csv
+*.sh

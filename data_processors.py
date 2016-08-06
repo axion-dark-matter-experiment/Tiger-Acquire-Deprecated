@@ -3,6 +3,8 @@ from scipy.optimize import leastsq  # least squares curve fitting
 import numpy as np  # numpy arrays
 import matplotlib.pyplot as plt  # accursed matplotlib functions
 import color_printer as cp
+import os
+import time
 
 #convert either a list of strings, or a single string
 #into a list of floats
@@ -182,22 +184,22 @@ class LorentzianFitter:
         nwa_yw = np.array(nwa_yw)
     
         # define middle values to fit to
-        middle = ((2 * nwa_points / 5 < np.arange(nwa_points)) & 
-                (np.arange(nwa_points) < 3 * nwa_points / 5))
+        middle = ((2 * nwa_points / 5 < np.arange(nwa_points)) & (np.arange(nwa_points) < 3 * nwa_points / 5))
         # initial values for fit: [HWHM, peak center, height]
         p = [25, center_freq, nwa_yw[nwa_points / 2]]
+        
         pbest = leastsq(self.__residuals, p, args=(nwa_yw[middle], nwa_xw[middle], center_freq, freq_window))[0]
     
         fitted_hwhm = pbest[0]
         fitted_center_freq = pbest[1]
-        fitted_center_freq_step = fitted_center_freq + 20
+#         fitted_center_freq_step = fitted_center_freq + 20
     
         fitted_height = pbest[2]
         fitted_q = fitted_center_freq / (fitted_hwhm * 2)
         # convert back to dBm
         fitted_height = 10 * np.log10(fitted_height)
     
-        nwa_y_dbmw = [10 * np.log10(y) for y in nwa_yw]
+#         nwa_y_dbmw = [10 * np.log10(y) for y in nwa_yw]
     
         # report parameters
         self.print_purple("Parameters:")
@@ -205,8 +207,64 @@ class LorentzianFitter:
         out_str = "Fitted Q: " + str(fitted_q) + "\nFitted center frequency (MHz): "\
         + str(fitted_center_freq) + "\nFitted height (dBm): " + str(fitted_height)
     
-        self.print_yellow(out_str)
+        self.print_blue(out_str)
     
         output_triple = [fitted_q, fitted_center_freq, fitted_height]
     
         return output_triple
+    
+class SaveFlatFiles:
+    
+    def __init__(self, root_dir, suffix):
+        
+        self.root_dir = root_dir
+        self.suffix = suffix
+        path = self.__get_folder_name()
+        self.__make_empty_data_folder( path )
+        
+        self.counter = 0
+    
+    def __call__(self, formatted_data, header_string = None):
+        self.__save_data( formatted_data, header_string )
+        self.counter += 1
+    
+    def __make_empty_data_folder(self, directory):
+        
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    
+    def __get_folder_name(self):
+        
+        time_stamp = time.strftime("%H:%M:%S_%d.%m.%Y")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        
+        root_path = "/"+self.root_dir+"/"
+        
+#         path = dir_path + "/data/" + time_stamp +"/"
+        path = dir_path + root_path + time_stamp +"/"
+        
+        return path
+
+    def __generate_save_file_name(self, idx):
+        
+        save_path = self.root_dir
+        return os.path.join(save_path, str(idx) + str(self.data_suffix) + '.csv')
+    
+    def __save_data(self, formatted_data, header_string ):
+        
+        path = self.__generate_save_file_name(self.idx)
+        out_file = open(path, 'a')
+        
+        print(header_string, end="\n", file=out_file)
+        
+        for item in formatted_data:
+            out_str = str(item)
+            trans_table = dict.fromkeys(map(ord, ' []'), None)
+            out_str = out_str.translate(trans_table)
+        
+            print(out_str, end="\n", file=out_file)
+        
+        out_str = "Wrote data to " + path
+        print ( out_str )
+        
+        out_file.close()   

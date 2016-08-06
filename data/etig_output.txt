@@ -1,3 +1,0 @@
-[95mConnecting to switch at IP Address: 10.95.100.174 using port 9221[0m
-Socket Connect: Could not connect to socket.
-[91mProblem generating socket object for switch! Exiting...[0m
