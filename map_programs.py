@@ -3,6 +3,7 @@ import program_core as core
 import atexit
 import subprocess
 import os
+import data_processors as procs
 
 class MapBuilderCore (core.ProgramCore):
     

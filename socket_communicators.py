@@ -434,12 +434,10 @@ class StepperMotorComm (SocketComm):
         self.print_yellow("Need to move "+str(delta_l))
         
         self._send_command_scl(step_sock, "FL" + str(delta_steps))
-        delay_time = 2*abs(5/16*delta_l)
+        delay_time = abs( delta_l )
         time.sleep(delay_time)
         
         step_sock.close()
-        
-        
 
     def reset_cavity(self, len_of_tune):
 

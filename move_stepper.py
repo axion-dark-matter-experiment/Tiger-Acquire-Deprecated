@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.5
 
 import socket_communicators as sc
+import color_printer as cp
 import argparse
 
 parser = argparse.ArgumentParser(description='Manually tune the length of the cavity.')
@@ -14,12 +15,55 @@ class StepperMover (sc.SocketComm):
     
     def __init__(self, host = "10.95.100.177", port = 7776):
         super(StepperMover, self).__init__()
-        self.step_sock = self._socket_connect(host, port)
+        
+        self.print_green = cp.ColorPrinter("Green")
+        self.print_red = cp.ColorPrinter("Red")
+        
+        self.step_sock = self._socket_connect( "10.95.100.177" , 7776)
+        
+        self.ardu_sock = self._socket_connect( "10.66.192.41" , 23)
+        self.ardu_comm = sc.ArduComm(self.ardu_sock)
         
     def __call__(self, tune_length, haste):
         self.__move_step(tune_length, haste)
+        
+    def __err_message(self, requested_cavity_length):
+        message = "Requested cavity length of "
+        message += str(requested_cavity_length)
+        message +=" is outside of reasonable bounds.\n"
+        message +="Aborting!"
+        
+        self.print_red( message )
+        
+    def __confirm_message(self, requested_cavity_length):
+        message = "Tuning cavity to "
+        message += str(requested_cavity_length)
+        message += " inches."
+        
+        self.print_green( message )
+        
+    def __sanity_check(self, requested_tune_length):
+        
+        current_length = self.ardu_comm.get_cavity_length()
+        requested_cavity_length = current_length + requested_tune_length
+        
+        if( requested_cavity_length <= 4.5 or requested_cavity_length >= 11):
+            self.__err_message(requested_cavity_length)
+            return False
+        else:
+            self.__confirm_message(requested_cavity_length)
+            return True
+        
+    def __close_sockets(self):
+        self.step_sock.close()
+        self.ardu_sock.close()
+        
 
     def __move_step(self, tune_length, haste_on = False): 
+        
+        if ( not self.__sanity_check(tune_length)):
+            self.__close_sockets()
+            return
             
         rev = tune_length * 16
     
@@ -43,11 +87,9 @@ class StepperMover (sc.SocketComm):
             # Velocity of 80 rev/s
             self._send_command_scl(self.step_sock, "VE1")
     
-        print ("Moving motor "+ str(abs(rev))+" revolutions.")
-    
         self._send_command_scl(self.step_sock, "FL"+str(nsteps))
-    
-        self.step_sock.close()
+        
+        self.__close_sockets()
 
 def main():
     

@@ -5,15 +5,14 @@ import subprocess
 import os
 import data_processors as procs
 import modetrack as mt
-import time
-import sys
+from socket_communicators import ArduComm
 
 class ModeTracker(core.ProgramCore):
     
     def __init__(self, config_path):
         super(ModeTracker, self).__init__(config_path)
         
-        self.fitter = procs.LorentzianFitter()
+        self.fitter = procs.NouveauLorentzianFitter()
         self.m_track = mt.ModeTrack()
 
         self.freq_window = int(self.data_dict['freq_window'])  # Frequency window used for identify peaks specified in MHz
@@ -29,12 +28,19 @@ class ModeTracker(core.ProgramCore):
         self.hwhm = 0.0
         self.quality_factor = 0.0
         
-        # actual_center_freq, sa_span, fft_length, fitted hwhm, effective_volume, bfield, noise_temperature, sa_averages
-        
     def prequel(self):
         self.prequel_reflection()
         
     def _build_data_header(self):
+        """
+        Orginal program saved the follow parameters:
+        actual_center_freq,
+        sa_span, fft_length,
+        fitted hwhm,
+        effective_volume,
+        bfield, noise_temperature,
+        sa_averages
+        """
         header = ''
         header += "sa_span;" + str(self.sa_span) + "\n"
         header += "fft_length;" + str(self.fft_length) + "\n"
@@ -87,7 +93,6 @@ class ModeTracker(core.ProgramCore):
         
     def __recenter_peak(self, power_list, mode_of_desire):
              
-#         cavity_length = self.__derive_cavity_length()
         cavity_length = self.ardu_comm.get_cavity_length()
         trans_window_str = self.convertor.power_list_to_str(power_list, mode_of_desire, self.freq_window, cavity_length)
         
@@ -136,6 +141,9 @@ class ModeTracker(core.ProgramCore):
         initial_window = self.convertor.str_list_to_power_list(initial_window)
 
         new_mode_of_desire = self.__recenter_peak(initial_window, mode_of_desire)
+        
+        if (new_mode_of_desire == 0):
+            return -1
 
         self.nwa_comm.set_freq_window(new_mode_of_desire , freq_window)
         final_window = self.nwa_comm.take_data_single()
@@ -166,18 +174,21 @@ class ModeTracker(core.ProgramCore):
         self.nwa_comm.turn_on_RF_source()
         
         return raw_sa_data
-    
+
 class ModeTrackProgram(ModeTracker):
 
     def __init__(self, config_path):
         super(ModeTrackProgram, self).__init__(config_path)
-        self.directory = self.get_folder_name()
-        self.make_empty_data_folder(self.directory)
         
-        self.saver = procs.FlatFileSaver('data', 'SA', 'Formatted')
-        self.raw_saver = procs.FlatFileSaver('data', 'R_SA', 'Raw')
+        self.sa_saver = procs.SignalAnalyzerSaver( 'data' )
+        self.nwa_saver = procs.NetworkAnalyzerSaver( 'data' )
         
         atexit.register(self.panic_cleanup)
+        
+    def __derive_length_from_start(self):
+        cavity_length = self.ardu_comm.get_cavity_length()
+        start_length = self.start_length
+        return cavity_length - start_length
         
     def find_mode_of_desire_reflection(self):
         nwa_data = self.get_data_nwa()
@@ -186,7 +197,7 @@ class ModeTrackProgram(ModeTracker):
         formatted_points = self.format_points(nwa_data)
         mode_of_desire = self.find_minima_peak(formatted_points)
         
-        if (mode_of_desire <= 0):
+        if (mode_of_desire <= 0.0):
             return -1
         else:
             return mode_of_desire
@@ -194,7 +205,7 @@ class ModeTrackProgram(ModeTracker):
     def find_mode_of_desire_transmission(self, mode_of_desire):
         mode_of_desire = self.check_peak(mode_of_desire)
         
-        if (mode_of_desire <= 0):
+        if (mode_of_desire <= 0.0):
             return -1
         else:
             return mode_of_desire
@@ -209,10 +220,6 @@ class ModeTrackProgram(ModeTracker):
         self.set_bg_data(formatted_points)
         
     def generate_save_file_name(self, idx):
-        # Generate file name time-stamp in the form dd.mm.yyyy
-#         time_stamp = time.strftime("%d.%m.%Y")
-        # concatenate the base save-file path with the date-time string to form the name of all necessary .csv files
-#         save_path = self.data_dict['save_file_path']
         
         save_path = self.directory
         return os.path.join(save_path, str(idx) + 'SA.csv')
@@ -220,6 +227,8 @@ class ModeTrackProgram(ModeTracker):
     def save_power_spec(self, power_spec):
         
         power_list = self.convertor.str_list_to_power_list(power_spec)
+        formatted_points = self.format_points(power_spec)
+        self.nwa_saver( formatted_points )
         
         dir_path = os.path.dirname(os.path.realpath(__file__))
         path = dir_path + "/data/current_power_spectrum.csv"
@@ -240,6 +249,8 @@ class ModeTrackProgram(ModeTracker):
         subprocess.Popen(command, shell=True)
         
     def transfer_terminal_output(self):
+        self.print_status_info()
+        
         dir_path = os.path.dirname(os.path.realpath(__file__)) + "/"
 
         cmd = "cat " + dir_path + "etig_log.txt" + " | " + dir_path + "ansi2html.sh"
@@ -253,44 +264,17 @@ class ModeTrackProgram(ModeTracker):
         out_file.close()
         
         transfer_cmd = "scp " + dir_path + "index.html "
-        transfer_cmd += "kitsune.dyndns-ip.com:~/"
+        transfer_cmd += " kitsune.dyndns-ip.com:~/"
          
         subprocess.Popen(transfer_cmd, shell=True)
-        
-        
-    def get_folder_name(self):
-        time_stamp = time.strftime("%H:%M:%S_%d.%m.%Y")
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        path = dir_path + "/data/" + time_stamp + "/"
-        
-        return path
-        
-    def make_empty_data_folder(self, directory):
-        
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-            
-    # actual_center_freq, sa_span, fft_length, fitted hwhm, effective_volume, bfield, noise_temperature, sa_averages
-        
-    def save_data(self, formatted_data):
-        
-        header = self._build_data_header()
-        self.saver(formatted_data, header)
-        
-    def save_raw_data(self, raw_data):
-        
-        header = self._build_data_header()
-        self.raw_saver(raw_data, header)
 
     def program(self):
 
         self.prequel()
         self.set_background()
-        self.next_iteration()
+        self.rapid_traverse()
 
-        # start indexing at one since we used our first iteration to capture
-        # background data
-        for x in range(1, self.num_of_iters):
+        for _ in range(0, self.num_of_iters):
             self.transfer_terminal_output()
             
             mode_of_desire = self.find_mode_of_desire_reflection()
@@ -303,19 +287,15 @@ class ModeTrackProgram(ModeTracker):
                 continue
             
             data = self.get_data_sa(mode_of_desire)
-            self.save_raw_data(data)
-            
-            data = self.convertor.str_list_to_power_list(data)
-            self.save_data(data)
+            self.sa_saver(data, self._build_data_header())
 
             self.next_iteration()
 
-#         self.retract_cavity()
-        self.close_all()
-
+        self.transfer_terminal_output()
+        
     def panic_cleanup(self):
-
-        current_iteration = self.iteration
-        revs_per_iters = float(self.data_dict['revs_per_iter'])
-        self.step_comm.panic_reset_cavity(current_iteration, revs_per_iters)
+        
+        current_length = self.__derive_length_from_start()
+        self.step_comm.reset_cavity(current_length)
+        self.transfer_terminal_output()
         self.close_all()

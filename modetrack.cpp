@@ -476,7 +476,7 @@ std::vector<double> ModeTrack::FindPeaks(std::vector<double>& data_list, ModeTra
     auto filtered_list = (method == Gauss)? GaussBlur(data_list):BilateralFilter(data_list,10,2);
     auto f_prime = Derivative(filtered_list);
 
-//    DebugSaveInfo(filtered_list,method);
+    DebugSaveInfo(filtered_list,method);
 
     int f_prime_size = f_prime.size()-1;
     int max_size = filtered_list.size();

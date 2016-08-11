@@ -39,6 +39,9 @@ class ProgramCore(config_classes.ConfigTypes):
         self.nominal_centers = self.data_dict['nominal_centers']
         self.num_of_iters = int(self.data_dict['num_of_iters'])
         self.start_length = float(self.data_dict['start_length'])
+        
+        self.initial_length = float(self.data_dict['intial_length'])
+        
         self.nwa_span = int(self.data_dict['nwa_span'])
             
         self.iteration = 0
@@ -48,19 +51,26 @@ class ProgramCore(config_classes.ConfigTypes):
         tune_length = float(self.data_dict['len_of_tune'])
         self.step_comm.reset_cavity(tune_length)
         
-    def __move_to_initial_cavity_length(self):
+    def __move_to_start_cavity_length(self):
         current_length = float(self.ardu_comm.get_cavity_length())
         self.step_comm.set_to_initial_length(self.start_length, current_length)
-
+        
+    def __move_to_initial_cavity_length(self):
+        current_length = float(self.ardu_comm.get_cavity_length())
+        self.step_comm.set_to_initial_length(self.initial_length, current_length)
+        
+    def rapid_traverse(self):
+        self.__move_to_initial_cavity_length()
+        
     def prequel_transmission(self):
         self.switch_comm.switch_to_network_analyzer()
         self.switch_comm.switch_to_transmission()
-        self.__move_to_initial_cavity_length()
+        self.__move_to_start_cavity_length()
          
     def prequel_reflection(self):
         self.switch_comm.switch_to_network_analyzer()
         self.switch_comm.switch_to_reflection()
-        self.__move_to_initial_cavity_length()
+        self.__move_to_start_cavity_length()
 
 
     def get_data_nwa(self):
@@ -78,14 +88,17 @@ class ProgramCore(config_classes.ConfigTypes):
         
         max_frequency = last_center + nwa_span / 2
         min_frequency = first_center - nwa_span / 2
+        
+        cavity_length = self.ardu_comm.get_cavity_length()
 
+        return self.convertor.make_plot_points(raw_data, cavity_length, min_frequency, max_frequency)
+    
+    def print_status_info(self):
         cavity_length = self.ardu_comm.get_cavity_length()
         self.print_blue("Current cavity length: " + str(cavity_length))
         
         time_stamp = time.strftime("%H:%M:%S")
         self.print_blue("Current time: " + str(time_stamp))
-
-        return self.convertor.make_plot_points(raw_data, cavity_length, min_frequency, max_frequency)
 
     def next_iteration(self):
 

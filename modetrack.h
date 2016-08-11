@@ -275,6 +275,20 @@ class ModeTrack {
      */
     void ParseString(std::string data_str);
 
+    /*!
+     * \brief Apply a the Biltaral filter
+     *
+     * See the original paper for more details,
+     *
+     * C. Tomasi and R. Manduchi, “Bilateral filtering for gray and color images,”
+     * in Proceedings  of  the  IEEE  International  Conference  on  Computer  Vision,
+     * pp. 839–846, 1998.
+     *
+     * \param data_list, the list that will be filtered
+     * \param sigma_s, "Spatial" standard deviation, the size of the gaussian kernel
+     * \param sigma_r
+     * \return
+     */
     std::vector<double> BilateralFilter(std::vector<double>& data_list, double sigma_s, double sigma_r);
     //
     uint FindMaxima(std::vector<double>& data_list);

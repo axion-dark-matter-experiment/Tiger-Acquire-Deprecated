@@ -1,13 +1,13 @@
 import re  # re.split
 from scipy.optimize import leastsq  # least squares curve fitting
 import numpy as np  # numpy arrays
-import matplotlib.pyplot as plt  # accursed matplotlib functions
 import color_printer as cp
 import os
 import time
+import subprocess
 
-#convert either a list of strings, or a single string
-#into a list of floats
+# convert either a list of strings, or a single string
+# into a list of floats
 
 class Convertor:
     
@@ -55,13 +55,13 @@ class Convertor:
             plot_points, a list of data triples with the format described above
         """
         
-        #If input is a -list- of strings join together to form a single string
-        #If input is a single string, do nothing
+        # If input is a -list- of strings join together to form a single string
+        # If input is a single string, do nothing
         total_str = ''.join(raw_data)
-        #remove end of field characters which would mess-up split
+        # remove end of field characters which would mess-up split
         power_list = total_str.strip()
-        #Since we are expecting a comma seperated list of strings (or single string)
-        #we split on command or newlines to remove these special characters
+        # Since we are expecting a comma seperated list of strings (or single string)
+        # we split on command or newlines to remove these special characters
         power_list = re.split(',|\n', power_list)
     
         power_list = [float(y) for y in power_list]
@@ -82,40 +82,108 @@ class Convertor:
     
         return formatted_points
     
-class Plotter:
+class NouveauLorentzianFitter:
+    
+    def __init__(self):
+        """
+        Initialize colored terminal printers.
+        """
+        self.print_blue = cp.ColorPrinter("Blue")
+        self.print_purple = cp.ColorPrinter("Purple")
         
-    def __call__(self, plot_data, center_freq, freq_window):
-        self.__plot_freq_window(plot_data, center_freq, freq_window)
         
-    def __plot_freq_window(self, plot_data, center_freq, freq_window):
+    def __call__(self, fit_data, center_freq, freq_window):
+        """
+        Overload __call__ function designed to fit the functor design pattern.
+        Call the internal function __determine_Q.
         
-        plot_title = 'Frequency Window'
+        Args:
+            fit_data: power spectrum where mode of desire is expected to be, in units of dBm
+            center_freq: frequency where the mode of desire is centered
+            freq_window: tne width of the frequency window in MHz
+            
+        Returns:
+            data triple in the format [Q, Max Power Frequency (dBm), HWHM(MHz)]
+        """
+        return self.__determine_Q(fit_data, center_freq, freq_window)
     
-        points = len(plot_data)
+    def __get_min_delta_index(self, search_list, reference ):
+        """
+        Compare all elements in a list to a reference and determine which element
+        is the closest to the reference.
+        The list under comparison MUST have a reference level of ZERO.
+        
+        Args:
+            search_list, the list of data to be compared to the reference value
+            reference, the element to be compared against. Needs to be strictly positive.
+            
+        Returns:
+            The index of whatever element was closest to 'reference'
+            If multiple elements are all equally close to 'reference' return the
+            element with the highest index (Python's behaviour, not mine)
+        """
+            
+        delta_list = [ abs(val - reference) for val in search_list ]
+        
+        min_delta = min ( delta_list )
+        return delta_list.index( min_delta )
     
-        nwa_y = [10.**(y / 10) for y in plot_data]  # convert from dBm to power (mW)
+    def __convert_to_mwatts(self, power_list):
+        """
+        Convert a power spectrum from units of dBm to units of milliWatts
+        
+        Args:
+            power_list, list of power data in dBm
+        
+        Returns:
+            List of power data in mW
+        """
+        return [10.**(dbm_power / 10) for dbm_power in power_list]
     
-        # get x values from center frequency and span
-        nwa_x = [(center_freq - (freq_window / 2) + \
-          freq_window * (float(x) / points)) for x in range(points)]
+    def __set_zero_reference(self, power_list):
+        
+        min_power = min (power_list)
+        return [ (power - min_power) for power in power_list]
+        
+    def __determine_Q(self, freq_window, center_frequency, frequency_span ):
+        
+        max_power_dbm = max( freq_window )
+        
+        mw_power_list = self.__convert_to_mwatts( freq_window )
+
+        max_power_mw = max ( mw_power_list )
+        
+        max_power_index = mw_power_list.index( max_power_mw )
+
+        half_max_power = max_power_mw / 2
+        
+        index_left_side = self.__get_min_delta_index( mw_power_list[:max_power_index], half_max_power )
+
+        index_right_side = self.__get_min_delta_index( mw_power_list[max_power_index:], half_max_power )
+        index_right_side += ( max_power_index )
+        
+        FWHM = frequency_span*abs(index_left_side - index_right_side)/len(freq_window)
+        
+        min_frequency = center_frequency - frequency_span / 2
+        max_power_frequency = ( max_power_index * frequency_span ) / (len( freq_window )) + min_frequency
+        
+        # Print parameters to terminal
+        self.print_purple("Parameters:")
+        
+        quality_factor = (max_power_frequency/FWHM)
     
-        # convert to arrays
-        nwa_x = np.array(nwa_x)
-        nwa_y = np.array(nwa_y)
-        nwa_y_dbm = [10 * np.log10(y) for y in nwa_y]
+        out_str = "Q: " + str(quality_factor) + "\nCenter Frequency (MHz): "\
+        + str(max_power_frequency) + "\nMax Power (dBm): " + str(max_power_dbm)\
+        + "\nFWHM:"+str(FWHM)
     
-        plt.title(plot_title)
-        plt.xlabel('Frequency (MHz)')
-        plt.ylabel('Power (dBm)')
-        plt.plot(nwa_x, nwa_y_dbm, '.')
-        #plot figure. While the figure is displayed the program will be halted, because
-        # you know- Matplotlib.
-        plt.show()
+        self.print_blue(out_str)
+        
+        return [quality_factor, max_power_frequency, FWHM/2]
         
 class LorentzianFitter:
     
     def __init__(self):
-        self.print_blue= cp.ColorPrinter("Blue")
+        self.print_blue = cp.ColorPrinter("Blue")
         self.print_purple = cp.ColorPrinter("Purple")
         
         
@@ -215,25 +283,12 @@ class LorentzianFitter:
     
 class FlatFileSaver:
     
-    def __init__(self, root_dir, suffix, sa_data_type = None):
+    def __init__(self, root_dir ):
         
         self.root_dir = root_dir
-        self.suffix = suffix
         self.directory = self.__get_folder_name()
         
-        self.__make_empty_data_folder( self.directory )
-        
-        self.sa_data_type = sa_data_type
-        self.counter = 0
-    
-    def __call__(self, data, header_string = None):
-        
-        if (self.sa_data_type == "Raw"):
-            self.__save_raw_data( data, header_string )
-        else:
-            self.__save_data( data, header_string )
-            
-        self.counter += 1
+        self.__make_empty_data_folder(self.directory)
     
     def __make_empty_data_folder(self, directory):
         
@@ -243,20 +298,69 @@ class FlatFileSaver:
     
     def __get_folder_name(self):
         
-        time_stamp = time.strftime("%H:%M:%S_%d.%m.%Y")
+        time_stamp = time.strftime("%S:%M:%H_%d.%m.%Y")
         dir_path = os.path.dirname(os.path.realpath(__file__))
         
-        root_path = "/"+self.root_dir+"/"
-        path = dir_path + root_path + time_stamp +"/"
+        root_path = "/" + self.root_dir + "/"
+        path = dir_path + root_path + time_stamp + "/"
 
         return path
 
-    def __generate_save_file_name(self, idx):
+    def _generate_save_file_name(self, idx = None, opt = None):
         
-        return os.path.join( str(idx) + str(self.suffix) + '.csv')
+        if( idx is None and opt is None):
+            return os.path.join( '.csv')
+        elif( opt is None ):
+            return os.path.join(str(idx) + '.csv')
+        elif( idx is None ):
+            return os.path.join(str(opt) + '.csv')
+        else:
+            return os.path.join(str(opt) + str(idx) + '.csv')
+    
+    def _append_to_data( self, data , file_path, header_string = None):
+        
+        out_file = open(file_path, 'a')
+        
+        if( header_string is not None):
+            print(header_string, end="\n", file=out_file)
+        
+        for item in data:
+            out_str = str(item)
+#             trans_table = dict.fromkeys(map(ord, ' []'), None)
+#             out_str = out_str.translate(trans_table)
+        
+            print(out_str, end="\n", file=out_file)
+        
+        out_str = "Wrote data to " + file_path
+        
+        out_file.close()
+        
+class SignalAnalyzerSaver( FlatFileSaver ):
+    
+    def __init__(self, root_dir, sa_type = 'R+F'):
+
+        super(SignalAnalyzerSaver, self).__init__( root_dir )
+        
+        if (sa_type == 'R'):
+            self.__call_back = self.__save_raw_data
+            
+        elif( sa_type == 'F'):
+            self.__call_back = self.__save_formatted_data
+            
+        elif( sa_type == 'R+F'):
+            self.convertor = Convertor()
+            self.__call_back = self.__save_raw_and_formatted
+            
+        self.counter = 0
+         
+    def __call__(self, data, header_string = None):
+        
+        self.__call_back( data, header_string )
+        self.counter += 1
     
     def __save_raw_data(self, raw_data, header_string):
-        path = self.__generate_save_file_name(self.counter)
+        
+        path = self._generate_save_file_name(self.counter, 'SA_R')
         file_path = self.directory + path
         
         out_file = open(file_path, 'a')
@@ -265,18 +369,41 @@ class FlatFileSaver:
         print(raw_data, end="\n", file=out_file)
         
         out_str = "Wrote data to " + path
-        print ( out_str )
+        print (out_str)
         
         out_file.close()
-    
-    def __save_data(self, formatted_data, header_string ):
         
-        path = self.__generate_save_file_name(self.counter)
+    def __save_formatted_data( self, formatted_data, header_string ):
+        
+        path = self._generate_save_file_name(self.counter, 'SA_F')
         file_path = self.directory + path
         
-        out_file = open(file_path, 'a')
+        self._append_to_data( formatted_data, file_path, header_string )
         
-        print(header_string, end="\n", file=out_file)
+    def __save_raw_and_formatted(self, raw_data, header_string ):
+        
+        self.__save_raw_data( raw_data, header_string )
+        formatted_data = self.convertor.str_list_to_power_list(raw_data)
+        
+        self.__save_formatted_data(formatted_data, header_string)
+        
+class NetworkAnalyzerSaver( FlatFileSaver ):
+    
+    def __init__(self, root_dir ):
+
+        super(NetworkAnalyzerSaver, self).__init__( root_dir )
+#         self.file_name = os.path.join('NA' + '.csv')
+        self.file_name = self._generate_save_file_name('NA')
+        
+    def __call__(self, formatted_data ):
+        self.__save_data( formatted_data )
+        self.__transfer_map()
+        
+    def __save_data(self, formatted_data):
+        
+        path = self.directory + self.file_name
+        
+        out_file = open(path, 'a')
         
         for item in formatted_data:
             out_str = str(item)
@@ -286,6 +413,14 @@ class FlatFileSaver:
             print(out_str, end="\n", file=out_file)
         
         out_str = "Wrote data to " + path
-        print ( out_str )
         
-        out_file.close()   
+        out_file.close()
+        
+    def __transfer_map(self):
+        
+        path = self.directory + self.file_name
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        
+        command = dir_path + "/data/transfer_map.sh " + path
+        
+        subprocess.Popen(command, shell=True)
