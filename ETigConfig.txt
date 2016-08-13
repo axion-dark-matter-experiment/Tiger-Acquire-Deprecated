@@ -9,7 +9,7 @@ d;nwa_power;-15.0
 d;freq_window;100
 d;sa_span;10
 d;sa_averages;256
-d;fft_length;65536
+d;fft_length;131072
 d;noise_temperature;1417
 d;effective_volume;20
 d;bfield;8.5e-4

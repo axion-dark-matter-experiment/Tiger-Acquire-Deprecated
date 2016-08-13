@@ -43,11 +43,11 @@ class SocketComm:
             Socket object to the specified IP and port on success, None on failure
         """
 
-        #Attempt to get host info
+        # Attempt to get host info
         try:
             sockinfo = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)
         except OSError:
-            #Return None if we fail
+            # Return None if we fail
             print ("Socket Connect: could not get host info.")
             return None
 
@@ -58,7 +58,7 @@ class SocketComm:
                 s.settimeout(5)  # set socket time-out to 5 seconds, default is ~120 seconds
                 s.connect((host, port))
                 print ("Socket Connect: connected to", s.getpeername()[0])
-                #Return socket object on success
+                # Return socket object on success
                 return s
             except (IOError, ValueError) as exc:
                 print ("Socket Connect: Could not connect to socket.")
@@ -135,6 +135,30 @@ class SocketComm:
             buff = sock.recv(2048)
             data += buff.decode()
         if printlen: print ("received", len(data), "bytes")
+        return data
+    
+    def _read_data_safe(self, sock, time_out = 2):
+        """
+        Read a string from a socket. If an emptry string (or no string)
+        is returned read from the socket again. This process will repeat
+        until a non-empty string is returned.
+        
+        Args:
+            sock: Socket to read from
+            timeout: max time to wait for the socket to respond
+            
+        Returns:
+            data: The data read from the socket as a string
+            which is guaranteed to be non-empty
+        """
+        data = self._read_data( sock, printlen = False, timeout = time_out)
+            
+        if not data:
+            #If data = "" or data = None wait one second, then try again
+            time.sleep(1)
+            self.print_red ("Failed to read from socket, retrying...")
+            data = self._read_data_safe( sock, time_out )
+            
         return data
 
 class NetworkAnalyzerComm (SocketComm):
@@ -301,6 +325,13 @@ class NetworkAnalyzerComm (SocketComm):
         return tmp_list
 
     def set_freq_window(self, frequency , span):
+        """
+        Set-up a frequency window around a single center frequency.
+        
+        Args:
+            frequency: the center of the frequency window (in MHz)
+            span: the width of the frequeny window (in MHz)
+        """
         
         # set passthrough mode to source
         self._send_command(self.nwa_sock, "PT19")
@@ -320,6 +351,10 @@ class NetworkAnalyzerComm (SocketComm):
         self._send_command(self.nwa_sock, "++addr 16")
         
     def take_data_single(self):
+        """
+        Collect a single set of data, using whatever settings that the
+        network analyzer is set to when this function is called.
+        """
         
         # set passthrough mode to source
         self._send_command(self.nwa_sock, "PT19")
@@ -350,33 +385,51 @@ class NetworkAnalyzerComm (SocketComm):
         time.sleep(1)
         self._send_command(self.nwa_sock, "++read 10")
         
-        return self._read_data(self.nwa_sock, printlen=True)
+        return self._read_data_safe( self.nwa_sock )
     
     def __set_RF_source(self, turn_on):
+        """
+        Turn on the signal sweeper on or off.
+        This function is only responsible for enabling/disabling the RF
+        source, not establishing its settings.
         
-        self._send_command(self.nwa_sock, "PT19") # set passthrough mode to source
-        self._send_command(self.nwa_sock, "++addr 17") # change GPIB address to passthrough
+        Args:
+            turn_on: boolean value that either turns the signal sweeper on or off
+            True = On, False = Off
+        """
+        
+        self._send_command(self.nwa_sock, "PT19")  # set passthrough mode to source
+        self._send_command(self.nwa_sock, "++addr 17")  # change GPIB address to passthrough
         
         if (turn_on == True):
-            self._send_command(self.nwa_sock, "RF1") # turn on RF
+            self._send_command(self.nwa_sock, "RF1")  # turn on RF
         elif (turn_on == False):
-            self._send_command(self.nwa_sock, "RF0") # turn off RF
+            self._send_command(self.nwa_sock, "RF0")  # turn off RF
         else:
             self.print_red("Bad command RF source not set.")
             
-        self._send_command(self.nwa_sock, "++addr 16") # change back GPIB address to network analyzer
+        self._send_command(self.nwa_sock, "++addr 16")  # change back GPIB address to network analyzer
     
     def turn_off_RF_source(self):
+        """
+        Turn the signal sweeper off.
+        """
         
         self.print_yellow("Turning off RF source.")
         self.__set_RF_source(False)
         
     def turn_on_RF_source(self):
+        """
+        Turn the signal sweeper on.
+        """
         
         self.print_yellow("Turning on RF source.")
         self.__set_RF_source(True)
 
 class StepperMotorComm (SocketComm):
+    """
+    Object to sends commands to an Applied Motion products stepper motor.
+    """
 
     def __init__(self, addr_dict):
         super(StepperMotorComm, self).__init__()
@@ -403,7 +456,7 @@ class StepperMotorComm (SocketComm):
             return sock
         except (IOError, ValueError) as exc:
             # some exception handling overlaps with _socket_connect, but we need to handle ValueError in the case of a bad port number
-            st = "Problem generating socket object for " + inst_name + "!"+"Error was: "+ str(exc)
+            st = "Problem generating socket object for " + inst_name + "!" + "Error was: " + str(exc)
             self.print_red(st)
             return -1
 
@@ -413,28 +466,28 @@ class StepperMotorComm (SocketComm):
         # set 200 steps/rev
         self._send_command_scl(step_sock, "MR0")
         # set acceleration
-        self._send_command_scl(step_sock, "AC"+str(traverse_speed))
+        self._send_command_scl(step_sock, "AC" + str(traverse_speed))
         # set deceleration
-        self._send_command_scl(step_sock, "DE"+str(traverse_speed))
+        self._send_command_scl(step_sock, "DE" + str(traverse_speed))
         # set velocity
-        self._send_command_scl(step_sock, "VE"+str(traverse_speed))
+        self._send_command_scl(step_sock, "VE" + str(traverse_speed))
         
         self.print_green("Stepper motor set.")
         
     def set_to_initial_length(self, initial_length, current_length):
         
-        self.print_purple("Moving to initial cavity length of "+str(initial_length))
+        self.print_purple("Moving to initial cavity length of " + str(initial_length))
         
         step_sock = self.__get_step_sock()
         self.__set_stepper_motor(step_sock, 5)
         
         delta_l = initial_length - current_length
-        delta_steps = int(round(16*200*delta_l))
+        delta_steps = int(round(16 * 200 * delta_l))
         
-        self.print_yellow("Need to move "+str(delta_l))
+        self.print_yellow("Need to move " + str(delta_l))
         
         self._send_command_scl(step_sock, "FL" + str(delta_steps))
-        delay_time = abs( delta_l )
+        delay_time = abs(delta_l)
         time.sleep(delay_time)
         
         step_sock.close()
@@ -483,9 +536,12 @@ class StepperMotorComm (SocketComm):
         time.sleep(revs)
         step_sock.close()
         
-class SwitchComm ( SocketComm ):
+class SwitchComm (SocketComm):
+    """
+    Object to send commands to a network enabled power supply, Sorensen XDL Series II PSU (XDL 35-5TP)
+    """
     
-    def __init__(self, switch_sock ):
+    def __init__(self, switch_sock):
         super(SwitchComm, self).__init__()
         self.switch_sock = switch_sock
         self.__set_voltages()
@@ -496,11 +552,11 @@ class SwitchComm ( SocketComm ):
         
     def switch_to_signal_analyzer(self):
         self.print_purple("Switched to Signal Analyzer")
-        self._send_command(self.switch_sock,"OP1 1")
+        self._send_command(self.switch_sock, "OP1 1")
         
     def switch_to_network_analyzer(self):
         self.print_purple("Switched to Network Analyzer")
-        self._send_command(self.switch_sock,"OP1 0")
+        self._send_command(self.switch_sock, "OP1 0")
         
     def switch_to_transmission(self):
         self.print_purple("Switched to Transmission Measurements")
@@ -510,97 +566,120 @@ class SwitchComm ( SocketComm ):
         self.print_purple("Switched to Reflection Measurements")
         self._send_command(self.switch_sock, "OP2 0")
         
-class ArduComm( SocketComm ):
+class ArduComm(SocketComm):
+    """
+    Object to send and receive commands from an Arduino Uno (R3), equipped
+    with a string potentiometer.
+    """
     
-    def __init__(self, ardu_sock ):
+    def __init__(self, ardu_sock):
         super(ArduComm, self).__init__()
         self.ardu_sock = ardu_sock
         
     def get_cavity_length(self):
-        self._send_command(self.ardu_sock, "LengthOfCavity")
-        return float(self._read_data(self.ardu_sock, printlen=False).strip(' \t\n\r'))
+        """
+        Get the current cavity length from the Arduino.
         
-class SignalAnalyzerComm( SocketComm ):
+        This function will poll the Arduino until a non-empty string is returned,
+        guaranteeing that the return value will be valid.
+        
+        Note that this does not elminate the problem of getting 'doubled' responses, e.g.
+        "7.5\r\n7.5"
+        """
+        self._send_command(self.ardu_sock, "LengthOfCavity")
+        # Arduino can take an unusually long time to respond, need to use a timeout > 2 seconds
+        # need to strip any whiteespace that that will cause a bad cast from string to float
+        response = self._read_data_safe(self.ardu_sock, 5).strip(' \t\n\r')
+        
+        return float(response)
+        
+class SignalAnalyzerComm(SocketComm):
+    """
+    Object to send and receive commands from Aligent CXA Signal Analyzer
+    """
     
-    def __init__(self, sa_sock ):
+    def __init__(self, sa_sock):
         super(SignalAnalyzerComm, self).__init__()
         self.sa_sock = sa_sock
     
-    def set_signal_analyzer(self, center_freq, fft_length = 131072, freq_span = 10, num_averages = 20001):
+    def set_signal_analyzer(self, center_freq, fft_length=131072, freq_span=10, num_averages=20001):
+        """
+        Establish signal analyzer settings.
+        
+        Args:
+            center_freq: the frequency that will be in the middle of the frequency window (in MHz)
+            fft_length: the number of IQ points that make up a power spectrum. Also determines total capture time.
+            Maximum number of points is 131072
+            freq_span: how wide the frequency window should be (in MHz). The maximum size is limited to 10 MHz
+            num_averages: the number of points that should be averaged together, maximum is 20001
+        """
         
         self.print_purple("Setting spectrum analyzer")
         
-        #Set RF switch so that signal goes to Signal Analyzer
-#         switch=self.sock_dict['switch']
-#         self._send_command(switch, "OP1 1")
+        # general configuration
+        self._send_command(self.sa_sock, "INST:SEL BASIC")  # set IQ analyzer mode
+        self._send_command(self.sa_sock, "SPEC:DIF:BAND 10MHz")  # set Digital IF Bandwidth
+        self._send_command(self.sa_sock, "SPEC:DIF:FILT:TYPE FLAT")  # set filter type to flattop
+        self._send_command(self.sa_sock, "SPEC:FFT:WIND UNIF")  # set FFT window to uniform
+        self._send_command(self.sa_sock, "SPEC:FFT:LENG:AUTO OFF")  # disable automatic FFT window and length control
         
-        #general configuration
-        self._send_command(self.sa_sock, "INST:SEL BASIC") # set IQ analyzer mode
-        self._send_command(self.sa_sock, "SPEC:DIF:BAND 10MHz") # set Digital IF Bandwidth
-        self._send_command(self.sa_sock, "SPEC:DIF:FILT:TYPE FLAT") # set filter type to flattop
-        self._send_command(self.sa_sock, "SPEC:FFT:WIND UNIF") # set FFT window to uniform
-        self._send_command(self.sa_sock, "SPEC:FFT:LENG:AUTO OFF") # disable automatic FFT window and length control
+        # Max size for FFT length is 131072
+        # FFT length represents number of IQ pairs used to generate power spectrum
+        # FFT length indirectly controls 'capture time'
+        # Presumably this time is synonymous with integration time
+        self._send_command(self.sa_sock, "SPEC:FFT:WIND:LENG " + str(fft_length))  # set FFT window length
+        self._send_command(self.sa_sock, "SPEC:FFT:LENG " + str(fft_length))  # set FFT length
         
-        #Max size for FFT length is 131072
-        #FFT length represents number of IQ pairs used to generate power spectrum
-        #FFT length indirectly controls 'capture time'
-        #Presumably this time is synonymous with integration time
-        self._send_command(self.sa_sock, "SPEC:FFT:WIND:LENG "+str(fft_length)) # set FFT window length
-        self._send_command(self.sa_sock, "SPEC:FFT:LENG "+str(fft_length)) # set FFT length
+        # configure measurements
+        self._send_command(self.sa_sock, "CONF:SPEC:NDEF")  # configure measurement
+        self._send_command(self.sa_sock, "FREQ:CENT " + str(center_freq) + "MHz")  # set center frequency
+        self._send_command(self.sa_sock, "SPEC:FREQ:SPAN " + str(freq_span) + "MHz")  # set frequency span
         
-        #configure measurements
-        self._send_command(self.sa_sock, "CONF:SPEC:NDEF") # configure measurement
-        self._send_command(self.sa_sock, "FREQ:CENT "+str(center_freq)+"MHz") # set center frequency
-        self._send_command(self.sa_sock, "SPEC:FREQ:SPAN "+str(freq_span)+"MHz") # set frequency span
-        
-        #configure averaging
-        self._send_command(self.sa_sock, "SPEC:AVER:TYPE RMS") # set average type to power average
-        self._send_command(self.sa_sock, "ACP:AVER:TCON EXP") # set averaging to non-repeating
-        #Maximum number of averaged values is 20001
-        self._send_command(self.sa_sock, "SPEC:AVER:COUN "+str(num_averages)) # set number of averages
-        self._send_command(self.sa_sock, "INIT:CONT OFF") # turn off continuous measurement operation
-        #Total integration time is given by time_per_frame(FFT length)*num_averages
+        # configure averaging
+        self._send_command(self.sa_sock, "SPEC:AVER:TYPE RMS")  # set average type to power average
+        self._send_command(self.sa_sock, "ACP:AVER:TCON EXP")  # set averaging to non-repeating
+        # Maximum number of averaged values is 20001
+        self._send_command(self.sa_sock, "SPEC:AVER:COUN " + str(num_averages))  # set number of averages
+        self._send_command(self.sa_sock, "INIT:CONT OFF")  # turn off continuous measurement operation
+        # Total integration time is given by time_per_frame(FFT length)*num_averages
         
         self.print_green("Spectrum analyzer set")
 
     def take_data_signal_analyzer(self):
+        """
+        Collect a power spectrum from the signal analyzer.
+        Note that this function will trigger the signal analyzer to build a new power spectrum,
+        and not return until it is finished.
+        """
         self.print_purple("Starting integration...")
 
-        #Initialize measurement
-        #This will start collecting and averaging samples
+        # Initialize measurement
+        # This will start collecting and averaging samples
         self._send_command(self.sa_sock, "INIT:IMM")
         
         elapsed_time = 0.0
 
         # *OPC? will write "1\n" to the output when operation is complete.
         while True:
-            #Poll the signal analyzer
+            # Poll the signal analyzer
             self._send_command(self.sa_sock, "*OPC?")
-            status_str = self._read_data(self.sa_sock, printlen=False, timeout=0.5)
+            status_str = self._read_data(self.sa_sock, printlen = False , timeout = 1)
             
-            #Wait until *OPC? returns '1\n' indicating that the requested number
-            #of samples have been collected
+            # Wait until *OPC? returns '1\n' indicating that the requested number
+            # of samples have been collected
             if(status_str == "1\n"):
                 print ("\nIntegration complete")
                 break
             else:
                 elapsed_time += dt.datetime.now().microsecond
 #                 print ("\rWaiting, time elapsed: "+str(round(elapsed_time/1e6))+ " seconds")
-                status = "\rWaiting, time elapsed: "+str(round(elapsed_time/1e6))+ " seconds"
+                status = "\rWaiting, time elapsed: " + str(round(elapsed_time / 1e6)) + " seconds"
                 sys.stdout.write(status)
                 sys.stdout.flush()
 
-        #Since measurement is already initliazed collect data with the
-        #FETC(h) command
+        # Since measurement is already initliazed collect data with the
+        # FETC(h) command
         self._send_command(self.sa_sock, ":FETC:SPEC7?")
-        raw_sa_data = self._read_data(self.sa_sock, printlen=True, timeout=0.5)
+        raw_sa_data = self._read_data_safe(self.sa_sock, 0.5)
         
         return raw_sa_data
-
-#         out_file=open(self.data_dict['file_name'],'a')
-# 
-#         print(raw_sa_data, end="\n", file=out_file)
-#         out_str="Wrote data to "+self.data_dict['file_name']
-#         funcs.c_print(out_str,"Green")
-#  
-#         out_file.close()

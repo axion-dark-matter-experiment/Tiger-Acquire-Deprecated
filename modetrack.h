@@ -31,7 +31,7 @@ class ModeTrack {
      * \brief Set background data which will be subtracted from each
      * measurement
      * \param background_str string of power values seperated by commas,
-     * eg "p1,p2,...,pn"
+     * eg \f$ \{p_1,p_2,...,p_n\}\f$
      */
     void SetBackground(std::string background_str);
 
@@ -46,7 +46,7 @@ class ModeTrack {
      *
      * \param data_str string containing power data that should be
      * searched through. Needs to be in the a list of values seperated
-     * by commas, eg "p1,p2,...,pn"
+     * by commas, eg \f$ \{p_1,p_2,...,p_n\}\f$
      *
      * \param mode_number Identify which mode should be tracked.
      * Choices are 0,1,2 and 3.
@@ -68,7 +68,7 @@ class ModeTrack {
      *
      * \param data_str string containing power data that should be
      * searched through. Needs to be in the a list of values seperated
-     * by commas, eg "p1,p2,...,pn"
+     * by commas, eg \f$ \{p_1,p_2,...,p_n\}\f$
      *
      * \param mode_number Identify which mode should be tracked.
      * Choices are 0,1,2 and 3.

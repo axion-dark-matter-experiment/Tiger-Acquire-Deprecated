@@ -68,14 +68,9 @@ class Convertor:
         num_points = len(power_list)
         
         formatted_points = []
-        
-    
-#         max_frequency = nominal_centers[-1] + nwa_span / 2
-#         min_frequency = nominal_centers[0] - nwa_span / 2
-#         num_points = 4 * nwa_points
     
         for idx, power in enumerate(power_list):
-            # (idx+1)*(4600 - 3000)/(1604) + 3000
+
             frequency = (idx + 1) * (max_frequency - min_frequency) / (num_points) + min_frequency
             frequency = int(round(frequency))
             formatted_points.append([frequency, cavity_length, power])
@@ -260,14 +255,11 @@ class LorentzianFitter:
     
         fitted_hwhm = pbest[0]
         fitted_center_freq = pbest[1]
-#         fitted_center_freq_step = fitted_center_freq + 20
     
         fitted_height = pbest[2]
         fitted_q = fitted_center_freq / (fitted_hwhm * 2)
         # convert back to dBm
         fitted_height = 10 * np.log10(fitted_height)
-    
-#         nwa_y_dbmw = [10 * np.log10(y) for y in nwa_yw]
     
         # report parameters
         self.print_purple("Parameters:")
@@ -357,6 +349,8 @@ class SignalAnalyzerSaver( FlatFileSaver ):
         
         self.__call_back( data, header_string )
         self.counter += 1
+        
+        return self.counter
     
     def __save_raw_data(self, raw_data, header_string):
         

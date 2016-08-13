@@ -13,7 +13,7 @@ args = parser.parse_args()
 
 
 # argv = sys.argv
-argv = "/home/bephillips2/workspace/Electric_Tiger_Control_Code/ETigConfig2.txt"  # temporary stand-in for command line input
+argv = "/home/bephillips2/workspace/Electric_Tiger_Control_Code/ETigConfig.txt"  # temporary stand-in for command line input
 
 def main():
 

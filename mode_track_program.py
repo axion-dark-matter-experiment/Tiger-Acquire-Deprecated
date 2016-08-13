@@ -102,7 +102,6 @@ class ModeTracker(core.ProgramCore):
         
         power_list = self.convertor.str_list_to_power_list(freq_window_spec)
         
-#         path = os.path.join(os.getcwd() + '/data/current_freq_window.csv')
         dir_path = os.path.dirname(os.path.realpath(__file__))
         path = dir_path + "/data/current_freq_window.csv"
         out_file = open(path, 'w+')
@@ -180,8 +179,8 @@ class ModeTrackProgram(ModeTracker):
     def __init__(self, config_path):
         super(ModeTrackProgram, self).__init__(config_path)
         
-        self.sa_saver = procs.SignalAnalyzerSaver( 'data' )
-        self.nwa_saver = procs.NetworkAnalyzerSaver( 'data' )
+        self.sa_saver = procs.SignalAnalyzerSaver('data')
+        self.nwa_saver = procs.NetworkAnalyzerSaver('data')
         
         atexit.register(self.panic_cleanup)
         
@@ -218,17 +217,12 @@ class ModeTrackProgram(ModeTracker):
         nwa_data = self.get_data_nwa()
         formatted_points = self.format_points(nwa_data)
         self.set_bg_data(formatted_points)
-        
-    def generate_save_file_name(self, idx):
-        
-        save_path = self.directory
-        return os.path.join(save_path, str(idx) + 'SA.csv')
     
     def save_power_spec(self, power_spec):
         
         power_list = self.convertor.str_list_to_power_list(power_spec)
         formatted_points = self.format_points(power_spec)
-        self.nwa_saver( formatted_points )
+        self.nwa_saver(formatted_points)
         
         dir_path = os.path.dirname(os.path.realpath(__file__))
         path = dir_path + "/data/current_power_spectrum.csv"
@@ -267,6 +261,15 @@ class ModeTrackProgram(ModeTracker):
         transfer_cmd += " kitsune.dyndns-ip.com:~/"
          
         subprocess.Popen(transfer_cmd, shell=True)
+        
+    def save_sa_data (self, data):
+        header = self._build_data_header()
+        successful_data_collections = self.sa_saver(data, header)
+        total_power_spectra = self.iteration
+        
+        status_text = "Collected data for " + str(successful_data_collections) + " "
+        status_text += "out of " + str(total_power_spectra) + " power spectra."
+        self.print_blue(status_text)
 
     def program(self):
 
@@ -287,7 +290,7 @@ class ModeTrackProgram(ModeTracker):
                 continue
             
             data = self.get_data_sa(mode_of_desire)
-            self.sa_saver(data, self._build_data_header())
+            self.save_sa_data(data)
 
             self.next_iteration()
 
