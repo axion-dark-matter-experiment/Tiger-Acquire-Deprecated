@@ -683,3 +683,33 @@ class SignalAnalyzerComm(SocketComm):
         raw_sa_data = self._read_data_safe(self.sa_sock, 0.5)
         
         return raw_sa_data
+    
+class SignalGeneratorComm(SocketComm):
+    """
+    Object to send commands to the Agilent MXG N5183B Signal Generator
+    """
+    
+    def __init__(self, sg_sock):
+        super(SignalGeneratorComm, self).__init__()
+        self.sg_sock = sg_sock
+        
+    def RF_on(self):
+        self.print_purple("Turning on Signal Generator")
+        
+        self._send_command(self.sg_sock, "OUTP:STAT ON")
+        
+    def RF_off(self):
+        self.print_purple("Turning off Signal Generator")
+        
+        self._send_command(self.sg_sock, "OUTP:STAT OFF")
+        
+    def set_center_frequency(self, center_freq_mhz ):
+        self.print_purple("Setting center frequency...")
+
+        self._send_command(self.sg_sock, ":FREQ:CENT " + str(center_freq_mhz) + " MHz")
+        
+    def set_power_level( self, power_dbm ):
+        self.print_purple("Setting power level")
+        
+        self._send_command(self.sg_sock, ":SOUR:POW:LEV:IMM:AMP " + str(power_dbm) + " dB")
+        
