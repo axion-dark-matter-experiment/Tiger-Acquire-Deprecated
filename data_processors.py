@@ -327,11 +327,11 @@ class FlatFileSaver:
         
         out_file.close()
         
-class SignalAnalyzerSaver( FlatFileSaver ):
+class DigitizerSaver( FlatFileSaver ):
     
     def __init__(self, root_dir, sa_type = 'R+F'):
 
-        super(SignalAnalyzerSaver, self).__init__( root_dir )
+        super(DigitizerSaver, self).__init__( root_dir )
         
         if (sa_type == 'R'):
             self.__call_back = self.__save_raw_data
@@ -380,7 +380,7 @@ class SignalAnalyzerSaver( FlatFileSaver ):
         formatted_data = self.convertor.str_list_to_power_list(raw_data)
         
         self.__save_formatted_data(formatted_data, header_string)
-        
+
 class NetworkAnalyzerSaver( FlatFileSaver ):
     
     def __init__(self, root_dir ):

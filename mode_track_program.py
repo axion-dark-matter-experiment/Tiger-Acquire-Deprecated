@@ -16,7 +16,7 @@ class ModeTracker(core.ProgramCore):
         self.m_track = mt.ModeTrack()
 
         self.freq_window = int(self.data_dict['freq_window'])  # Frequency window used for identify peaks specified in MHz
-        self.sa_span = int(self.data_dict['sa_span'])  # MHz
+        self.digitizer_span = int(self.data_dict['digitizer_span'])  # MHz
         self.sa_averages = int(self.data_dict['sa_averages'])  # total number of averages to take, Max is
         self.fft_length = int(self.data_dict['fft_length'])  # Number of IQ points to generate spectrum, Max is
         
@@ -42,7 +42,7 @@ class ModeTracker(core.ProgramCore):
         sa_averages
         """
         header = ''
-        header += "sa_span;" + str(self.sa_span) + "\n"
+        header += "digitizer_span;" + str(self.digitizer_span) + "\n"
         header += "fft_length;" + str(self.fft_length) + "\n"
         header += "effective_volume;" + str(self.effective_volume) + "\n"
         header += "bfield;" + str(self.bfield) + "\n"

@@ -23,13 +23,13 @@ class ProgramCore(config_classes.ConfigTypes):
         nwa_span = self.data_dict['nwa_span']
         nwa_power = self.data_dict['nwa_power']
         
-        sa_sock = self.sock_dict['sa']
+        sg_sock = self.sock_dict['sg']
         switch_sock = self.sock_dict['switch']
         ardu_sock = self.sock_dict['ardu']
         step_addr = self.addr_dict['step']
         
         self.nwa_comm = sc.NetworkAnalyzerComm(nwa_sock, nwa_points, nwa_span, nwa_power)
-        self.sa_comm = sc.SignalAnalyzerComm(sa_sock)
+        self.sg_comm = sc.SignalGeneratorComm(sg_sock)
         self.switch_comm = sc.SwitchComm(switch_sock)
         self.ardu_comm = sc.ArduComm(ardu_sock)
         self.step_comm = sc.StepperMotorComm(step_addr)
