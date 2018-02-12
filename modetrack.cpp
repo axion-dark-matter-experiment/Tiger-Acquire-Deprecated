@@ -227,26 +227,9 @@ ModeTrack::ModeTrack() {
 }
 
 
-ModeTrack::~ModeTrack() {
-    // TODO Auto-generated destructor stub
-}
+ModeTrack::~ModeTrack() {}
 
 void ModeTrack::CastToType() {
-
-//    for (const auto& val : entries_strings) {
-
-//        //whitespace in data will cause a bad lexical cast
-//        //catch errors and flush
-//        try {
-//            double frequency = boost::lexical_cast<double>(std::get<0>(val));
-//            double length = boost::lexical_cast<double>(std::get<1>(val));
-//            double power = boost::lexical_cast<double>(std::get<2>(val));
-
-//            entries.push_back(std::make_tuple(frequency, length, power));
-//        } catch (boost::bad_lexical_cast) {
-//            std::cout<<"Bad Lexical Cast"<<std::endl;
-//        }
-//    }
 
 //    std::mutex thread_lock;
 
@@ -413,18 +396,14 @@ std::vector<double> ModeTrack::Convolve(std::vector<double>& data_list,std::vect
         data_deque.push_back(0.0);
     }
 
-//    std::mutex thread_lock;
-
-//    #pragma omp parallel for
-    for(int i = k; i<n+k; i++) {
+    for(int i = 2*k; i<n+k; i++) {
         double conv_elem=0.0;
         for(int j = 0; j<k ; j++) {
             conv_elem+=data_deque.at(i-j)*kernel.at(j);
         }
 
-//        thread_lock.lock();
         convolved_list.push_back(conv_elem);
-//        thread_lock.unlock();
+
     }
     return convolved_list;
 }
@@ -576,10 +555,6 @@ double ModeTrack::GenerateSpline(int mode_number, double length) {
 }
 
 void ModeTrack::PopulateBestFitCurves() {
-//    auto mode_one_coeffs = std::make_tuple(41.2931,-987.522,9121.16);
-//    auto mode_two_coeffs = std::make_tuple(36.2108,-952.119,9511.6);
-//    auto mode_three_coeffs = std::make_tuple(34.5861,-958.776,10112);
-//    auto mode_four_coeffs = std::make_tuple(35.2141,-1021.15,11026);
 
     auto mode_one_coeffs = std::make_tuple(47.9998,-1041.54,8950.56);
     auto mode_two_coeffs = std::make_tuple(44.2758,-1055.35,9610.61);
@@ -637,7 +612,8 @@ inline void c_print(T text,int color) {
 
 //peak_list: list of indices (in frequency space) where peaks were found for a particular cavity length
 //comparison_list: of data triples at the same cavity length
-std::map<uint,double> ModeTrack::CompareAndFill(std::vector<double>& peak_list,std::vector<std::tuple<double,double,double>>& comparison_list) {
+std::map<uint,double> ModeTrack::CompareAndFill(std::vector<double>& peak_list,\
+        std::vector<std::tuple<double,double,double>>& comparison_list) {
 
     //format is <peak index,<delta_mu,frequency>>
     //where delta_mu is defined below
@@ -761,7 +737,6 @@ std::vector<double> ModeTrack::BilateralFilter(std::vector<double>& data_list,do
         double norm_weight = 0.0;
 
         for(int q = p -radius; q <= p + radius ; q++) {
-
 
             double pos_weight = abs(p-q);
             double intens_weight = data_deque.at(p)-data_deque.at(q);
